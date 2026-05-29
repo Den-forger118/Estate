@@ -13,27 +13,29 @@ const reasons = [
 export default function Home() {
   return (
     <PageShell>
+{/* Hero section start */}
       <section className="hero">
         <div className="hero-copy reveal">
+          <div className="header-text">
           <span className="eyebrow">Secure, Comfortable, Modern Living</span>
           <h1>Find Your Perfect Home in a beautifully managed estate.</h1>
-          <p>
-            Premium homes, attentive property management, and peaceful community spaces for families, owners, and residents who value comfort without compromise.
-          </p>
           <div className="hero-actions">
             <Link href="/properties" className="btn btn-primary">Browse Available Units</Link>
             <Link href="/contact" className="btn btn-secondary">Book an Inspection</Link>
           </div>
-        </div>
-        <div className="hero-media reveal">
+          </div>
+          <div className="hero-media reveal">
           <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1600&q=84" alt="Premium estate home exterior" />
           <div className="hero-stat">
             <strong>96%</strong>
             <span>resident satisfaction across managed communities</span>
           </div>
         </div>
+        </div>
       </section>
+    {/* hero section end */}
 
+{/* 
       <section className="section">
         <SectionIntro eyebrow="Featured properties" title="Residences ready for inspection" text="Explore a curated selection of villas, townhomes, duplexes, and apartments with transparent details and guided viewings." />
         <div className="property-grid">
@@ -42,6 +44,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      
 
       <section className="section split-section">
         <div className="image-panel reveal">
@@ -101,6 +104,7 @@ export default function Home() {
         </div>
         <Link href="/contact" className="btn btn-primary">Contact Management</Link>
       </section>
+      */}
     </PageShell>
   );
 }
