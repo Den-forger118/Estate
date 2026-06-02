@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {
-  const isDashboard = request.nextUrl.pathname.startsWith("/dashboard");
+  const path = request.nextUrl.pathname;
+  const isProtected = path.startsWith("/dashboard") || path.startsWith("/community");
   const isAuthed = request.cookies.get("mock_auth")?.value === "true";
 
-  if (isDashboard && !isAuthed) {
+  if (isProtected && !isAuthed) {
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("next", request.nextUrl.pathname);
+    loginUrl.searchParams.set("next", path);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -14,5 +15,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/community", "/community/:path*"],
 };

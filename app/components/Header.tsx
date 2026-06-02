@@ -11,11 +11,12 @@ const navItems = [
   ["Properties", "/properties"],
   ["Blog", "/blog"],
   ["Contact", "/contact"],
+  ["Resident Services", "/community"],
   ["Dashboard", "/dashboard"],
 ];
 
 export function Header() {
-  const [hidden, setHidden] = useState(true);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -23,7 +24,7 @@ export function Header() {
     };
 
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: false });
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 

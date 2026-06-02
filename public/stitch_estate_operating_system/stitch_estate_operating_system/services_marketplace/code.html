@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#d8e3fb",
+                        "outline": "#75777d",
+                        "inverse-primary": "#bcc7de",
+                        "on-surface": "#0b1c30",
+                        "surface-tint": "#545f73",
+                        "secondary-fixed": "#dae2fd",
+                        "on-primary-container": "#8590a6",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary": "#00190e",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-secondary-container": "#5c647a",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "surface-variant": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "inverse-surface": "#213145",
+                        "outline-variant": "#c5c6cd",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "surface-container-high": "#dce9ff",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#00301e",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary": "#565e74",
+                        "primary": "#091426",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e5eeff",
+                        "primary-fixed-dim": "#bcc7de",
+                        "primary-container": "#1e293b",
+                        "on-surface-variant": "#45474c",
+                        "on-primary-fixed": "#111c2d",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-fixed": "#6ffbbe",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed": "#131b2e",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#00a472"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "container-max": "1440px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "margin-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "caption": ["Inter"],
+                        "title-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface">
+<div class="flex min-h-screen">
+<!-- SideNavBar - JSON Command Executed -->
+<aside class="hidden md:flex flex-col h-screen sticky left-0 top-0 w-64 bg-surface border-r border-outline-variant py-stack-lg transition-all">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface">Resident OS</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Premium Estates</p>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span>Events</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span>Directory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-primary font-semibold transition-colors rounded-lg font-body-md bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span>Marketplace</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span>Security</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="report">report</span>
+<span>Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span>Bookings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="flex items-center gap-3 py-4 border-t border-outline-variant">
+<img alt="Resident profile avatar" class="w-10 h-10 rounded-full bg-surface-container" src="https://lh3.googleusercontent.com/aida/AP1WRLtZhGXK13pM8LARX_vC8PKEM7T1f2St7-QjfjzfmfQeNOhqGamwUQU7nao5Q2yHYwInPTg1D37JGfu9pQfJkl6VZTViezFp-7m7ktEOn5tu1d3gWOeaCvstERbH5NB18SIxmm2EyRia6dOKGJcRvffPB-9nL-wcTLb7pLaUNtzaQu33mewbvSZAG_0A8YHmeOITRrymkjuBxFfXDZf-A_k8Ztf_MP3yyi5TGi8fohOCENKDteUjh6Zt-eOE"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Alex Thompson</p>
+<p class="font-caption text-caption text-on-surface-variant">Penthouse 4B</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0 bg-background overflow-hidden">
+<!-- TopNavBar - JSON Command Executed -->
+<header class="flex justify-between items-center w-full px-margin-desktop py-stack-md z-40 sticky top-0 bg-surface-bright shadow-sm">
+<div class="flex items-center gap-gutter flex-1">
+<div class="max-w-md w-full relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-full pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary-container focus:border-primary outline-none font-body-md" placeholder="Search services..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto px-margin-desktop py-stack-lg">
+<!-- Hero Section -->
+<section class="mb-stack-lg relative rounded-xl overflow-hidden bg-primary-container h-64 flex flex-col justify-center px-12">
+<img class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" data-alt="A professional technician in a clean navy uniform performing precise electrical maintenance on a modern, high-end residential control panel. The scene is bathed in cool, daylight lighting with soft shadows, emphasizing a clean and reliable service environment. The aesthetic is modern corporate, focusing on expertise and safety." src="https://lh3.googleusercontent.com/aida/AP1WRLsr8iSDdSO0sLMDA7YeYp74NoYttvjkX_TY--ird13Nrd7oP_VhFyLw1uMkhGZm9uLtlGQET0hlXuqrF33--0Fjhlvidc7MdeQxez9PHcg8Q7-L66GCZGyj6e5knXrv6_T9Oe9psYTTYtCHsJS5BLKbP1mS_knKT0_7BiBe5ZbnBZx7JA7bAn95vXEgpLXocVhim5Gj4ZiBJf8T2ymiFLHBISVIGnmSDoyDR5UICEK39jVCKGN6kTCPR4RJ"/>
+<div class="relative z-10 max-w-2xl">
+<h2 class="font-display-lg text-display-lg text-on-primary mb-2">Expert Care for Your Estate</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container">Verified, background-checked professionals selected exclusively for our premium community residents.</p>
+</div>
+</section>
+<!-- Category Pills -->
+<nav class="flex items-center gap-3 mb-stack-lg overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full font-label-md transition-transform active:scale-95 whitespace-nowrap">All Services</button>
+<button class="px-6 py-2 bg-white border border-outline-variant hover:bg-surface-container transition-all rounded-full font-label-md whitespace-nowrap">Plumbers</button>
+<button class="px-6 py-2 bg-white border border-outline-variant hover:bg-surface-container transition-all rounded-full font-label-md whitespace-nowrap">Electricians</button>
+<button class="px-6 py-2 bg-white border border-outline-variant hover:bg-surface-container transition-all rounded-full font-label-md whitespace-nowrap">Tutors</button>
+<button class="px-6 py-2 bg-white border border-outline-variant hover:bg-surface-container transition-all rounded-full font-label-md whitespace-nowrap">Cleaners</button>
+<button class="px-6 py-2 bg-white border border-outline-variant hover:bg-surface-container transition-all rounded-full font-label-md whitespace-nowrap">Handymen</button>
+</nav>
+<!-- Bento Grid Layout for Providers -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-gutter">
+<!-- Top Rated Featured Card (Large) -->
+<div class="lg:col-span-8 bg-white rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300">
+<div class="flex flex-col md:flex-row h-full">
+<div class="md:w-1/2 relative h-64 md:h-auto overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A professional plumber wearing a crisp, branded white polo shirt skillfully adjusting a high-end chrome kitchen faucet in a bright, luxury minimalist kitchen. The lighting is soft and natural, emphasizing cleanliness and precision. The overall mood is reliable and high-end corporate, with a focus on attention to detail." src="https://lh3.googleusercontent.com/aida/AP1WRLvNqLprvlEAmVhKo7hVwLY3ypev-Y2LY9inb0O2LiJnVxrZOfk1aHlWQfrTMqZe0hSdiQTfsEPrH_BykS2guZqwJC32yr4mImSSPxR4uYwvmhuv0crFueuxpUsr0XNrBM3YB3_ekJKoLBDhZDYbDbb26y4J1SH-sTpqSCRiS_G_1ZNXUP28nT--syflIkmfjLonIZ3nB3UK4Yt3gc9rfiGtj5Z4RqThPzoOPdNv_lLWucbUK2FmcxRw7pLY"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary text-on-primary px-3 py-1 rounded-full text-caption font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span> Verified
+                                    </span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full text-caption font-semibold">Bestseller</span>
+</div>
+</div>
+<div class="md:w-1/2 p-stack-lg flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Precision Plumbing &amp; Design</h3>
+<div class="flex items-center gap-1 text-on-surface font-semibold">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>4.9</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 leading-relaxed">
+                                        Specializing in luxury estate fixtures and complex filtration systems. Master plumbers with 15+ years experience in high-end residential maintenance.
+                                    </p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-surface-container px-3 py-1 rounded text-caption text-on-surface-variant">Leak Detection</span>
+<span class="bg-surface-container px-3 py-1 rounded text-caption text-on-surface-variant">Luxury Fixtures</span>
+<span class="bg-surface-container px-3 py-1 rounded text-caption text-on-surface-variant">Emergency 24/7</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="text-on-surface">
+<span class="font-headline-md text-headline-md font-bold">$120</span>
+<span class="text-caption text-on-surface-variant">/ hour</span>
+</div>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-md transition-all active:scale-95">Book Now</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Grid Items -->
+<div class="lg:col-span-4 bg-white rounded-xl border border-outline-variant p-stack-md flex flex-col hover:shadow-md transition-all group">
+<div class="relative h-48 rounded-lg overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional electrician with a focused expression, wearing a high-visibility safety vest over a professional grey work shirt, inspecting a sophisticated smart home lighting system. The environment is a modern, high-tech interior with subtle ambient blue lighting. The style is clean, corporate, and reflects technical mastery." src="https://lh3.googleusercontent.com/aida/AP1WRLunKY2yQUUmSZy4LzLxmrOX1lWlCk0jhxde1FV5bx4plHQTBJSlPzXd17rVAweJv1N5hK6oYQFWU0FpTX42sV3Yl1s9jT1M2XFgRIV_Wx0wDyIEonU_Dn8recM3WZ3KPqWq6huDGxxIQTBVfBi_58wWzJ04O17M0ZA3N-nbmxCgQyeo5AaeELq1lvOd4n4hZ-7W9jjVY9XHAnFqs8nouBeqkpA7TueDq10WcDu8DZ1ISb6g1yOYhXpOpN4"/>
+<span class="absolute top-3 right-3 bg-white/90 glass-effect px-2 py-1 rounded text-caption font-bold text-on-surface">4.8 Rating</span>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-title-lg text-title-lg text-on-surface">Elite Electric Systems</h4>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Smart home automation and high-voltage specialists.</p>
+<div class="mt-auto flex justify-between items-center pt-4 border-t border-outline-variant">
+<span class="font-label-md text-label-md font-bold">$95/hr</span>
+<button class="text-primary font-semibold hover:underline font-label-md">Book Now</button>
+</div>
+</div>
+</div>
+<!-- Regular Cards -->
+<div class="lg:col-span-4 bg-white rounded-xl border border-outline-variant p-stack-md flex flex-col hover:shadow-md transition-all group">
+<div class="relative h-48 rounded-lg overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional cleaner wearing a minimalist white uniform and eco-friendly gloves, carefully polishing a marble surface in a bright, airy designer living room. The room features high ceilings and high-end furniture. The aesthetic is pristine, luxurious, and emphasizes a serene, healthy home environment." src="https://lh3.googleusercontent.com/aida/AP1WRLvFXQBNLzmTkVpY76AkCiXKmwkN3YCNAI1ybej9IRS2soFFr4D6cf_L2QvryqIphrfcmNGd6IsqfnOpjltLmbWBkcV8McZnW5RnwbdAOGLVxAHlGKl6ApZFznzub2uCZOppDsaovRWSrGQLCQgq_o6WyAn0nYfY50cmqFlTaK_OOQuIp4kFn2tsyzHdynhtnDpw_6EQ9f6xR7njXylVYzuooA-owA7_6k0oT34r_vnEExi2-_QO_uG7qxJU"/>
+<span class="absolute top-3 right-3 bg-white/90 glass-effect px-2 py-1 rounded text-caption font-bold text-on-surface">5.0 Rating</span>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-title-lg text-title-lg text-on-surface">Pure Estate Cleaning</h4>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Eco-friendly deep cleaning for premium residences.</p>
+<div class="mt-auto flex justify-between items-center pt-4 border-t border-outline-variant">
+<span class="font-label-md text-label-md font-bold">$60/hr</span>
+<button class="text-primary font-semibold hover:underline font-label-md">Book Now</button>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4 bg-white rounded-xl border border-outline-variant p-stack-md flex flex-col hover:shadow-md transition-all group">
+<div class="relative h-48 rounded-lg overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A smiling, professional academic tutor in a smart-casual blazer sitting at a large wooden table in a sunlit private library, guiding a student through a science textbook. The atmosphere is quiet, intellectual, and supportive. High-quality books line the shelves in the background, signaling an elite educational environment." src="https://lh3.googleusercontent.com/aida/AP1WRLvqtDGyJKjw-0VxYWIhtADiN3xiHd1apwJ1Ab1imKSBpcUSEW_u6iUZvhgCej5A9JWDwpow4IorFuccDq939wdqI0nqR_TrkeWowhlxcIhc9U6x6uUe9Ox_W0Go4n2bNGxkIjWMLWf2eDqP7gX42fUO7WBmveumbyyc1RXemeq6_tmWQfGVZuYTnWw691hszNFSoG2rYOJPz1zUT1_WVMruTaf0gC181NP6z898t0gANYZpyAX46Ipgauw"/>
+<span class="absolute top-3 right-3 bg-white/90 glass-effect px-2 py-1 rounded text-caption font-bold text-on-surface">4.9 Rating</span>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-title-lg text-title-lg text-on-surface">Ivy League Tutors</h4>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Personalized academic excellence for all grade levels.</p>
+<div class="mt-auto flex justify-between items-center pt-4 border-t border-outline-variant">
+<span class="font-label-md text-label-md font-bold">$150/hr</span>
+<button class="text-primary font-semibold hover:underline font-label-md">Book Now</button>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4 bg-white rounded-xl border border-outline-variant p-stack-md flex flex-col hover:shadow-md transition-all group">
+<div class="relative h-48 rounded-lg overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional handyman in a neat work uniform using a high-quality laser level to align bespoke wooden cabinetry in a contemporary home office. The tools are modern and well-maintained. The setting is clean and orderly, reflecting a meticulous approach to home improvement and repair." src="https://lh3.googleusercontent.com/aida/AP1WRLuepQnUh7N4fEcwFN3JgxlBUnGc2KhzQIKLDbu_oMjMBktsQH90lrDHlgx0uovO9saua5geDTbbnDp94gh4Be-VbuTWUeHh2mcDLCqyHwgr7Dorj-T3dPbXcPARovDU-3Ni8DWxnRGQgbbj4GNMMk7NT31s3WHVdUiV14ekNo2a0PWhSjdh4_F3eEi-5h9tIaqgjvz4FonbzcRJ1X8o8nD0s5NJ0HDQ1yE3C8LmvDI_fLjNdCplF_nwZcTH"/>
+<span class="absolute top-3 right-3 bg-white/90 glass-effect px-2 py-1 rounded text-caption font-bold text-on-surface">4.7 Rating</span>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-title-lg text-title-lg text-on-surface">The Bespoke Handyman</h4>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Custom installations and meticulous home repairs.</p>
+<div class="mt-auto flex justify-between items-center pt-4 border-t border-outline-variant">
+<span class="font-label-md text-label-md font-bold">$80/hr</span>
+<button class="text-primary font-semibold hover:underline font-label-md">Book Now</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Verified Security Badge Section -->
+<section class="mt-stack-lg p-stack-lg bg-surface-container rounded-2xl flex flex-col md:flex-row items-center gap-stack-lg border border-outline-variant">
+<div class="bg-primary p-6 rounded-full">
+<span class="material-symbols-outlined text-white text-4xl" data-icon="shield_with_heart" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Resident OS Trust Guarantee</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+                            Every provider in our marketplace undergoes a rigorous 5-step verification process, including criminal background checks, license verification, and estate security clearance. We handle the insurance so you can focus on your home.
+                        </p>
+</div>
+<div class="md:ml-auto">
+<button class="bg-white border border-primary text-primary px-6 py-3 rounded-lg font-label-md hover:bg-primary hover:text-on-primary transition-all">Learn About Security</button>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Mobile Nav Bar (JSON Pivot Logic) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-bright flex justify-around items-center py-stack-md z-50 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-caption">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="text-caption">Directory</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" data-icon="storefront" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<span class="text-caption font-bold">Market</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-caption">Bookings</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for category pills
+        const pills = document.querySelectorAll('nav button');
+        pills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                pills.forEach(p => {
+                    p.classList.remove('bg-primary', 'text-on-primary');
+                    p.classList.add('bg-white', 'text-on-surface-variant', 'border-outline-variant');
+                });
+                pill.classList.add('bg-primary', 'text-on-primary');
+                pill.classList.remove('bg-white', 'text-on-surface-variant', 'border-outline-variant');
+            });
+        });
+
+        // Search highlight effect
+        const searchInput = document.querySelector('input');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-[1.02]');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-[1.02]');
+        });
+    </script>
+</body></html>

@@ -8,16 +8,27 @@ import {
   moduleMeta,
   roleLabels,
   roleModules,
-  roleOptions,
 } from "../data/dashboard";
+import {
+  AUTH_KEY,
+  getStoredName,
+  syncRoleAfterLandlordApproval,
+} from "../data/roles";
 
-const AUTH_KEY = "ernest_mock_auth";
-const ROLE_KEY = "ernest_dashboard_role";
-
-function getRole(): DashboardRole {
-  if (typeof window === "undefined") return "admin";
-  const stored = window.localStorage.getItem(ROLE_KEY) as DashboardRole | null;
-  return stored && stored in roleLabels ? stored : "admin";
+function primaryActionForRole(role: DashboardRole): { label: string; href: string } | null {
+  if (role === "owner") {
+    return { label: "Apply to Become Landlord", href: "/dashboard/landlord-application" };
+  }
+  if (role === "landlord") {
+    return { label: "New Lease", href: "/dashboard/leases" };
+  }
+  if (role === "admin" || role === "manager") {
+    return { label: "New Property", href: "/dashboard/properties" };
+  }
+  if (role === "tenant") {
+    return { label: "New Maintenance Request", href: "/dashboard/maintenance" };
+  }
+  return null;
 }
 
 export function DashboardShell({ children }: { children: ReactNode }) {
@@ -25,6 +36,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [ready, setReady] = useState(false);
   const [role, setRole] = useState<DashboardRole>("admin");
+  const displayName = getStoredName();
 
   useEffect(() => {
     const authed = window.localStorage.getItem(AUTH_KEY) === "true";
@@ -33,7 +45,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       return;
     }
 
-    const activeRole = getRole();
+    const activeRole = syncRoleAfterLandlordApproval();
     setRole(activeRole);
     setReady(true);
   }, [router]);
@@ -45,17 +57,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   const navItems = roleModules[role].map((module) => moduleMeta[module]);
   const canAccess = roleModules[role].some((module) => moduleMeta[module].href === pathname);
+  const primaryAction = primaryActionForRole(role);
 
   useEffect(() => {
     if (ready && !canAccess) {
       router.replace("/dashboard");
     }
   }, [canAccess, ready, router]);
-
-  function updateRole(nextRole: DashboardRole) {
-    setRole(nextRole);
-    window.localStorage.setItem(ROLE_KEY, nextRole);
-  }
 
   function signOut() {
     window.localStorage.removeItem(AUTH_KEY);
@@ -82,9 +90,11 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </div>
         </Link>
 
-        <Link href="/dashboard/properties" className="btn btn-primary dashboard-primary-action">
-          New Property
-        </Link>
+        {primaryAction ? (
+          <Link href={primaryAction.href} className="btn btn-primary dashboard-primary-action">
+            {primaryAction.label}
+          </Link>
+        ) : null}
 
         <nav className="dashboard-nav" aria-label={`${roleLabels[role]} dashboard navigation`}>
           {navItems.map((item) => (
@@ -100,6 +110,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         </nav>
 
         <div className="dashboard-sidebar-footer">
+          {role !== "maintenance" ? <Link href="/community">Resident Services</Link> : null}
           <Link href="/contact">Support</Link>
           <button type="button" onClick={signOut}>
             Sign Out
@@ -115,22 +126,16 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="dashboard-user-tools">
-            <select
-              aria-label="Switch dashboard role"
-              value={role}
-              onChange={(event) => updateRole(event.target.value as DashboardRole)}
-            >
-              {roleOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
             <div className="dashboard-avatar" aria-hidden="true">
-              EV
+              {displayName
+                .split(" ")
+                .map((part) => part[0])
+                .join("")
+                .slice(0, 2)
+                .toUpperCase()}
             </div>
             <div className="dashboard-user-copy">
-              <strong>Eleanor Vance</strong>
+              <strong>{displayName}</strong>
               <span>{roleLabels[role]}</span>
             </div>
           </div>

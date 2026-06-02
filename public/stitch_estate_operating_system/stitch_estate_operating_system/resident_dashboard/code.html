@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#d8e3fb",
+                    "outline": "#75777d",
+                    "inverse-primary": "#bcc7de",
+                    "on-surface": "#0b1c30",
+                    "surface-tint": "#545f73",
+                    "secondary-fixed": "#dae2fd",
+                    "on-primary-container": "#8590a6",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "surface-bright": "#f8f9ff",
+                    "tertiary": "#00190e",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "on-secondary-container": "#5c647a",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#dae2fd",
+                    "surface-variant": "#d3e4fe",
+                    "error-container": "#ffdad6",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "inverse-surface": "#213145",
+                    "outline-variant": "#c5c6cd",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "surface-container-high": "#dce9ff",
+                    "background": "#f8f9ff",
+                    "tertiary-container": "#00301e",
+                    "surface-container-highest": "#d3e4fe",
+                    "secondary": "#565e74",
+                    "primary": "#091426",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "surface-container-low": "#eff4ff",
+                    "surface-container": "#e5eeff",
+                    "primary-fixed-dim": "#bcc7de",
+                    "primary-container": "#1e293b",
+                    "on-surface-variant": "#45474c",
+                    "on-primary-fixed": "#111c2d",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#cbdbf5",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-fixed": "#6ffbbe",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-secondary-fixed": "#131b2e",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#00a472"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "stack-sm": "8px",
+                    "container-max": "1440px",
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "caption": ["Inter"],
+                    "title-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-row">
+<!-- SideNavBar Component -->
+<aside class="hidden md:flex h-screen sticky left-0 top-0 w-64 flex-col py-stack-lg border-r border-outline-variant bg-surface">
+<div class="px-6 mb-stack-lg">
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface">Resident OS</h1>
+<p class="font-label-md text-label-md text-on-surface-variant tracking-wider uppercase">Premium Estates</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-semibold hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-body-md text-body-md">Events</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md text-body-md">Directory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-body-md text-body-md">Marketplace</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-body-md text-body-md">Security</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">report</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-md text-body-md">Bookings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<div class="flex items-center gap-3 p-4 rounded-xl bg-surface-container">
+<img alt="Resident profile avatar" class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a middle-aged man with a friendly expression, wearing a tailored navy blazer and a crisp white shirt. The photography is high-end, featuring soft rim lighting and a shallow depth of field against a minimalist, light-toned architectural background. The overall aesthetic is clean, corporate, and premium." src="https://lh3.googleusercontent.com/aida/AP1WRLvDKva9GpD3HPthDz3tP6goVJ1ibDInGrXndbCivWvcSnrdGpBQcPMG6MCzqcWtwB4WgJ86Z95GWry16QQbmftxQ8--IHAMi-VBMcI8pNTXfxbTvL4Cg2n7DG1LLBZGHD51sOuPk8CB3Px3r_TejfqfMnA9ymFSklJLbhDj-sUmzKNXPPB2z_H6Gnmf47H53J3IZ4xWAD3LP3l6qi-IOpXT9Q7Nf3nipJfnrylZWCR63ChhDaB1sPp4sU9Q"/>
+<div>
+<p class="font-body-md text-body-md font-semibold">Alex Johnson</p>
+<p class="font-caption text-caption text-on-surface-variant">Penthouse 4B</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar Component -->
+<header class="flex justify-between items-center w-full px-margin-desktop py-stack-md z-40 sticky top-0 bg-surface-bright shadow-sm border-b border-outline-variant">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary-container text-body-md font-body-md" placeholder="Search services, events, or documents..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6 ml-gutter">
+<button class="relative p-2 hover:bg-surface-container rounded-full transition-all">
+<span class="material-symbols-outlined text-on-surface">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface-bright"></span>
+</button>
+<div class="h-8 w-px bg-outline-variant"></div>
+<button class="flex items-center gap-2 hover:bg-surface-container p-1 pr-3 rounded-full transition-all">
+<img alt="Resident avatar" class="w-8 h-8 rounded-full object-cover" data-alt="A professional headshot of a middle-aged man with a friendly expression, wearing a tailored navy blazer. The photography is high-end, featuring soft rim lighting and a shallow depth of field against a minimalist, light-toned architectural background. The overall aesthetic is clean, corporate, and premium." src="https://lh3.googleusercontent.com/aida/AP1WRLtKaZq7jgg4QM6TXAq4VaYGFEND8Cwb8qN_g9ZgadTMhLC6oY_bVnOpr222dbt1iNHG3DlT4hW4graF2FnJRIzMkmS_xrTOc-m3wqlhVKTeNAQAdnRbkp3eo1oKfFhFBieZ-p5forvWGOGh7QRSNsqVNOwRWd1dPt5PGKG_i1eNIl2AFMgEReOTp1017GsE031BN2Sfk_9evFh0LLRzHwXCW6y-xbBIUrxSs06MDbmDBGZ31Lwz8OIiNUFV"/>
+<span class="material-symbols-outlined text-on-surface">expand_more</span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto px-margin-desktop py-stack-lg max-w-container-max mx-auto w-full">
+<!-- Hero Welcome Section -->
+<section class="relative h-[320px] rounded-3xl overflow-hidden mb-stack-lg">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="An ultra-luxurious, modern residential lobby with soaring ceilings, floor-to-ceiling windows overlooking a manicured private park, and minimalist designer furniture. The space is bathed in warm, golden hour sunlight, creating a serene and exclusive atmosphere. High-end materials like polished marble and dark walnut are visible, maintaining a Modern Corporate aesthetic with high clarity." src="https://lh3.googleusercontent.com/aida/AP1WRLtV30pwDk75dtnLC8mkdl88V4ugdx3ZnT5-H5O2iDKfs6IjL4Jfa0MGj3hTkkHiqyX4HHQWZxfiKJRJeWqqbzub3c-ETYX9oeuFkVyjE3yy1sm502zdqqKrjxd-Dnnz0bHCPq8YkrtgzTgt8CBMtPoxYLyar6m0lLqjschMPt2-X5LZUrcKJLeFfBhHxW4zjKwOIBaXDDQaMOGZoHCAMKFEqIE8Qg8_mEc0IVDyZyBew_esIa15_lJLKgr5"/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent flex flex-col justify-center px-12">
+<h2 class="font-display-lg text-display-lg text-white mb-2">Welcome Home, Alex.</h2>
+<p class="font-title-lg text-title-lg text-white/90">Penthouse 4B is ready for your arrival.</p>
+</div>
+</section>
+<!-- Quick Actions Grid -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-gutter mb-stack-lg">
+<button class="flex flex-col items-start p-6 bg-surface-container-lowest border border-outline-variant rounded-2xl hover:shadow-lg transition-all group active:scale-95">
+<div class="p-3 bg-primary-fixed rounded-xl mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-on-primary-fixed group-hover:text-on-primary">report_problem</span>
+</div>
+<span class="font-body-lg text-body-lg font-semibold">Report incident</span>
+</button>
+<button class="flex flex-col items-start p-6 bg-surface-container-lowest border border-outline-variant rounded-2xl hover:shadow-lg transition-all group active:scale-95">
+<div class="p-3 bg-primary-fixed rounded-xl mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-on-primary-fixed group-hover:text-on-primary">book_online</span>
+</div>
+<span class="font-body-lg text-body-lg font-semibold">Book facility</span>
+</button>
+<button class="flex flex-col items-start p-6 bg-surface-container-lowest border border-outline-variant rounded-2xl hover:shadow-lg transition-all group active:scale-95">
+<div class="p-3 bg-primary-fixed rounded-xl mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-on-primary-fixed group-hover:text-on-primary">event_available</span>
+</div>
+<span class="font-body-lg text-body-lg font-semibold">View upcoming events</span>
+</button>
+<button class="flex flex-col items-start p-6 bg-surface-container-lowest border border-outline-variant rounded-2xl hover:shadow-lg transition-all group active:scale-95">
+<div class="p-3 bg-primary-fixed rounded-xl mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-on-primary-fixed group-hover:text-on-primary">local_convenience_store</span>
+</div>
+<span class="font-body-lg text-body-lg font-semibold">Find local service</span>
+</button>
+</section>
+<!-- Bento Grid Overview -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter auto-rows-min">
+<!-- Upcoming Events (Large Card) -->
+<div class="md:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-3xl p-8 flex flex-col justify-between overflow-hidden relative">
+<div class="relative z-10">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md font-semibold">Upcoming Events</h3>
+<span class="font-label-md text-label-md text-on-tertiary-container bg-tertiary-fixed-dim px-3 py-1 rounded-full">3 New</span>
+</div>
+<div class="group relative overflow-hidden rounded-2xl mb-4">
+<img class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A sophisticated evening garden party at a luxury estate. Elegant residents are seen socializing under strings of warm fairy lights, holding glasses of champagne. The setting features manicured lawns, white linen-covered tables, and modern sculptural elements in the background. The mood is refined, social, and exclusive, with a cool evening color palette and warm light accents." src="https://lh3.googleusercontent.com/aida/AP1WRLvVz_agGHy2bzThk6rda8ZnomXT-uAc-1Ps6V3ADXhDS94xO_ZOlR6s7QfAT_hKeDqQOUY3e7QvUf1Hme9yANP8xBHOcfzQ1pCoyYQttwdhIHONa9NY5M33h8dn0LW3tkpk_iCYt1Y7_dS-7vIkKOaycg--tlwiAIbljqQUh96ZAzZL3omKNT5UB2B_kTmVEsVChJetXSOxxB2k1-kfgqzIoY2VPI2h56AfFjVSfp3qTamsiwXog7ny2u8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
+<p class="text-white font-label-md tracking-widest uppercase mb-1">Community Exclusive</p>
+<h4 class="text-white font-headline-md font-bold">Resident Networking Event</h4>
+<p class="text-white/80 font-body-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">schedule</span> This Friday, 7:00 PM • Sky Lounge
+                                </p>
+</div>
+</div>
+</div>
+<button class="font-label-md text-primary hover:underline flex items-center gap-2">View all community events <span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+<!-- Recent Security Notices -->
+<div class="bg-surface-container-low border border-outline-variant rounded-3xl p-8 flex flex-col">
+<div class="flex items-center gap-2 mb-6 text-error">
+<span class="material-symbols-outlined">security</span>
+<h3 class="font-title-lg text-title-lg font-semibold">Security Notices</h3>
+</div>
+<div class="space-y-4">
+<div class="p-4 bg-white rounded-xl border border-outline-variant">
+<p class="font-body-md font-semibold mb-1">Gate 2 Maintenance</p>
+<p class="font-caption text-on-surface-variant mb-2">Technicians will be servicing Gate 2 tomorrow from 10 AM to 2 PM. Please use North Entrance.</p>
+<span class="font-label-md text-[10px] text-outline uppercase tracking-tighter">Posted 2h ago</span>
+</div>
+<div class="p-4 bg-white rounded-xl border border-outline-variant">
+<p class="font-body-md font-semibold mb-1">CCTV Upgrade Complete</p>
+<p class="font-caption text-on-surface-variant mb-2">Phase 1 of the HD camera installation on Perimeter A is now finished.</p>
+<span class="font-label-md text-[10px] text-outline uppercase tracking-tighter">Posted Yesterday</span>
+</div>
+</div>
+<button class="mt-auto pt-6 font-label-md text-on-surface-variant hover:text-primary transition-colors text-center w-full">Access security portal</button>
+</div>
+<!-- Reserved Amenities -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-3xl p-8 flex flex-col">
+<h3 class="font-title-lg text-title-lg font-semibold mb-6">Reserved Amenities</h3>
+<div class="flex items-start gap-4 p-4 rounded-2xl bg-primary text-white mb-4">
+<div class="p-3 bg-white/20 rounded-xl">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div>
+<p class="font-body-md font-bold">Elite Fitness Center</p>
+<p class="font-caption text-white/80">Private Gym Session</p>
+<div class="mt-2 flex items-center gap-2 font-label-md bg-white/10 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-[14px]">event</span> Tomorrow, 8:00 AM
+                            </div>
+</div>
+</div>
+<div class="mt-auto">
+<div class="flex justify-between items-center p-4 border border-outline-variant rounded-2xl">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">pool</span>
+<span class="font-body-md">Lap Pool (Lane 2)</span>
+</div>
+<span class="font-label-md text-outline">Sat, 11 AM</span>
+</div>
+</div>
+</div>
+<!-- Emergency Contacts -->
+<div class="md:col-span-2 bg-inverse-surface text-inverse-on-surface rounded-3xl p-8 flex flex-col md:flex-row gap-8 items-center">
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md font-semibold mb-2">Emergency Contacts</h3>
+<p class="font-body-md text-inverse-primary mb-6">On-call staff available 24/7 for immediate assistance within the estate grounds.</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-error flex items-center justify-center">
+<span class="material-symbols-outlined text-white">shield</span>
+</div>
+<div>
+<p class="font-body-md font-bold text-white">Estate Security</p>
+<p class="font-caption text-inverse-primary">Dial Ext. 999</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed-dim flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-fixed">engineering</span>
+</div>
+<div>
+<p class="font-body-md font-bold text-white">Facility Manager</p>
+<p class="font-caption text-inverse-primary">Dial Ext. 104</p>
+</div>
+</div>
+</div>
+</div>
+<div class="hidden md:block w-48 h-48 bg-gradient-to-br from-white/10 to-transparent rounded-full flex items-center justify-center border border-white/5">
+<span class="material-symbols-outlined text-[80px] text-white/20">support_agent</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Only for Home/Dashboard as per mandate) -->
+<button class="fixed bottom-margin-desktop right-margin-desktop w-16 h-16 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-50 group">
+<span class="material-symbols-outlined text-[32px]">add</span>
+<span class="absolute right-full mr-4 px-4 py-2 bg-primary text-white rounded-xl text-body-md font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">New Request</span>
+</button>
+<script>
+        // Micro-interaction for hover effects on cards
+        document.querySelectorAll('.bg-surface-container-lowest').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.transition = 'all 0.3s cubic-bezier(0.2, 0, 0, 1)';
+                card.classList.add('shadow-xl');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.classList.remove('shadow-xl');
+            });
+        });
+
+        // Search bar focus effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary-container');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary-container');
+        });
+    </script>
+</body></html>

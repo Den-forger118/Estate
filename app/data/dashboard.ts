@@ -1,9 +1,6 @@
-export type DashboardRole =
-  | "admin"
-  | "manager"
-  | "landlord"
-  | "tenant"
-  | "maintenance";
+import { roleLabels, roleOptions, type UserRole } from "./roles";
+
+export type DashboardRole = UserRole;
 
 export type DashboardModule =
   | "dashboard"
@@ -17,23 +14,11 @@ export type DashboardModule =
   | "reports"
   | "messages"
   | "documents"
+  | "landlord-applications"
+  | "landlord-application"
   | "settings";
 
-export const roleLabels: Record<DashboardRole, string> = {
-  admin: "Administrator",
-  manager: "Property Manager",
-  landlord: "Landlord",
-  tenant: "Tenant",
-  maintenance: "Maintenance Staff",
-};
-
-export const roleOptions: { label: string; value: DashboardRole }[] = [
-  { label: roleLabels.admin, value: "admin" },
-  { label: roleLabels.manager, value: "manager" },
-  { label: roleLabels.landlord, value: "landlord" },
-  { label: roleLabels.tenant, value: "tenant" },
-  { label: roleLabels.maintenance, value: "maintenance" },
-];
+export { roleLabels, roleOptions };
 
 export const moduleMeta: Record<
   DashboardModule,
@@ -111,6 +96,18 @@ export const moduleMeta: Record<
     icon: "S",
     summary: "Profile, access, billing, notification, and platform controls.",
   },
+  "landlord-applications": {
+    label: "Landlord Applications",
+    href: "/dashboard/landlord-applications",
+    icon: "A",
+    summary: "Review property owner requests to lease units within the estate.",
+  },
+  "landlord-application": {
+    label: "Become a Landlord",
+    href: "/dashboard/landlord-application",
+    icon: "L",
+    summary: "Apply for approval to rent your owned unit to tenants.",
+  },
 };
 
 export const roleModules: Record<DashboardRole, DashboardModule[]> = {
@@ -126,6 +123,7 @@ export const roleModules: Record<DashboardRole, DashboardModule[]> = {
     "reports",
     "messages",
     "documents",
+    "landlord-applications",
     "settings",
   ],
   manager: [
@@ -139,14 +137,27 @@ export const roleModules: Record<DashboardRole, DashboardModule[]> = {
     "reports",
     "messages",
     "documents",
+    "landlord-applications",
+    "settings",
+  ],
+  owner: [
+    "dashboard",
+    "properties",
+    "payments",
+    "messages",
+    "documents",
+    "landlord-application",
     "settings",
   ],
   landlord: [
     "dashboard",
     "properties",
     "units",
+    "tenants",
+    "leases",
     "payments",
     "reports",
+    "messages",
     "documents",
     "settings",
   ],

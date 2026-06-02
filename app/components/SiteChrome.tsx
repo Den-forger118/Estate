@@ -9,6 +9,7 @@ const footerItems = [
   ["Properties", "/properties"],
   ["Blog", "/blog"],
   ["Contact", "/contact"],
+  ["Resident Services", "/community"],
 ];
 
 export function Footer() {

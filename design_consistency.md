@@ -791,24 +791,27 @@ Protected Dashboard Routes:
 - /dashboard/messages
 - /dashboard/documents
 - /dashboard/settings
+- /dashboard/landlord-applications
+- /dashboard/landlord-application
 
 ### Role-Based Navigation
-Navigation must change based on user role. Do NOT create one universal sidebar for all users.
 
-Admin:
-Full access to all modules.
+Full specification: **`user-roles-navigation.md`**.
 
-Property Manager:
-Access to operations, tenants, leases, payments, maintenance, reports, and documents.
+Hierarchy: Administrator → Property Manager → Property Owner → Landlord → Tenant → Maintenance Staff.
 
-Landlord:
-Access to properties, units, payments, revenue, reports, and documents.
+Property owners apply to become landlords; only admin and property manager approve (`/dashboard/landlord-applications`).
 
-Tenant:
-Access only to lease, payments, maintenance requests, messages, documents, and settings.
+REMS highlights:
 
-Maintenance Staff:
-Access only to maintenance tasks, assigned work, messages, and documents.
+- **Admin** — all modules including landlord application review.
+- **Property Manager** — operations modules + landlord application review.
+- **Property Owner** — owned property, documents, payments; submit `/dashboard/landlord-application`.
+- **Landlord** — owner-approved leasing: units, tenants, leases, payments, reports.
+- **Tenant** — lease, payments, maintenance, messages, documents.
+- **Maintenance Staff** — maintenance, messages, documents only.
+
+Resident services (`/community/*`): all roles **except** maintenance staff.
 
 ### Development Notes
 - Maintain the same design system used in the public website (typography, spacing, buttons, colors, interactions).
@@ -817,3 +820,15 @@ Access only to maintenance tasks, assigned work, messages, and documents.
 - Add placeholder route guards (unauthenticated users should redirect to `/login`).
 - Ensure navigation feels logical, smooth, and non-chaotic.
 - Prioritize consistency, scalability, and clean UX.
+
+## Resident Utility Platform Navigation
+
+The third platform pillar (resident services, not a social network) lives under `/community/*`.
+
+- Development navigation spec: `community-navigation.md`
+- Stitch design source: `public/stitch_estate_operating_system/`
+- Implementation: `app/community/` with the same dashboard shell tokens as REMS
+- Access: mock auth; all roles except `maintenance` (see `user-roles-navigation.md`)
+
+
+

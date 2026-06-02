@@ -12,6 +12,10 @@ import {
   tenants,
   units,
 } from "../data/dashboard";
+import {
+  LandlordApplicationSubmitPanel,
+  LandlordApplicationsReviewPanel,
+} from "./LandlordApplicationPanels";
 import type { CSSProperties } from "react";
 
 const revenueTrend = [
@@ -328,6 +332,8 @@ export function SettingsView() {
 }
 
 export function ModuleView({ module }: { module: DashboardModule }) {
+  if (module === "landlord-application") return <LandlordApplicationSubmitPanel />;
+  if (module === "landlord-applications") return <LandlordApplicationsReviewPanel />;
   if (module === "properties") return <PropertiesView />;
   if (module === "maintenance") return <MaintenanceView />;
   if (module === "messages") return <MessagesView />;
