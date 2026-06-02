@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LuxeManage - Tenant Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-dim": "#cbdbf5",
+                    "surface-variant": "#d3e4fe",
+                    "on-tertiary-fixed": "#331200",
+                    "secondary-fixed": "#85f8c4",
+                    "on-tertiary-fixed-variant": "#763300",
+                    "on-primary-fixed": "#131b2e",
+                    "error-container": "#ffdad6",
+                    "secondary": "#006c4a",
+                    "on-secondary-fixed-variant": "#005137",
+                    "inverse-primary": "#bec6e0",
+                    "outline": "#76777d",
+                    "on-error": "#ffffff",
+                    "surface-container": "#e5eeff",
+                    "inverse-surface": "#213145",
+                    "primary-fixed": "#dae2fd",
+                    "secondary-fixed-dim": "#68dba9",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#000000",
+                    "surface-bright": "#f8f9ff",
+                    "on-background": "#0b1c30",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "tertiary-container": "#331200",
+                    "surface-container-low": "#eff4ff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#ffdbca",
+                    "surface-container-high": "#dce9ff",
+                    "on-secondary": "#ffffff",
+                    "primary": "#000000",
+                    "on-tertiary-container": "#cf6721",
+                    "on-secondary-container": "#00714e",
+                    "surface-tint": "#565e74",
+                    "surface-container-highest": "#d3e4fe",
+                    "background": "#f8f9ff",
+                    "on-primary-container": "#7c839b",
+                    "on-surface-variant": "#45464d",
+                    "tertiary-fixed-dim": "#ffb68e",
+                    "on-surface": "#0b1c30",
+                    "surface": "#f8f9ff",
+                    "primary-fixed-dim": "#bec6e0",
+                    "secondary-container": "#82f5c1",
+                    "primary-container": "#131b2e",
+                    "outline-variant": "#c6c6cd",
+                    "on-secondary-fixed": "#002114",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "0.5rem",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "sm": "1rem",
+                    "lg": "2rem",
+                    "base": "4px",
+                    "container-max": "1440px",
+                    "md": "1.5rem",
+                    "xl": "3rem"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full border-r border-outline-variant dark:border-outline fixed left-0 top-0 h-full w-[280px] bg-surface-container-low dark:bg-primary-container shadow-sm z-40">
+<div class="p-gutter flex items-center gap-xs">
+<span class="material-symbols-outlined text-[32px] text-primary dark:text-inverse-primary" data-icon="domain" data-weight="fill" style="font-variation-settings: 'FILL' 1;">domain</span>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">LuxeManage</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Property Portal</p>
+</div>
+</div>
+<div class="px-gutter mb-gutter">
+<button class="w-full bg-primary text-on-primary py-sm px-md rounded-DEFAULT font-label-md text-label-md hover:bg-secondary transition-colors duration-200 flex items-center justify-center gap-xs shadow-sm">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                New Property
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-xs">
+<ul class="space-y-base">
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-label-md text-label-md">Properties</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="meeting_room">meeting_room</span>
+<span class="font-label-md text-label-md">Units</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-secondary font-bold border-r-4 border-secondary bg-secondary-container/20 hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Tenants</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-md text-label-md">Leases</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Payments</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span>
+<span class="font-label-md text-label-md">Maintenance</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-md text-label-md">Invoices</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-label-md text-label-md">Messages</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-label-md text-label-md">Documents</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="mt-auto p-xs border-t border-outline-variant/30">
+<ul class="space-y-base">
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-xs rounded-DEFAULT text-on-surface-variant hover:text-primary hover:bg-surface-variant dark:hover:bg-on-primary-fixed-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:ml-[280px] h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 w-full bg-surface dark:bg-surface-container-lowest shadow-sm flex justify-between items-center h-16 px-gutter max-w-container-max mx-auto transition-all duration-300 ease-in-out md:hidden">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[24px] text-primary" data-icon="domain" data-weight="fill">domain</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">LuxeManage</span>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant">
+<button class="hover:bg-surface-container-high p-xs rounded-full transition-all duration-300"><span class="material-symbols-outlined" data-icon="search">search</span></button>
+<button class="hover:bg-surface-container-high p-xs rounded-full transition-all duration-300"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="hover:bg-surface-container-high p-xs rounded-full transition-all duration-300"><span class="material-symbols-outlined" data-icon="menu">menu</span></button>
+</div>
+</header>
+<!-- TopAppBar (Desktop) -->
+<header class="hidden md:flex sticky top-0 z-30 w-full bg-surface/80 backdrop-blur-md justify-between items-center h-[72px] px-gutter border-b border-outline-variant/30">
+<div class="flex items-center gap-lg flex-1">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full pl-xl pr-sm py-sm rounded-DEFAULT border border-outline-variant bg-surface focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-sm text-body-sm" placeholder="Search tenants, units, or leases..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<button class="p-xs rounded-full hover:bg-surface-variant transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-xs rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+<button class="p-xs rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant/50"></div>
+<div class="flex items-center gap-sm cursor-pointer hover:bg-surface-variant p-xs rounded-DEFAULT transition-colors">
+<div class="text-right hidden lg:block">
+<p class="font-label-md text-label-md text-on-surface">Eleanor Vance</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Role: Administrator</p>
+</div>
+<img alt="User Profile" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a middle-aged woman with styled dark hair, wearing a navy blue blazer over a crisp white shirt. She has a confident, warm smile. The background is a soft, blurred modern office interior with subtle natural light. The overall mood is approachable, authoritative, and high-end corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmzFwqugJgn-EF116gVm0U8nkcaxMuu4kba49I-AohTvyhJ54k_hRC03UD1ZoDWI-rOn2kl4GU009DxKRaC1eoYo4f2A_XetLf44M9Q29stKYK8r9_fOx2W63nbAnOFc5r2l_NiclTOhYAdQU2g1GAOsVZZmU9EMSUiJJ_ApGmuyALXtAIyqx1Ghvp2bvtNSmkPp5N3IDy8MBqSXlYVq0ODS_tIuHyMXobYLYDdqEO-s5AJ7JGpRhRbeGBeHe1r4prpa3Q2K89rOQ"/>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-mobile md:p-gutter max-w-container-max mx-auto w-full">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-lg">
+<div>
+<h2 class="font-display-lg text-headline-lg-mobile md:text-headline-lg font-bold text-on-surface">Tenants</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Manage your resident directory and active leases.</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-xs px-sm py-xs bg-surface border border-outline-variant rounded-DEFAULT font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                        Filters
+                    </button>
+<button class="flex items-center gap-xs px-md py-sm bg-primary text-on-primary rounded-DEFAULT font-label-md text-label-md hover:bg-secondary transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="person_add">person_add</span>
+                        Add Tenant
+                    </button>
+</div>
+</div>
+<!-- Stats Overview -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md mb-lg">
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-[0_4px_24px_rgba(11,28,48,0.04)] border border-outline-variant/30 flex items-center justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Tenants</p>
+<p class="font-headline-md text-headline-md font-bold text-on-surface mt-xs">1,248</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-[0_4px_24px_rgba(11,28,48,0.04)] border border-outline-variant/30 flex items-center justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Active Leases</p>
+<p class="font-headline-md text-headline-md font-bold text-on-surface mt-xs">1,192</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="task_alt">task_alt</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-[0_4px_24px_rgba(11,28,48,0.04)] border border-outline-variant/30 flex items-center justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Expiring Soon</p>
+<p class="font-headline-md text-headline-md font-bold text-on-surface mt-xs">34</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-[#fef08a]/30 flex items-center justify-center text-[#854d0e]">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-[0_4px_24px_rgba(11,28,48,0.04)] border border-outline-variant/30 flex items-center justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Delinquent</p>
+<p class="font-headline-md text-headline-md font-bold text-error mt-xs">12</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-error-container/50 flex items-center justify-center text-error">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Tenant List -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-md">
+<!-- Tenant Card 1 -->
+<div class="bg-surface-container-lowest rounded-lg shadow-[0_4px_24px_rgba(11,28,48,0.04)] border border-outline-variant/30 overflow-hidden hover:-translate-y-1 transition-transform duration-300 cursor-pointer group flex flex-col">
+<div class="p-md flex items-start gap-md border-b border-outline-variant/20 relative">
+<img alt="Tenant Avatar" class="w-16 h-16 rounded-full object-cover border-2 border-surface shadow-sm z-10" data-alt="A portrait of a young man with short, styled hair and a slight beard, wearing a casual gray crewneck sweater. He is looking directly at the camera with a neutral, calm expression. The background is a solid, soft light-gray studio backdrop. Lighting is even and flattering, typical of professional corporate headshots." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3hR8LuzBGhKS-RGHKe7ks8mON5mslp6Rp_0AAxC9dMQMIK_LpgVpmJLxqsCVCtcV0NeTL71msGbuohe-J4DgpQvSyTfm15QqDl4nBB1lkHK0-pJd0lT9DHU-5G_N79dLfnpb8gAsmQ5Q6B4fWhBwskyerEZnRjLc-7ViC6azKiDWY6lyEBr9dAkbEzVyzkIwIei05qVZQmuXlC8fO26b0LnOd-pXKtkfWEWzb8E5kbKrqGZTWojvyveo-VPQIE2fHbYyv26Yf6qQ"/>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-label-md text-body-lg font-bold text-on-surface group-hover:text-secondary transition-colors">Marcus Chen</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Unit 4B - The Grandview</p>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-secondary-container/30 text-secondary">Active</span>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-bright flex-1 flex flex-col justify-between">
+<div class="space-y-xs mb-md">
+<div class="flex items-center gap-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="mail">mail</span>
+<span>m.chen@example.com</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="phone">phone</span>
+<span>(555) 123-4567</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-sm border-t border-outline-variant/20">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase text-[10px]">Next Payment</p>
+<p class="font-label-md text-label-md text-on-surface">Oct 1, 2023</p>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase text-[10px]">Lease Ends</p>
+<p class="font-label-md text-label-md text-on-surface">Aug 2024</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tenant Card 2 (Expiring) -->
+<div class="bg-surface-container-lowest rounded-lg shadow-[0_4px_24px_rgba(11,28,48,0.04)] border border-outline-variant/30 overflow-hidden hover:-translate-y-1 transition-transform duration-300 cursor-pointer group flex flex-col relative">
+<div class="absolute top-0 left-0 w-full h-1 bg-[#fef08a]"></div>
+<div class="p-md flex items-start gap-md border-b border-outline-variant/20">
+<img alt="Tenant Avatar" class="w-16 h-16 rounded-full object-cover border-2 border-surface shadow-sm" data-alt="A portrait of a young woman with long dark hair, wearing a white blouse. She has a gentle smile. The lighting is soft and natural, with a blurred, light-colored background suggesting a bright indoor setting. The image feels professional, clean, and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf0AFQUzymmwRQd9mDUOY23qOke80DsYXC9c-2tTHwjNLaq3SyvjhDn6h9rg4eaVZqoxGCN88yLQHTuRCaJ7vk9EM56DVVkZiAC70mb4Bu45eLQorR1H8YVrQyj3POE3ZB1XuYKTWBH1iHczYX4KaXMZ0E7gBW__Zo3WanRlaernds07p0Bmc6ajimwrLnydlVLv-VgOf1LDsyi1mbQV5ix0xfq1v-sldq1cbLdAkpwWJ7QNAQBZSOs7zsHon79VEC6L7aJ1dx-4A"/>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-label-md text-body-lg font-bold text-on-surface group-hover:text-secondary transition-colors">Sarah Jenkins</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Unit 12A - Skyline Towers</p>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[#fef08a]/40 text-[#854d0e]">Expiring</span>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-bright flex-1 flex flex-col justify-between">
+<div class="space-y-xs mb-md">
+<div class="flex items-center gap-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="mail">mail</span>
+<span>s.jenkins@example.com</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="phone">phone</span>
+<span>(555) 987-6543</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-sm border-t border-outline-variant/20">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase text-[10px]">Next Payment</p>
+<p class="font-label-md text-label-md text-on-surface">Oct 1, 2023</p>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-error uppercase text-[10px] font-bold">Lease Ends</p>
+<p class="font-label-md text-label-md text-error">Nov 15, 2023</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tenant Card 3 -->
+<div class="bg-surface-container-lowest rounded-lg shadow-[0_4px_24px_rgba(11,28,48,0.04)] border border-outline-variant/30 overflow-hidden hover:-translate-y-1 transition-transform duration-300 cursor-pointer group flex flex-col">
+<div class="p-md flex items-start gap-md border-b border-outline-variant/20">
+<div class="w-16 h-16 rounded-full bg-surface-dim border-2 border-surface shadow-sm flex items-center justify-center text-on-surface-variant font-headline-md">
+                            DR
+                        </div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-label-md text-body-lg font-bold text-on-surface group-hover:text-secondary transition-colors">David Rodriguez</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Unit 2C - Oakwood Estates</p>
+</div>
+<span class="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-secondary-container/30 text-secondary">Active</span>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-bright flex-1 flex flex-col justify-between">
+<div class="space-y-xs mb-md">
+<div class="flex items-center gap-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="mail">mail</span>
+<span>david.r@example.com</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="phone">phone</span>
+<span>(555) 222-3333</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-sm border-t border-outline-variant/20">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase text-[10px]">Next Payment</p>
+<p class="font-label-md text-label-md text-on-surface">Oct 1, 2023</p>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase text-[10px]">Lease Ends</p>
+<p class="font-label-md text-label-md text-on-surface">May 2025</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

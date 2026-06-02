@@ -18,11 +18,11 @@ export default function AboutPage() {
       <section className="page-hero">
         <div className="page-hero-inner reveal">
           <div className="stack">
-            <span className="eyebrow">About Aster Grove</span>
+            <span className="eyebrow">About Ernest Ofori</span>
             <h1>Estate living shaped by care, security, and quiet refinement.</h1>
           </div>
           <p>
-            Aster Grove Estates was founded to bring premium property management discipline to residential communities where families expect comfort, privacy, and reliable support.
+            Ernest Ofori was founded to bring premium property management discipline to residential communities where families expect comfort, privacy, and reliable support.
           </p>
         </div>
       </section>

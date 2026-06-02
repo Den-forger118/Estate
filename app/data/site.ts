@@ -179,7 +179,7 @@ export const testimonials = [
     name: "Daniel Reyes",
     role: "Owner client",
     quote:
-      "Aster Grove made the leasing process feel calm and transparent. The reporting is clear, and the management team is easy to reach.",
+      "Ernest Ofori made the leasing process feel calm and transparent. The reporting is clear, and the management team is easy to reach.",
   },
   {
     name: "Nora Whitaker",

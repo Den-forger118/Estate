@@ -5,7 +5,7 @@ This project does not use a third-party component design system such as Material
 The current public website uses:
 
 - **Tailwind CSS v4** as the CSS engine/reset layer through `@import "tailwindcss";` in `app/globals.css`.
-- **A custom Aster Grove Estates design system** defined in `app/globals.css`.
+- **A custom Ernest Ofori design system** defined in `app/globals.css`.
 - **Next Font / Geist** from `next/font/google` in `app/layout.tsx`.
 
 ## Core Tokens

@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const property = properties.find((item) => item.slug === slug);
   return {
-    title: property ? `${property.name} | Aster Grove Estates` : "Property | Aster Grove Estates",
+    title: property ? `${property.name} | Ernest Ofori` : "Property | Ernest Ofori",
     description: property?.description,
   };
 }
@@ -94,7 +94,7 @@ export default async function PropertyDetailsPage({ params }: Props) {
           <article className="floor-card reveal">
             <span className="eyebrow">Location</span>
             <h2>{property.location}</h2>
-            <p>Positioned within Aster Grove&apos;s managed residential corridor with controlled access, landscaped roads, and convenient resident services.</p>
+            <p>Positioned within Ernest Ofori&apos;s managed residential corridor with controlled access, landscaped roads, and convenient resident services.</p>
             <div className="map-placeholder">Map placeholder for {property.location}</div>
           </article>
         </div>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LuxeManage - Units Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "surface-variant": "#d3e4fe",
+                        "on-tertiary-fixed": "#331200",
+                        "secondary-fixed": "#85f8c4",
+                        "on-tertiary-fixed-variant": "#763300",
+                        "on-primary-fixed": "#131b2e",
+                        "error-container": "#ffdad6",
+                        "secondary": "#006c4a",
+                        "on-secondary-fixed-variant": "#005137",
+                        "inverse-primary": "#bec6e0",
+                        "outline": "#76777d",
+                        "on-error": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "inverse-surface": "#213145",
+                        "primary-fixed": "#dae2fd",
+                        "secondary-fixed-dim": "#68dba9",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#000000",
+                        "surface-bright": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-container": "#331200",
+                        "surface-container-low": "#eff4ff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbca",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "on-tertiary-container": "#cf6721",
+                        "on-secondary-container": "#00714e",
+                        "surface-tint": "#565e74",
+                        "surface-container-highest": "#d3e4fe",
+                        "background": "#f8f9ff",
+                        "on-primary-container": "#7c839b",
+                        "on-surface-variant": "#45464d",
+                        "tertiary-fixed-dim": "#ffb68e",
+                        "on-surface": "#0b1c30",
+                        "surface": "#f8f9ff",
+                        "primary-fixed-dim": "#bec6e0",
+                        "secondary-container": "#82f5c1",
+                        "primary-container": "#131b2e",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-fixed": "#002114",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "0.5rem",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "sm": "1rem",
+                        "lg": "2rem",
+                        "base": "4px",
+                        "container-max": "1440px",
+                        "md": "1.5rem",
+                        "xl": "3rem"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Subtle scrollbar for table */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #c6c6cd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- SideNavBar (Hidden on Mobile, Visible on md+) -->
+<nav class="hidden md:flex flex-col h-full border-r border-outline-variant bg-surface-container-low shadow-sm fixed left-0 top-0 w-[280px] z-40 transition-all duration-300">
+<!-- Header -->
+<div class="p-gutter flex items-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary filled" data-icon="domain" data-weight="fill">domain</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">LuxeManage</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Property Portal</p>
+</div>
+</div>
+<!-- CTA -->
+<div class="px-gutter pb-sm">
+<button class="w-full bg-primary text-on-primary rounded-lg py-sm font-label-md text-label-md hover:bg-secondary transition-colors duration-200 flex items-center justify-center gap-xs shadow-sm shadow-primary/10 hover:-translate-y-0.5 active:translate-y-0 active:opacity-80">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Property
+            </button>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto px-sm py-sm custom-scrollbar flex flex-col gap-base">
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-label-md text-label-md">Properties</span>
+</a>
+<!-- ACTIVE TAB -->
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-secondary font-bold border-r-4 border-secondary bg-secondary-container/20 scale-98 active:opacity-80 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined filled" data-icon="meeting_room" data-weight="fill">meeting_room</span>
+<span class="font-label-md text-label-md">Units</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Tenants</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-md text-label-md">Leases</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Payments</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span>
+<span class="font-label-md text-label-md">Maintenance</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-md text-label-md">Invoices</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-label-md text-label-md">Messages</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-label-md text-label-md">Documents</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<!-- Footer Links -->
+<div class="mt-auto border-t border-outline-variant p-sm flex flex-col gap-base">
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:ml-[280px] h-screen overflow-hidden bg-background">
+<!-- TopNavBar (Responsive) -->
+<header class="sticky top-0 z-30 w-full bg-surface shadow-sm transition-all duration-300 ease-in-out">
+<div class="flex justify-between items-center h-16 px-margin-mobile md:px-gutter max-w-container-max mx-auto">
+<!-- Mobile Brand (Hidden on md) -->
+<div class="md:hidden flex items-center gap-xs">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[18px] filled">domain</span>
+</div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">LuxeManage</span>
+</div>
+<!-- Search (Left on Web, hidden or icon on mobile) -->
+<div class="hidden md:flex items-center max-w-md w-full relative">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant">search</span>
+<input class="w-full pl-xl pr-sm py-2 bg-surface-container-low border border-outline-variant rounded-full font-body-sm text-body-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Search units, properties, or tenants..." type="text"/>
+</div>
+<!-- Mobile Search Icon -->
+<button class="md:hidden p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-xs md:gap-sm">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border border-surface"></span>
+</button>
+<button class="hidden md:block p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+<button class="hidden md:block p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-xs hidden md:block"></div>
+<div class="hidden lg:flex flex-col items-end mr-sm">
+<span class="font-label-sm text-label-sm text-on-surface">Jane Doe</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant text-[11px]">Role: Administrator</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant overflow-hidden flex-shrink-0 hover:ring-2 hover:ring-secondary transition-all">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYMkOnMoUsiHDGdkYG4yRGrEUHyH3l4u7zYGRDc8Exz4oUUNqmqQWKFcXtL6R_dTlx2lO5AC05SvWT60RcnhbKXp33BhZIdyWIFFLEjwmRaZtSzsfLLwBhGLyvVIIkXs33uPFoJrJ8G69HcW2Kmyk3cJaTV42fHQYcG7eWQPuXVCiDE3JU450ukRahE9B-ZtkSd9xczdvdVxqy89rC-uqtBOC6NuBrr7kq0fpIZS42ib8PPYVXEaG4rHBQIeIrKmn5P5Gehs3cUag"/>
+</button>
+</div>
+</div>
+<!-- Mobile Navigation Cluster (Only visible on mobile, under top bar) -->
+<div class="md:hidden flex overflow-x-auto custom-scrollbar bg-surface border-t border-outline-variant px-margin-mobile">
+<a class="flex-shrink-0 px-sm py-3 text-on-surface-variant font-label-md text-label-md" href="#">Dashboard</a>
+<a class="flex-shrink-0 px-sm py-3 text-on-surface-variant font-label-md text-label-md" href="#">Properties</a>
+<a class="flex-shrink-0 px-sm py-3 text-primary font-bold font-label-md text-label-md border-b-2 border-primary" href="#">Units</a>
+<a class="flex-shrink-0 px-sm py-3 text-on-surface-variant font-label-md text-label-md" href="#">Tenants</a>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="flex-1 overflow-y-auto custom-scrollbar p-margin-mobile md:p-gutter relative">
+<div class="max-w-container-max mx-auto w-full flex flex-col gap-lg h-full">
+<!-- Page Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-sm">
+<div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary font-semibold tracking-tight">Units Management</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Manage and track all property units across your portfolio.</p>
+</div>
+<div class="flex items-center gap-xs mt-2 md:mt-0">
+<button class="flex items-center gap-xs px-sm py-2 bg-surface border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+                            Export
+                        </button>
+<button class="flex items-center gap-xs px-sm py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-secondary transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add Unit
+                        </button>
+</div>
+</div>
+<!-- Advanced Filters Bar (Glassmorphism inspired container) -->
+<div class="bg-surface/80 backdrop-blur-md border border-outline-variant rounded-xl p-sm shadow-sm flex flex-col lg:flex-row gap-sm items-start lg:items-center justify-between">
+<div class="flex flex-wrap items-center gap-sm w-full lg:w-auto">
+<!-- Property Filter -->
+<div class="relative min-w-[200px] flex-grow lg:flex-grow-0">
+<label class="absolute -top-2 left-2 bg-surface px-1 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-[10px]">Property</label>
+<select class="w-full bg-transparent border border-outline-variant rounded-lg px-sm py-2 font-body-sm text-body-sm text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary appearance-none transition-colors">
+<option>All Properties</option>
+<option>The Grand Atrium</option>
+<option>Riverfront Residences</option>
+<option>Skyline Towers</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<!-- Status Filter -->
+<div class="relative min-w-[160px] flex-grow lg:flex-grow-0">
+<label class="absolute -top-2 left-2 bg-surface px-1 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-[10px]">Status</label>
+<select class="w-full bg-transparent border border-outline-variant rounded-lg px-sm py-2 font-body-sm text-body-sm text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary appearance-none transition-colors">
+<option>All Statuses</option>
+<option>Occupied</option>
+<option>Vacant</option>
+<option>Under Maintenance</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<!-- Type Filter -->
+<div class="relative min-w-[140px] flex-grow lg:flex-grow-0">
+<label class="absolute -top-2 left-2 bg-surface px-1 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-[10px]">Unit Type</label>
+<select class="w-full bg-transparent border border-outline-variant rounded-lg px-sm py-2 font-body-sm text-body-sm text-on-surface focus:border-secondary focus:ring-1 focus:ring-secondary appearance-none transition-colors">
+<option>All Types</option>
+<option>Studio</option>
+<option>1BR</option>
+<option>2BR</option>
+<option>Penthouse</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Search/Clear Filters -->
+<div class="flex items-center gap-xs w-full lg:w-auto mt-2 lg:mt-0 justify-end">
+<button class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors underline-offset-2 hover:underline">Clear Filters</button>
+<div class="h-6 w-px bg-outline-variant mx-1"></div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-2 text-on-surface-variant text-[18px]">search</span>
+<input class="pl-xl pr-sm py-1.5 bg-surface-container-low border border-outline-variant rounded-md font-body-sm text-body-sm focus:border-secondary focus:ring-1 focus:ring-secondary w-full lg:w-48 transition-all" placeholder="Search Unit #..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Inventory Table Card -->
+<div class="bg-surface rounded-xl border border-outline-variant shadow-sm overflow-hidden flex-1 flex flex-col min-h-[400px]">
+<div class="overflow-x-auto flex-1 custom-scrollbar">
+<table class="w-full text-left border-collapse min-w-[900px]">
+<thead class="bg-surface-container-low border-b border-outline-variant sticky top-0 z-10">
+<tr>
+<th class="py-3 px-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-16">
+<div class="flex items-center gap-1 cursor-pointer hover:text-primary">Unit # <span class="material-symbols-outlined text-[14px]">arrow_downward</span></div>
+</th>
+<th class="py-3 px-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Property</th>
+<th class="py-3 px-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-24">Type</th>
+<th class="py-3 px-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-36">Status</th>
+<th class="py-3 px-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Tenant</th>
+<th class="py-3 px-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-32 text-right">Monthly Rent</th>
+<th class="py-3 px-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-32">Lease Expiry</th>
+<th class="py-3 px-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-16 text-center">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-sm text-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-3 px-sm font-label-md text-primary">101A</td>
+<td class="py-3 px-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">apartment</span>
+</div>
+<span class="font-medium text-on-surface">The Grand Atrium</span>
+</div>
+</td>
+<td class="py-3 px-sm text-on-surface-variant">2BR</td>
+<td class="py-3 px-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-secondary-container/30 text-secondary-fixed-dim border border-secondary/20">Occupied</span>
+</td>
+<td class="py-3 px-sm">
+<div class="flex items-center gap-2">
+<img alt="Tenant Profile" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUYtB4RP7yS4KrzT0-XcH0mAdZsI7UTNTDW1VnPEEqAj0Z6vWw1QP_o6PLLYwwMdUHqcyYsjn73fDjBPVbSixSBxus1lufpq8ZEt9Mh1_U9DLtGgMPmItWR73k8Xxl9al2pcxSeUdFywH8cW2MkX9pY_uhPMW27pTuKR-W6bDj7u8BRvxKyS_gur4Kz1dwYlARSjYKgHjR35IPYpxOkcpgM_aNfDJMCxz6ON5BYWB77ndJjSxVAHKeU82fDryvYo1L7f2pvwmDw1k"/>
+<span>Michael Chen</span>
+</div>
+</td>
+<td class="py-3 px-sm text-right font-medium">$3,200</td>
+<td class="py-3 px-sm text-on-surface-variant">Oct 31, 2024</td>
+<td class="py-3 px-sm text-center">
+<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-variant transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-3 px-sm font-label-md text-primary">102A</td>
+<td class="py-3 px-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">apartment</span>
+</div>
+<span class="font-medium text-on-surface">The Grand Atrium</span>
+</div>
+</td>
+<td class="py-3 px-sm text-on-surface-variant">1BR</td>
+<td class="py-3 px-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-surface-variant text-on-surface-variant border border-outline-variant/30">Vacant</span>
+</td>
+<td class="py-3 px-sm text-on-surface-variant italic text-[12px]">--</td>
+<td class="py-3 px-sm text-right font-medium">$2,400</td>
+<td class="py-3 px-sm text-on-surface-variant italic text-[12px]">--</td>
+<td class="py-3 px-sm text-center">
+<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-variant transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-3 px-sm font-label-md text-primary">PH-01</td>
+<td class="py-3 px-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">location_city</span>
+</div>
+<span class="font-medium text-on-surface">Skyline Towers</span>
+</div>
+</td>
+<td class="py-3 px-sm text-on-surface-variant">Penthouse</td>
+<td class="py-3 px-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#fef3c7] text-[#92400e] border border-[#fcd34d]/50">Under Maintenance</span>
+</td>
+<td class="py-3 px-sm text-on-surface-variant italic text-[12px]">--</td>
+<td class="py-3 px-sm text-right font-medium">$8,500</td>
+<td class="py-3 px-sm text-on-surface-variant italic text-[12px]">--</td>
+<td class="py-3 px-sm text-center">
+<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-variant transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-3 px-sm font-label-md text-primary">405B</td>
+<td class="py-3 px-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">water</span>
+</div>
+<span class="font-medium text-on-surface">Riverfront Residences</span>
+</div>
+</td>
+<td class="py-3 px-sm text-on-surface-variant">Studio</td>
+<td class="py-3 px-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-secondary-container/30 text-secondary-fixed-dim border border-secondary/20">Occupied</span>
+</td>
+<td class="py-3 px-sm">
+<div class="flex items-center gap-2">
+<img alt="Tenant Profile" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVrfhc1d6BeGHw6QycvmyyhvxqyQX2JcuntbjI0746iT2TIMl4tnn0Fm3S1vj4LT7dc4mDEdIgu7Pc7wHFk1Fv43YT-BcJOLbfyuVXT43WPFIgLOXp_B0C7ZgXhDAhv-m2V9H7abVCaYvHcvOdOQVTIAPO1SijWsXw--HiUYiurkox8Kn0bIXGE3QfS4pd4zD-115IA6W9yThYOvcxTrEtCy_sfMfqekylfeheSlFxMMrxctdejwj_sIjajIWA6panv2QW_wgxqaI"/>
+<span>Sarah Jenkins</span>
+</div>
+</td>
+<td class="py-3 px-sm text-right font-medium">$1,850</td>
+<td class="py-3 px-sm text-on-surface-variant text-error">May 15, 2024</td>
+<td class="py-3 px-sm text-center">
+<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-variant transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="border-t border-outline-variant bg-surface p-sm flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1-4 of 124 units</span>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container-low transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-secondary text-on-primary font-label-sm text-label-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container-low font-label-sm text-label-sm transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container-low font-label-sm text-label-sm transition-colors">3</button>
+<span class="px-1 text-on-surface-variant">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

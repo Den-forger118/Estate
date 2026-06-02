@@ -11,6 +11,7 @@ const navItems = [
   ["Properties", "/properties"],
   ["Blog", "/blog"],
   ["Contact", "/contact"],
+  ["Dashboard", "/dashboard"],
 ];
 
 export function Header() {

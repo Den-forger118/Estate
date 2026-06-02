@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aster Grove Estates | Premium Real Estate Living",
+  title: "Ernest Ofori | Premium Real Estate Living",
   description:
     "A polished public real estate website for secure estate living, property management, available homes, services, news, and inspections.",
 };

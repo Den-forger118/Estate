@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { BlogCard, PropertyCard } from "./components/Cards";
 import { PageShell, SectionIntro } from "./components/SiteChrome";
 import { blogPosts, properties, testimonials } from "./data/site";
@@ -13,29 +14,33 @@ const reasons = [
 export default function Home() {
   return (
     <PageShell>
-{/* Hero section start */}
+      {/* Hero section start */}
       <section className="hero">
+        <div className="hero-media reveal">
+          <Image
+            src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1600&q=84"
+            alt="Premium estate home exterior"
+            fill
+            priority
+            sizes="100vw"
+          />
+          <div className="hero-stat">
+            <strong>96%</strong>
+            <span>resident satisfaction across managed communities</span>
+          </div>
+        </div>
         <div className="hero-copy reveal">
-          <div className="header-text">
           <span className="eyebrow">Secure, Comfortable, Modern Living</span>
           <h1>Find Your Perfect Home in a beautifully managed estate.</h1>
           <div className="hero-actions">
             <Link href="/properties" className="btn btn-primary">Browse Available Units</Link>
             <Link href="/contact" className="btn btn-secondary">Book an Inspection</Link>
           </div>
-          </div>
-          <div className="hero-media reveal">
-          <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1600&q=84" alt="Premium estate home exterior" />
-          <div className="hero-stat">
-            <strong>96%</strong>
-            <span>resident satisfaction across managed communities</span>
-          </div>
-        </div>
         </div>
       </section>
-    {/* hero section end */}
+      {/* hero section end */}
 
-{/* 
+
       <section className="section">
         <SectionIntro eyebrow="Featured properties" title="Residences ready for inspection" text="Explore a curated selection of villas, townhomes, duplexes, and apartments with transparent details and guided viewings." />
         <div className="property-grid">
@@ -48,7 +53,12 @@ export default function Home() {
 
       <section className="section split-section">
         <div className="image-panel reveal">
-          <img src="https://images.unsplash.com/photo-1600047509358-9dc75507daeb?auto=format&fit=crop&w=1400&q=82" alt="Landscaped estate walkway" />
+          <Image
+            src="https://images.unsplash.com/photo-1600047509358-9dc75507daeb?auto=format&fit=crop&w=1400&q=82"
+            alt="Landscaped estate walkway"
+            fill
+            sizes="(max-width: 980px) 100vw, 50vw"
+          />
         </div>
         <div className="stack reveal">
           <span className="eyebrow">Why choose us</span>
@@ -104,7 +114,7 @@ export default function Home() {
         </div>
         <Link href="/contact" className="btn btn-primary">Contact Management</Link>
       </section>
-      */}
+    
     </PageShell>
   );
 }
