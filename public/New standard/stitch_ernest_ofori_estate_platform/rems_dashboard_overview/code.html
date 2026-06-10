@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>REMS Dashboard Overview</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#466559",
+                        "muted": "#6B7A73",
+                        "surface": "#FFFFFF",
+                        "surface-alt": "#EDE8DF",
+                        "primary-fixed": "#c8eadb",
+                        "on-primary-fixed-variant": "#2f4d42",
+                        "outline-variant": "#c1c8c3",
+                        "on-secondary-container": "#52675d",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#dee4df",
+                        "on-secondary": "#ffffff",
+                        "background": "#f5fbf5",
+                        "surface-dim": "#d5dcd6",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#ecf2ed",
+                        "inverse-primary": "#adcec0",
+                        "primary-container": "#1c3a30",
+                        "surface-variant": "#dee4df",
+                        "secondary-container": "#cde5d8",
+                        "on-primary-container": "#84a497",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e4eae4",
+                        "primary-dark": "#111F1A",
+                        "inverse-surface": "#2c322e",
+                        "border": "#D9D2C7",
+                        "tertiary-fixed-dim": "#f3bc7d",
+                        "tertiary": "#301b00",
+                        "on-surface": "#171d1a",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#0b1f17",
+                        "surface-container-low": "#eff5f0",
+                        "secondary": "#4e6359",
+                        "primary-fixed-dim": "#adcec0",
+                        "on-tertiary-fixed": "#2b1700",
+                        "secondary-fixed-dim": "#b4ccbf",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#012018",
+                        "on-tertiary-fixed-variant": "#633f0a",
+                        "outline": "#727975",
+                        "tertiary-container": "#4d2e00",
+                        "on-tertiary-container": "#c69459",
+                        "on-surface-variant": "#414845",
+                        "surface-container": "#e9efea",
+                        "secondary-fixed": "#d0e8db",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f5fbf5",
+                        "on-secondary-fixed-variant": "#364b41",
+                        "on-background": "#171d1a",
+                        "on-error-container": "#93000a",
+                        "primary": "#04241b",
+                        "tertiary-fixed": "#ffddb9",
+                        "page-bg": "#F6F2EC"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "margin-site": "40px",
+                        "stack-lg": "32px",
+                        "max-width": "1180px",
+                        "stack-sm": "8px",
+                        "section-gap": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-section": ["Playfair Display"],
+                        "data-md": ["DM Mono"],
+                        "body-md": ["DM Sans"],
+                        "body-sm": ["DM Sans"],
+                        "data-lg": ["DM Mono"],
+                        "label-caps": ["DM Sans"],
+                        "display-h1": ["Playfair Display"],
+                        "display-h1-mobile": ["Playfair Display"],
+                        "body-lg": ["DM Sans"]
+                    },
+                    "fontSize": {
+                        "headline-section": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "data-md": ["14px", {"lineHeight": "1", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "data-lg": ["20px", {"lineHeight": "1", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-h1-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F6F2EC;
+            color: #171d1a;
+        }
+        /* Hide scrollbars for a cleaner institutional look */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .sidebar-transition {
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .zebra-rows tr:nth-child(even) {
+            background-color: rgba(237, 232, 223, 0.3);
+        }
+
+        .chart-bar {
+            transition: height 1s ease-out;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- REMS Sidebar -->
+<aside class="fixed left-0 top-0 h-screen sidebar-transition z-50 bg-primary-dark overflow-hidden flex flex-col w-[60px] md:w-[220px]" id="sidebar">
+<!-- Brand Header -->
+<div class="h-16 flex items-center px-4 border-b border-white/10 shrink-0">
+<div class="w-8 h-8 rounded bg-surface-tint flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-lg">domain</span>
+</div>
+<div class="ml-3 transition-opacity duration-300 overflow-hidden whitespace-nowrap">
+<span class="font-headline-section text-headline-section text-white block leading-none">REMS</span>
+<span class="font-label-caps text-[10px] text-muted tracking-widest block mt-1 uppercase">Estate Management</span>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 mt-6 px-2 space-y-1">
+<a class="flex items-center text-white border-l-2 border-primary-fixed-dim bg-primary-container px-3 py-3 group" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="dashboard">dashboard</span>
+<span class="ml-3 font-label-caps text-label-caps transition-opacity overflow-hidden whitespace-nowrap">Dashboard</span>
+</a>
+<a class="flex items-center text-muted px-3 py-3 group hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="domain">domain</span>
+<span class="ml-3 font-label-caps text-label-caps transition-opacity overflow-hidden whitespace-nowrap">Properties</span>
+</a>
+<a class="flex items-center text-muted px-3 py-3 group hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="groups">groups</span>
+<span class="ml-3 font-label-caps text-label-caps transition-opacity overflow-hidden whitespace-nowrap">Tenants</span>
+</a>
+<a class="flex items-center text-muted px-3 py-3 group hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="payments">payments</span>
+<span class="ml-3 font-label-caps text-label-caps transition-opacity overflow-hidden whitespace-nowrap">Finance</span>
+</a>
+<a class="flex items-center text-muted px-3 py-3 group hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="analytics">analytics</span>
+<span class="ml-3 font-label-caps text-label-caps transition-opacity overflow-hidden whitespace-nowrap">Reports</span>
+</a>
+<a class="flex items-center text-muted px-3 py-3 group hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined shrink-0" data-icon="settings">settings</span>
+<span class="ml-3 font-label-caps text-label-caps transition-opacity overflow-hidden whitespace-nowrap">Settings</span>
+</a>
+</nav>
+<!-- Admin Profile Mini -->
+<div class="mt-auto border-t border-white/10 p-4 flex items-center">
+<img alt="REMS Admin" class="w-8 h-8 rounded shrink-0 grayscale hover:grayscale-0 transition-all cursor-pointer" data-alt="A professional headshot of a mature administrative professional with silver hair wearing a tailored charcoal suit against a minimal architectural backdrop with soft natural lighting in a high-end institutional style." src="https://lh3.googleusercontent.com/aida/AP1WRLtRYZYEJnTVTVycWNJ0J63tGPBdqhTMxKOJ2ofbVZ_YxtREj8-g5ii3cnyjzl-pALnrU2LU4Fgxq6NC5UkA6Eqw0U4X3TjbcA40kI080SfL_SZiHxlS1P8LSHUpK2UthSnvpBIP3EZP4HoFCUyDZ8ff_h-AfMG1LijS41jZGvFqmGF40-lPZbqac5OOr21HGWLTcXzufUP618xPpXxmBW80hDT0K-wK1VRHIteQV2xaQ2OGr7eMQ9FPhA"/>
+<div class="ml-3 transition-opacity overflow-hidden whitespace-nowrap">
+<p class="font-label-caps text-white text-[11px] leading-tight">Admin User</p>
+<p class="font-body-sm text-muted text-[10px]">Super Admin</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[60px] md:ml-[220px] min-h-screen flex flex-col transition-all duration-300">
+<!-- Top Bar -->
+<header class="h-16 bg-surface flex items-center justify-between px-margin-site sticky top-0 z-40">
+<div class="flex items-center w-full max-w-xl">
+<span class="material-symbols-outlined text-muted mr-3" data-icon="search">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 font-body-sm text-on-surface-variant placeholder:text-muted" placeholder="Search for property, tenant, or transaction..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-muted hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-1.5 h-1.5 bg-error rounded-full"></span>
+</button>
+<div class="h-8 w-px bg-border"></div>
+<div class="flex items-center gap-3">
+<span class="font-label-caps text-label-caps text-right hidden sm:block">
+<span class="block text-primary">Resident OS</span>
+<span class="block text-muted font-normal">Q3 FY2024</span>
+</span>
+<div class="w-8 h-8 rounded bg-surface-alt flex items-center justify-center font-bold text-primary-dark">EO</div>
+</div>
+</div>
+</header>
+<div class="p-margin-site max-w-max-width mx-auto w-full flex-1">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-section-gap gap-stack-md">
+<div>
+<span class="font-label-caps text-label-caps text-muted mb-1 block">OVERVIEW</span>
+<h1 class="font-body-md text-[32px] font-bold text-primary leading-tight">Dashboard</h1>
+</div>
+<div class="flex items-center bg-surface border border-border px-4 py-2 rounded-lg gap-3">
+<span class="material-symbols-outlined text-muted text-lg" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-sm text-on-surface-variant">Jan 1, 2024 — Mar 31, 2024</span>
+<span class="material-symbols-outlined text-muted text-lg cursor-pointer" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- KPI Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-section-gap">
+<!-- Revenue Card -->
+<div class="bg-surface border border-border p-6 rounded-lg transition-transform hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-muted">GROSS REVENUE</span>
+<span class="text-success text-[11px] font-bold flex items-center text-primary-fixed-dim">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="trending_up">trending_up</span>
+                            12.5%
+                        </span>
+</div>
+<div class="font-data-lg text-[28px] text-primary-dark">$842,400</div>
+<div class="mt-2 h-1 w-full bg-surface-alt rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-3/4"></div>
+</div>
+</div>
+<!-- Occupancy Card -->
+<div class="bg-surface border border-border p-6 rounded-lg transition-transform hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-muted">OCCUPANCY</span>
+<span class="text-error text-[11px] font-bold flex items-center text-error">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="trending_down">trending_down</span>
+                            0.8%
+                        </span>
+</div>
+<div class="font-data-lg text-[28px] text-primary-dark">94.2%</div>
+<p class="font-body-sm text-muted mt-2">12 vacant units out of 180</p>
+</div>
+<!-- Tickets Card -->
+<div class="bg-surface border border-border p-6 rounded-lg transition-transform hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-muted">ACTIVE TICKETS</span>
+<span class="text-muted text-[11px] font-bold">STABLE</span>
+</div>
+<div class="font-data-lg text-[28px] text-primary-dark">42</div>
+<p class="font-body-sm text-muted mt-2">14 urgent priority needing attention</p>
+</div>
+<!-- Tasks Card -->
+<div class="bg-surface border border-border p-6 rounded-lg transition-transform hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-muted">PENDING TASKS</span>
+<span class="bg-primary-container text-white text-[10px] px-1.5 py-0.5 rounded uppercase">Action</span>
+</div>
+<div class="font-data-lg text-[28px] text-primary-dark">18</div>
+<p class="font-body-sm text-muted mt-2">Next inspection in 2 days</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-section-gap">
+<!-- Revenue Chart Section -->
+<div class="lg:col-span-2 space-y-stack-lg">
+<div class="flex items-center justify-between">
+<h3 class="font-body-md font-bold text-primary">Revenue Distribution</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-label-caps text-[10px] text-muted uppercase">Residential</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span>
+<span class="font-label-caps text-[10px] text-muted uppercase">Commercial</span>
+</div>
+</div>
+</div>
+<div class="bg-surface border border-border rounded-lg p-stack-lg relative h-[320px] flex items-end justify-between gap-4">
+<!-- Chart Lines (Y Axis simulation) -->
+<div class="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-between pointer-events-none px-6 py-10">
+<div class="border-t border-border/40 w-full"></div>
+<div class="border-t border-border/40 w-full"></div>
+<div class="border-t border-border/40 w-full"></div>
+<div class="border-t border-border/40 w-full"></div>
+</div>
+<!-- Simulated Bars -->
+<div class="relative z-10 flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container chart-bar rounded-t-[2px]" style="height: 65%;"></div>
+<span class="font-label-caps text-[10px] mt-4 text-muted">JAN</span>
+</div>
+<div class="relative z-10 flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container chart-bar rounded-t-[2px]" style="height: 72%;"></div>
+<span class="font-label-caps text-[10px] mt-4 text-muted">FEB</span>
+</div>
+<div class="relative z-10 flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container chart-bar rounded-t-[2px]" style="height: 85%;"></div>
+<span class="font-label-caps text-[10px] mt-4 text-muted">MAR</span>
+</div>
+<div class="relative z-10 flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container chart-bar rounded-t-[2px]" style="height: 60%;"></div>
+<span class="font-label-caps text-[10px] mt-4 text-muted">APR</span>
+</div>
+<div class="relative z-10 flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container chart-bar rounded-t-[2px]" style="height: 78%;"></div>
+<span class="font-label-caps text-[10px] mt-4 text-muted">MAY</span>
+</div>
+<div class="relative z-10 flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container chart-bar rounded-t-[2px]" style="height: 92%;"></div>
+<span class="font-label-caps text-[10px] mt-4 text-muted">JUN</span>
+</div>
+</div>
+</div>
+<!-- Priority Tasks Section -->
+<div class="space-y-stack-lg">
+<div class="flex items-center justify-between">
+<h3 class="font-body-md font-bold text-primary">Priority Tasks</h3>
+<a class="text-primary font-label-caps text-[11px] hover:underline" href="#">VIEW ALL</a>
+</div>
+<div class="bg-surface border border-border rounded-lg overflow-hidden">
+<ul class="divide-y divide-border">
+<li class="p-4 hover:bg-surface-alt transition-colors group cursor-pointer">
+<div class="flex items-start justify-between mb-2">
+<span class="bg-error-container text-on-error-container text-[10px] px-1.5 py-0.5 rounded font-bold">URGENT</span>
+<span class="font-label-caps text-[10px] text-muted">DUE TODAY</span>
+</div>
+<p class="font-body-sm text-primary mb-3">Leak repair in Penthouse B-12</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<img alt="Assignee" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="Close-up portrait of a skilled technician wearing a professional uniform, with a focused and capable expression, photographed in a high-key studio setting that aligns with a clean and institutional visual style." src="https://lh3.googleusercontent.com/aida/AP1WRLvodGwH5_4-PfbmXXPjZ3SYz9liDUke9PS1xvY-4TTWnjHhX5AVpFoCb_Emy3Kcf50LdsKVIpzfG7WQd8R4gnmkJwJn29Zj6V22qMwMEIWrtFUFXpNyLZp78WLvFwgWGeF1BN5PoPBAShb92fRNonjegVMqhZfzUUg1QExRMQRkbtr-mpz3wXoxv2LofKwKh0PYOeFoNPp0271uBdvUzp975UQ6vHeC5BhGRotT8A18I7m2JXKLKcgJszo"/>
+<img alt="Assignee" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="Close-up portrait of a modern facility manager with an intelligent expression, wearing a minimalist white shirt, against a neutral concrete background with soft natural lighting for a quiet luxury aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLvjVmKjx_NhdaVXn33RZtWsSQwYw6-o6BzYda-s27O63ngAnnqn1YvU5S1ZE-EjfvajYy0CvPNbzOis6LtL5v9mtZRpA2StY9pC0YcCsljFWTto3G0j5bLPRmjIATib4BNYPTtoKODA7SYmsKVY-v8UbtXjIjp2nKPthvYI_geP-7E-HKByjUfzRLW408rI0bPzawraqQOVB6c92-XNjSAIMEHRBVGenOA_rjPQavAe-jyIClAUOrqZt-E"/>
+</div>
+<span class="material-symbols-outlined text-muted text-lg opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+</li>
+<li class="p-4 hover:bg-surface-alt transition-colors group cursor-pointer">
+<div class="flex items-start justify-between mb-2">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] px-1.5 py-0.5 rounded font-bold">MEDIUM</span>
+<span class="font-label-caps text-[10px] text-muted">2 DAYS LEFT</span>
+</div>
+<p class="font-body-sm text-primary mb-3">Elevator compliance inspection</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-surface-dim flex items-center justify-center text-[8px] font-bold text-on-surface">JH</div>
+</div>
+<span class="material-symbols-outlined text-muted text-lg opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+</li>
+<li class="p-4 hover:bg-surface-alt transition-colors group cursor-pointer">
+<div class="flex items-start justify-between mb-2">
+<span class="bg-surface-container-highest text-muted text-[10px] px-1.5 py-0.5 rounded font-bold">LOW</span>
+<span class="font-label-caps text-[10px] text-muted">NEXT WEEK</span>
+</div>
+<p class="font-body-sm text-primary mb-3">Gym HVAC filter replacement</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<img alt="Assignee" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="Portrait of a young maintenance engineer with a friendly and professional look, in a minimalist high-end environment with warm, subtle lighting and an institutional quality feel." src="https://lh3.googleusercontent.com/aida/AP1WRLuCMN2stsoMIKG4uyhuAJ-reevtH3qoFygzPaQQjtGbI3ogpoZ16N5N9RpsoTBTJUnM-F1S1DiZ8u9SbdBjNmAEU3Y1_eLSFJC7Mes6kTFOnedJxQnYZeq8MVnX3Z1GwdIiblsuz63jvcd8i15rAOL_0IfcUzZXfHFUdFVVJmdb21HYhw6iY9YDxSTL7j-0k9eUw4v-c1YErGPqqqdFHS9mntKq9_eveNdaC62_5rIaq_YmafHC7soS0WQ"/>
+</div>
+<span class="material-symbols-outlined text-muted text-lg opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Recent Transactions Table Section -->
+<div class="mt-section-gap">
+<div class="flex items-center justify-between mb-stack-lg">
+<h3 class="font-body-md font-bold text-primary">Recent Financial Activity</h3>
+<button class="bg-primary-container text-white px-4 py-2 rounded font-label-caps text-[11px] flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                        EXPORT REPORT
+                    </button>
+</div>
+<div class="bg-surface border border-border rounded-lg overflow-hidden">
+<table class="w-full text-left zebra-rows">
+<thead>
+<tr class="bg-surface-alt/50 border-b border-border">
+<th class="px-6 py-4 font-label-caps text-[11px] text-muted">DATE</th>
+<th class="px-6 py-4 font-label-caps text-[11px] text-muted">ENTITY</th>
+<th class="px-6 py-4 font-label-caps text-[11px] text-muted">PROPERTY</th>
+<th class="px-6 py-4 font-label-caps text-[11px] text-muted">STATUS</th>
+<th class="px-6 py-4 font-label-caps text-[11px] text-muted text-right">AMOUNT</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border/20">
+<tr>
+<td class="px-6 py-5 font-data-md text-on-surface-variant">24 MAR 2024</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-fixed flex items-center justify-center font-bold text-primary-dark text-xs">AS</div>
+<div>
+<p class="font-body-sm text-primary leading-none mb-1">Adrian Sterling</p>
+<p class="font-label-caps text-[9px] text-muted">RESIDENTIAL TENANT</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-body-sm text-on-surface-variant">Azure Towers, Suite 402</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-container">COMPLETED</span>
+</td>
+<td class="px-6 py-5 text-right font-data-md text-primary">$4,250.00</td>
+</tr>
+<tr>
+<td class="px-6 py-5 font-data-md text-on-surface-variant">23 MAR 2024</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-alt flex items-center justify-center font-bold text-primary-dark text-xs">GL</div>
+<div>
+<p class="font-body-sm text-primary leading-none mb-1">Global Logistics Ltd</p>
+<p class="font-label-caps text-[9px] text-muted">COMMERCIAL CLIENT</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-body-sm text-on-surface-variant">Harbor Plaza, Ground Floor</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-tertiary-fixed text-on-tertiary-fixed-variant">PENDING</span>
+</td>
+<td class="px-6 py-5 text-right font-data-md text-primary">$12,800.00</td>
+</tr>
+<tr>
+<td class="px-6 py-5 font-data-md text-on-surface-variant">22 MAR 2024</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-fixed flex items-center justify-center font-bold text-primary-dark text-xs">EM</div>
+<div>
+<p class="font-body-sm text-primary leading-none mb-1">Elena Martinez</p>
+<p class="font-label-caps text-[9px] text-muted">RESIDENTIAL TENANT</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5 font-body-sm text-on-surface-variant">Heritage Lofts, 12A</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-container">COMPLETED</span>
+</td>
+<td class="px-6 py-5 text-right font-data-md text-primary">$3,100.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full py-stack-lg px-margin-site flex flex-col items-center gap-stack-md border-t border-outline-variant bg-surface-alt mt-auto">
+<div class="flex flex-col md:flex-row items-center gap-stack-lg justify-between w-full max-w-max-width">
+<div class="flex items-center gap-2">
+<span class="font-headline-section text-[20px] text-primary">REMS</span>
+<span class="h-4 w-px bg-border"></span>
+<span class="font-label-caps text-muted text-[10px]">PREMIUM LIVING PLATFORM</span>
+</div>
+<div class="flex gap-stack-lg">
+<a class="font-label-caps text-muted hover:text-primary transition-colors underline" href="#">Privacy Policy</a>
+<a class="font-label-caps text-muted hover:text-primary transition-colors underline" href="#">Terms of Service</a>
+<a class="font-label-caps text-muted hover:text-primary transition-colors underline" href="#">Support</a>
+</div>
+</div>
+<p class="font-body-sm text-muted text-[11px]">© 2024 Special Gardens Platform. All rights reserved.</p>
+</footer>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        // Sidebar Toggle Logic (Hover expansion simulation)
+        const sidebar = document.getElementById('sidebar');
+        const main = document.querySelector('main');
+
+        // Simple chart bar height animation on load
+        window.addEventListener('load', () => {
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach(bar => {
+                const height = bar.style.height;
+                bar.style.height = '0';
+                setTimeout(() => {
+                    bar.style.height = height;
+                }, 100);
+            });
+        });
+    </script>
+</body></html>

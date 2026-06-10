@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>REMS Documents | LuxeManage</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "inverse-on-surface": "#eaf1ff",
+                            "surface-dim": "#cbdbf5",
+                            "surface-variant": "#d3e4fe",
+                            "on-tertiary-fixed": "#331200",
+                            "secondary-fixed": "#85f8c4",
+                            "on-tertiary-fixed-variant": "#763300",
+                            "on-primary-fixed": "#131b2e",
+                            "error-container": "#ffdad6",
+                            "secondary": "#006c4a",
+                            "on-secondary-fixed-variant": "#005137",
+                            "inverse-primary": "#bec6e0",
+                            "outline": "#76777d",
+                            "on-error": "#ffffff",
+                            "surface-container": "#e5eeff",
+                            "inverse-surface": "#213145",
+                            "primary-fixed": "#dae2fd",
+                            "secondary-fixed-dim": "#68dba9",
+                            "on-tertiary": "#ffffff",
+                            "on-primary": "#ffffff",
+                            "tertiary": "#000000",
+                            "surface-bright": "#f8f9ff",
+                            "on-background": "#0b1c30",
+                            "surface-container-lowest": "#ffffff",
+                            "on-primary-fixed-variant": "#3f465c",
+                            "tertiary-container": "#331200",
+                            "surface-container-low": "#eff4ff",
+                            "on-error-container": "#93000a",
+                            "tertiary-fixed": "#ffdbca",
+                            "surface-container-high": "#dce9ff",
+                            "on-secondary": "#ffffff",
+                            "primary": "#000000",
+                            "on-tertiary-container": "#cf6721",
+                            "on-secondary-container": "#00714e",
+                            "surface-tint": "#565e74",
+                            "surface-container-highest": "#d3e4fe",
+                            "background": "#f8f9ff",
+                            "on-primary-container": "#7c839b",
+                            "on-surface-variant": "#45464d",
+                            "tertiary-fixed-dim": "#ffb68e",
+                            "on-surface": "#0b1c30",
+                            "surface": "#f8f9ff",
+                            "primary-fixed-dim": "#bec6e0",
+                            "secondary-container": "#82f5c1",
+                            "primary-container": "#131b2e",
+                            "outline-variant": "#c6c6cd",
+                            "on-secondary-fixed": "#002114",
+                            "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "xs": "0.5rem",
+                            "gutter": "24px",
+                            "margin-mobile": "16px",
+                            "sm": "1rem",
+                            "lg": "2rem",
+                            "base": "4px",
+                            "container-max": "1440px",
+                            "md": "1.5rem",
+                            "xl": "3rem"
+                    },
+                    "fontFamily": {
+                            "label-sm": ["Inter"],
+                            "body-sm": ["Inter"],
+                            "headline-md": ["Inter"],
+                            "headline-lg-mobile": ["Inter"],
+                            "display-lg": ["Inter"],
+                            "headline-lg": ["Inter"],
+                            "body-md": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                            "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                            "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                            "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full border-r border-outline-variant dark:border-outline bg-surface-container-low dark:bg-primary-container shadow-sm fixed left-0 top-0 h-full w-[280px] z-40">
+<div class="p-gutter flex items-center gap-sm border-b border-outline-variant">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">LuxeManage</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Property Portal</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-sm">
+<ul class="space-y-xs px-sm">
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+                        Properties
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="meeting_room">meeting_room</span>
+                        Units
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                        Tenants
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                        Leases
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                        Payments
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span>
+                        Maintenance
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+                        Invoices
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+                        Reports
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+                        Messages
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-secondary font-bold border-r-4 border-secondary bg-secondary-container/20 transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+                        Documents
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 scale-98 active:opacity-80 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                        Settings
+                    </a>
+</li>
+</ul>
+</div>
+<div class="p-gutter border-t border-outline-variant space-y-sm">
+<button class="w-full bg-primary text-on-primary py-xs rounded-lg font-label-md text-label-md hover:bg-on-background transition-colors shadow-sm">
+                New Property
+            </button>
+<ul class="space-y-xs">
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                        Support
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-xs rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                        Sign Out
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col md:ml-[280px] min-h-screen">
+<!-- TopNavBar (Mobile only for full nav, Web uses it for utility) -->
+<header class="flex justify-between items-center h-16 px-gutter max-w-container-max mx-auto w-full sticky top-0 z-30 bg-surface dark:bg-surface-container-lowest shadow-sm transition-all duration-300 ease-in-out md:hidden">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">LuxeManage</div>
+<div class="flex items-center gap-sm">
+<button class="p-xs text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</header>
+<!-- Desktop Utility Bar -->
+<header class="hidden md:flex justify-between items-center h-16 px-gutter w-full sticky top-0 z-30 bg-surface/80 backdrop-blur-md border-b border-outline-variant">
+<div class="flex-1 flex items-center gap-md max-w-2xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Search documents, folders, or tags..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md ml-auto">
+<div class="font-label-md text-label-md text-on-surface-variant mr-4">Role: Administrator</div>
+<button class="p-xs text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-xs text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center border border-outline-variant ml-2 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate administrator in a modern office setting. The lighting is bright and clean, typical of a high-end business portrait. The color palette emphasizes cool grays and crisp whites, aligning with the light-mode UI aesthetic. The mood is confident and reliable." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIP4VGVDrlpb1BUCqbzAK8RO8ZT2k5jZMhKQ0bY8pBjEA6xkIWSbYcApY6f8pgYtCyNm1wDMWlI4xTw7EqMyJO9L356UhRZudl8Myv_uHm_OzMsICELZA32TG8M9NOhJzCJbMTvPgItWRzXOOKIJNeY_Z1moAd_pGdgFrd0z8wnktdkynQV6iurLdfX6OeTb2Yt72ZTrYTiRECJ0MWPbuPQOPuBAmxS4XdeKG8j2zPD8ybhgZk7Eu-BIw9ymubSjANCunTNH5ERBw"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-margin-mobile md:p-gutter max-w-container-max mx-auto w-full flex-1 flex flex-col gap-lg">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
+<div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Document Center</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Manage leases, deeds, and tenant files.</p>
+</div>
+<div class="flex gap-sm">
+<button class="flex items-center gap-xs px-md py-2 bg-surface-container-lowest border border-outline-variant text-primary rounded-lg font-label-md text-label-md hover:bg-surface-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="create_new_folder">create_new_folder</span>
+                        New Folder
+                    </button>
+<button class="flex items-center gap-xs px-md py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-on-background transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="upload">upload</span>
+                        Upload File
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Quick Access / Folders (Left Col) -->
+<div class="lg:col-span-3 flex flex-col gap-gutter">
+<!-- Storage Widget -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex flex-col gap-sm">
+<div class="flex justify-between items-center">
+<h3 class="font-label-md text-label-md text-on-surface">Storage Usage</h3>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="cloud">cloud</span>
+</div>
+<div class="font-headline-md text-headline-md text-on-surface">45.2 GB</div>
+<div class="w-full bg-surface-variant rounded-full h-2 mt-2">
+<div class="bg-secondary h-2 rounded-full" style="width: 45%"></div>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant flex justify-between">
+<span>Used</span>
+<span>100 GB Total</span>
+</div>
+</div>
+<!-- Folders Nav -->
+<div class="bg-surface-container-lowest rounded-xl p-xs border border-outline-variant shadow-sm">
+<ul class="space-y-1">
+<li>
+<button class="w-full flex items-center justify-between px-sm py-2 rounded-lg bg-surface-variant text-primary font-label-md text-label-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="folder_open" data-weight="fill">folder_open</span>
+                                        All Documents
+                                    </div>
+<span class="font-label-sm text-label-sm bg-surface-container-high px-2 py-0.5 rounded-full">142</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center justify-between px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                                        Leases
+                                    </div>
+<span class="font-label-sm text-label-sm">45</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center justify-between px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" data-icon="real_estate_agent">real_estate_agent</span>
+                                        Property Deeds
+                                    </div>
+<span class="font-label-sm text-label-sm">12</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center justify-between px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+                                        Tenant IDs
+                                    </div>
+<span class="font-label-sm text-label-sm">85</span>
+</button>
+</li>
+</ul>
+</div>
+</div>
+<!-- Main File Area (Right Col) -->
+<div class="lg:col-span-9 flex flex-col gap-gutter">
+<!-- Drag & Drop Zone -->
+<div class="border-2 border-dashed border-outline-variant rounded-xl bg-surface-container-lowest/50 p-lg flex flex-col items-center justify-center text-center hover:bg-surface-variant/50 hover:border-secondary transition-all cursor-pointer group h-48">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center text-secondary mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface mb-1">Drag and drop files here</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">or click to browse from your computer (Max 50MB)</p>
+</div>
+<!-- File List Table -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex-1 flex flex-col">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<h2 class="font-label-md text-label-md text-on-surface">Recent Files</h2>
+<div class="flex gap-2">
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="filter_list">filter_list</span></button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="more_vert">more_vert</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface">
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-10">
+<input class="rounded border-outline-variant text-secondary focus:ring-secondary" type="checkbox"/>
+</th>
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Name</th>
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Category</th>
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider hidden md:table-cell">Size</th>
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider hidden sm:table-cell">Uploaded</th>
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Owner</th>
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider w-12"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="p-sm"><input class="rounded border-outline-variant text-secondary focus:ring-secondary opacity-0 group-hover:opacity-100 transition-opacity" type="checkbox"/></td>
+<td class="p-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="description">description</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Lease_Agreement_104B.pdf</span>
+</div>
+</td>
+<td class="p-sm">
+<span class="px-2 py-1 rounded-full bg-secondary-container/30 text-secondary font-label-sm text-label-sm">Leases</span>
+</td>
+<td class="p-sm font-body-sm text-body-sm text-on-surface-variant hidden md:table-cell">2.4 MB</td>
+<td class="p-sm font-body-sm text-body-sm text-on-surface-variant hidden sm:table-cell">Oct 24, 2023</td>
+<td class="p-sm">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold text-on-surface-variant">JD</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden lg:inline">J. Doe</span>
+</div>
+</td>
+<td class="p-sm text-right">
+<button class="text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span></button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="p-sm"><input class="rounded border-outline-variant text-secondary focus:ring-secondary opacity-0 group-hover:opacity-100 transition-opacity" type="checkbox"/></td>
+<td class="p-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="image">image</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Tenant_ID_Smith.jpg</span>
+</div>
+</td>
+<td class="p-sm">
+<span class="px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-label-sm">Tenant IDs</span>
+</td>
+<td class="p-sm font-body-sm text-body-sm text-on-surface-variant hidden md:table-cell">1.1 MB</td>
+<td class="p-sm font-body-sm text-body-sm text-on-surface-variant hidden sm:table-cell">Oct 22, 2023</td>
+<td class="p-sm">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold text-on-surface-variant">AS</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden lg:inline">A. Smith</span>
+</div>
+</td>
+<td class="p-sm text-right">
+<button class="text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span></button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
+<td class="p-sm"><input class="rounded border-outline-variant text-secondary focus:ring-secondary opacity-0 group-hover:opacity-100 transition-opacity" type="checkbox"/></td>
+<td class="p-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="real_estate_agent">real_estate_agent</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Deed_Sunset_Blvd.pdf</span>
+</div>
+</td>
+<td class="p-sm">
+<span class="px-2 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">Property Deeds</span>
+</td>
+<td class="p-sm font-body-sm text-body-sm text-on-surface-variant hidden md:table-cell">5.8 MB</td>
+<td class="p-sm font-body-sm text-body-sm text-on-surface-variant hidden sm:table-cell">Oct 15, 2023</td>
+<td class="p-sm">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-xs font-bold text-on-surface-variant">JD</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden lg:inline">J. Doe</span>
+</div>
+</td>
+<td class="p-sm text-right">
+<button class="text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-sm border-t border-outline-variant flex justify-between items-center bg-surface-bright">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1-3 of 142 files</span>
+<div class="flex gap-1">
+<button class="p-1 text-on-surface-variant hover:text-primary disabled:opacity-50" disabled=""><span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></button>
+<button class="p-1 text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

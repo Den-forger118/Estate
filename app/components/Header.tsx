@@ -1,40 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useScrollCompressed } from "../hooks/useScrollCompressed";
 import { brand } from "../data/site";
 
-const navItems = [
-  ["Home", "/"],
-  ["About", "/about"],
-  ["Services", "/services"],
-  ["Properties", "/properties"],
-  ["Blog", "/blog"],
-  ["Contact", "/contact"],
+const navItems: { label: string; href: string; mobile?: boolean }[] = [
+  { label: "Properties", href: "/properties", mobile: true },
+  { label: "Services", href: "/services" },
+  { label: "About", href: "/about", mobile: true },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact", mobile: true },
+  { label: "Resident Services", href: "/community" },
+  { label: "Dashboard", href: "/dashboard" },
 ];
 
 export function Header() {
-  const [hidden, setHidden] = useState(true);
-
-  useEffect(() => {
-    const onScroll = () => {
-      setHidden(window.scrollY > 0);
-    };
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: false });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const pathname = usePathname();
+  const compressed = useScrollCompressed();
 
   return (
-    <header className={`site-header ${hidden ? "site-header-hidden" : ""}`}>
+    <header className={`site-header${compressed ? " site-header-compressed" : ""}`}>
       <Link href="/" className="brand-mark" aria-label={`${brand.name} home`}>
-        <span>EO</span>
-        <strong>{brand.name}</strong>
+        {brand.name}
       </Link>
       <nav className="nav-links" aria-label="Primary navigation">
-        {navItems.map(([label, href]) => (
-          <Link key={href} href={href}>
+        {navItems.map(({ label, href, mobile }) => (
+          <Link
+            key={href}
+            href={href}
+            className={mobile ? "nav-link-mobile" : "nav-link-desktop"}
+            style={
+              pathname === href || (href !== "/" && pathname.startsWith(href))
+                ? { color: "var(--primary)", borderBottom: "2px solid var(--primary)", paddingBottom: "2px" }
+                : undefined
+            }
+          >
             {label}
           </Link>
         ))}

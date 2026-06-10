@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Properties - LuxeManage</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "surface-variant": "#d3e4fe",
+                        "on-tertiary-fixed": "#331200",
+                        "secondary-fixed": "#85f8c4",
+                        "on-tertiary-fixed-variant": "#763300",
+                        "on-primary-fixed": "#131b2e",
+                        "error-container": "#ffdad6",
+                        "secondary": "#006c4a",
+                        "on-secondary-fixed-variant": "#005137",
+                        "inverse-primary": "#bec6e0",
+                        "outline": "#76777d",
+                        "on-error": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "inverse-surface": "#213145",
+                        "primary-fixed": "#dae2fd",
+                        "secondary-fixed-dim": "#68dba9",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#000000",
+                        "surface-bright": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-container": "#331200",
+                        "surface-container-low": "#eff4ff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbca",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "on-tertiary-container": "#cf6721",
+                        "on-secondary-container": "#00714e",
+                        "surface-tint": "#565e74",
+                        "surface-container-highest": "#d3e4fe",
+                        "background": "#f8f9ff",
+                        "on-primary-container": "#7c839b",
+                        "on-surface-variant": "#45464d",
+                        "tertiary-fixed-dim": "#ffb68e",
+                        "on-surface": "#0b1c30",
+                        "surface": "#f8f9ff",
+                        "primary-fixed-dim": "#bec6e0",
+                        "secondary-container": "#82f5c1",
+                        "primary-container": "#131b2e",
+                        "outline-variant": "#c6c6cd",
+                        "on-secondary-fixed": "#002114",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "0.5rem",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "sm": "1rem",
+                        "lg": "2rem",
+                        "base": "4px",
+                        "container-max": "1440px",
+                        "md": "1.5rem",
+                        "xl": "3rem"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    },
+                    "boxShadow": {
+                        'ambient': '0 4px 24px -4px rgba(11, 28, 48, 0.06)',
+                        'ambient-hover': '0 8px 32px -4px rgba(11, 28, 48, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-container-low dark:bg-primary-container flex flex-col border-r border-outline-variant shadow-sm z-40 hidden md:flex">
+<!-- Header -->
+<div class="px-gutter py-md border-b border-outline-variant/50">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-lg bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">LuxeManage</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Property Portal</p>
+</div>
+</div>
+<button class="mt-md w-full py-2.5 px-4 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-secondary transition-colors duration-200 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                New Property
+            </button>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 overflow-y-auto py-sm px-3 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-bold border-r-4 border-secondary bg-secondary-container/20 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="domain" data-weight="fill" style="font-variation-settings: 'FILL' 1;">domain</span>
+                Properties
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="meeting_room">meeting_room</span>
+                Units
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Tenants
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                Leases
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                Payments
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="build">build</span>
+                Maintenance
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+                Invoices
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+                Reports
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+                Messages
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+                Documents
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<!-- Footer -->
+<div class="p-4 border-t border-outline-variant/50 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-variant transition-colors duration-200 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col min-h-screen md:ml-[280px]">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-30 w-full bg-surface shadow-sm h-16 flex justify-between items-center px-gutter">
+<!-- Mobile Menu Trigger -->
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex-1 flex items-center justify-end md:justify-between max-w-container-max mx-auto w-full">
+<!-- Search (Hidden on Mobile) -->
+<div class="hidden md:flex relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Search properties, tenants, or units..." type="text"/>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-variant hidden md:block">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-variant hidden md:block">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-2 hidden md:block"></div>
+<div class="flex items-center gap-3">
+<div class="hidden md:flex flex-col items-end">
+<span class="font-label-md text-label-md text-primary">Admin User</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Role: Administrator</span>
+</div>
+<img alt="User Profile" class="w-10 h-10 rounded-full border-2 border-surface-container-high" data-alt="A professional headshot of a female property manager in a well-lit modern office setting. She is wearing a tailored navy blazer and has a confident, approachable expression. The lighting is soft and natural, contributing to a premium, trustworthy corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-UznWkUcpeY-fUob437NPrFLoBaWwZqMuYSbsfrxr3d814FyjqfUKnf8H9vujgAyTRawyIGDG1GOalVJc-Rs-5aSK7AlFPetv8gaP7swayE4AfwuYel_TNRA9S4H1IAKGtp_9By0EynRYK47yLuxv8hVpK--c7YKNt1OZHuiy0MS0DAIvDfAFAJdpEDce-MP-rMrgnoM1JeMuxdUhJjw9cgXnFs_c5XJ2_-O5eo82ZQbej4CvvCFL-qUz6Up5VG7twqFqFUyKIHs"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 p-margin-mobile md:p-gutter max-w-container-max mx-auto w-full">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-lg">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary mb-2">Properties</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Manage and monitor your luxury real estate portfolio. View occupancy rates, revenue metrics, and operational status at a glance.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filters
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-secondary transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Add Property
+                    </button>
+</div>
+</div>
+<!-- Status Tabs -->
+<div class="flex gap-2 mb-md border-b border-outline-variant pb-px overflow-x-auto">
+<button class="px-4 py-2 font-label-md text-label-md text-primary border-b-2 border-primary whitespace-nowrap">All Properties (12)</button>
+<button class="px-4 py-2 font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">Active (9)</button>
+<button class="px-4 py-2 font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">Development (2)</button>
+<button class="px-4 py-2 font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors whitespace-nowrap">Maintenance (1)</button>
+</div>
+<!-- Property Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Property Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-ambient hover:shadow-ambient-hover transition-shadow duration-300 group flex flex-col h-full cursor-pointer">
+<div class="relative h-56 overflow-hidden">
+<img alt="Skyline Heights Exterior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A stunning, high-resolution exterior shot of a modern luxury high-rise apartment building against a clear blue sky. The architecture features extensive use of glass and sleek metallic framing, reflecting a premium urban lifestyle. The lighting is bright and natural, highlighting the crisp, clean lines of the structure in a minimalist corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEAC4IHYzOxnH9M33xhh_TpKuHmAEcO56StPjqjnMCHLVTfHSRbncTcXpYK7zMusuinbXJ9HO4xtBOl588cqkMFAcN1pu9ItlK-i5t54-roeUHrhYr84T90EhF9Ctf9BBqL6uBDe5wVtbJhopC-BTXZ8NLp3MhqJd-mBty_nunEjP8UOSCLu7JlHrk9xxoUGR8cjXLzsiH-9hFKNujK6KGBCviomInHSWX2wbtlNdvW1MQWCdZBhPvV8zsE4NyjvfoiH186o3CBkw"/>
+<div class="absolute top-3 left-3 bg-secondary-container/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 border border-secondary/20">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-on-secondary-container uppercase tracking-wider">Active</span>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Skyline Heights</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                    1200 Metropolitan Ave, Seattle
+                                </p>
+</div>
+<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="mt-auto pt-4 border-t border-surface-container-high grid grid-cols-3 gap-4">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5 uppercase tracking-wider">Units</p>
+<p class="font-body-md text-body-md font-semibold text-primary">245</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5 uppercase tracking-wider">Occupancy</p>
+<p class="font-body-md text-body-md font-semibold text-secondary">94%</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5 uppercase tracking-wider">Rev (YTD)</p>
+<p class="font-body-md text-body-md font-semibold text-primary">$4.2M</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Property Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-ambient hover:shadow-ambient-hover transition-shadow duration-300 group flex flex-col h-full cursor-pointer">
+<div class="relative h-56 overflow-hidden">
+<img alt="Oakwood Estates Exterior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A wide, beautifully composed architectural photograph of a luxury gated community estate featuring contemporary homes with flat roofs and large windows. The scene is bathed in warm, late-afternoon golden hour light, emphasizing the high-end landscaping and serene environment. The overall aesthetic is calm, affluent, and impeccably maintained." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfH_XiyM5lP7FP5V_1yOptHNpfxCSvYBw8CoPP9IMySRTXuHjmZODln83hVs8uynjG2eZ_vkR-5nkquCmYIrzRyJ1grDrQUI7IZm9_xuGnuhEjdcQm4qxQvr-DvqxhA7QSgXxG_-xUO6EJqDzOdbD4yaTj1sbjfRiJGGJkPegr_eTy1XUmzYyDeFmE3IuFqzUnIwmLJMC6msqPE1djrahIQZwFwz1Ajn3XreoOyI11S6bnTDuCGHbU1oAZDxhDUyEvv8z_L4XKKjY"/>
+<div class="absolute top-3 left-3 bg-secondary-container/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 border border-secondary/20">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-on-secondary-container uppercase tracking-wider">Active</span>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Oakwood Estates</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                    4500 Whispering Pines Ln, Austin
+                                </p>
+</div>
+<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="mt-auto pt-4 border-t border-surface-container-high grid grid-cols-3 gap-4">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5 uppercase tracking-wider">Units</p>
+<p class="font-body-md text-body-md font-semibold text-primary">82</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5 uppercase tracking-wider">Occupancy</p>
+<p class="font-body-md text-body-md font-semibold text-secondary">98%</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5 uppercase tracking-wider">Rev (YTD)</p>
+<p class="font-body-md text-body-md font-semibold text-primary">$2.8M</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Property Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-ambient hover:shadow-ambient-hover transition-shadow duration-300 group flex flex-col h-full cursor-pointer">
+<div class="relative h-56 overflow-hidden">
+<img alt="The Grand Plaza Interior/Exterior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sophisticated shot of a luxury property development site under construction, viewed through the sleek glass windows of an adjacent finished lobby. The lighting is crisp and corporate, utilizing a cool white balance that highlights structural steel and pristine concrete. The mood conveys progress, institutional stability, and premium development quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgsKWgv_1wG5jdV3Bmw1loDjv5U5uDMt7NnYqGBmfmPn63x2jmXFoXUg2fpe5owQT0clL4qJlqxV15qJh1iO-B2ohKyA5nWigADrPGsDmegV6ne9P5FE4oQ-84l4fXUUImP1eyyp-qm2HybDucfqbFQGojEwSffb34nS7ShKoq74LI3Egc9CwiemFJ4zF1aPpiXM5ky0RwLTFUrB1eoh5Y5Se7zomHjX7ighL4p1BBzv41pboMUUQRTAya9TqAiXrVLiaSAMLCaWI"/>
+<div class="absolute top-3 left-3 bg-surface-variant/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-surface-tint"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Development</span>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">The Grand Plaza</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                    88 Financial District Blvd, NY
+                                </p>
+</div>
+<button class="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="mt-auto pt-4 border-t border-surface-container-high grid grid-cols-3 gap-4">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5 uppercase tracking-wider">Units</p>
+<p class="font-body-md text-body-md font-semibold text-primary">310</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5 uppercase tracking-wider">Progress</p>
+<p class="font-body-md text-body-md font-semibold text-primary">65%</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-0.5 uppercase tracking-wider">Est. Comp</p>
+<p class="font-body-md text-body-md font-semibold text-primary">Q4 '24</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,21 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Mono, DM_Sans, Playfair_Display } from "next/font/google";
+import { ToastProvider } from "./components/Toast";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const playfair = Playfair_Display({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSans = DM_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
+const dmMono = DM_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "Aster Grove Estates | Premium Real Estate Living",
+  title: "Special Gardens | Premium Living",
   description:
-    "A polished public real estate website for secure estate living, property management, available homes, services, news, and inspections.",
+    "Institutional estate management, property listings, resident services, and REMS operations for Special Gardens.",
 };
 
 export default function RootLayout({
@@ -24,11 +33,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body>{children}</body>
+    <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${dmMono.variable} h-full antialiased`}>
+      <body>
+        {children}
+        <ToastProvider />
+      </body>
     </html>
   );
 }

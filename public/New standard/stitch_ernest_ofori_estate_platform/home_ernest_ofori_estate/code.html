@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Special Gardens | Premium Living</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:wght@400;600&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#466559",
+                      "muted": "#6B7A73",
+                      "surface": "#FFFFFF",
+                      "surface-alt": "#EDE8DF",
+                      "primary-fixed": "#c8eadb",
+                      "on-primary-fixed-variant": "#2f4d42",
+                      "outline-variant": "#c1c8c3",
+                      "on-secondary-container": "#52675d",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#dee4df",
+                      "on-secondary": "#ffffff",
+                      "background": "#f5fbf5",
+                      "surface-dim": "#d5dcd6",
+                      "on-tertiary": "#ffffff",
+                      "inverse-on-surface": "#ecf2ed",
+                      "inverse-primary": "#adcec0",
+                      "primary-container": "#1c3a30",
+                      "surface-variant": "#dee4df",
+                      "secondary-container": "#cde5d8",
+                      "on-primary-container": "#84a497",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#e4eae4",
+                      "primary-dark": "#111F1A",
+                      "inverse-surface": "#2c322e",
+                      "border": "#D9D2C7",
+                      "tertiary-fixed-dim": "#f3bc7d",
+                      "tertiary": "#301b00",
+                      "on-surface": "#171d1a",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed": "#0b1f17",
+                      "surface-container-low": "#eff5f0",
+                      "secondary": "#4e6359",
+                      "primary-fixed-dim": "#adcec0",
+                      "on-tertiary-fixed": "#2b1700",
+                      "secondary-fixed-dim": "#b4ccbf",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed": "#012018",
+                      "on-tertiary-fixed-variant": "#633f0a",
+                      "outline": "#727975",
+                      "tertiary-container": "#4d2e00",
+                      "on-tertiary-container": "#c69459",
+                      "on-surface-variant": "#414845",
+                      "surface-container": "#e9efea",
+                      "secondary-fixed": "#d0e8db",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#f5fbf5",
+                      "on-secondary-fixed-variant": "#364b41",
+                      "on-background": "#171d1a",
+                      "on-error-container": "#93000a",
+                      "primary": "#04241b",
+                      "tertiary-fixed": "#ffddb9",
+                      "page-bg": "#F6F2EC"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-md": "16px",
+                      "margin-mobile": "20px",
+                      "gutter": "24px",
+                      "margin-site": "40px",
+                      "stack-lg": "32px",
+                      "max-width": "1180px",
+                      "stack-sm": "8px",
+                      "section-gap": "64px"
+              },
+              "fontFamily": {
+                      "headline-section": ["Playfair Display"],
+                      "data-md": ["DM Mono"],
+                      "body-md": ["DM Sans"],
+                      "body-sm": ["DM Sans"],
+                      "data-lg": ["DM Mono"],
+                      "label-caps": ["DM Sans"],
+                      "display-h1": ["Playfair Display"],
+                      "display-h1-mobile": ["Playfair Display"],
+                      "body-lg": ["DM Sans"]
+              },
+              "fontSize": {
+                      "headline-section": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "data-md": ["14px", {"lineHeight": "1", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                      "data-lg": ["20px", {"lineHeight": "1", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "display-h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "display-h1-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F6F2EC;
+            overflow-x: hidden;
+            transition: opacity 180ms ease-in-out;
+        }
+        .page-transition {
+            animation: fadeIn 180ms ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- Top Navigation Bar -->
+<nav class="bg-surface sticky top-0 full-width z-50 border-b border-outline-variant" id="top-nav">
+<div class="flex justify-between items-center w-full px-margin-site max-w-max-width mx-auto py-4">
+<h1 class="font-display-h1 text-[24px] text-primary">Special Gardens</h1>
+<div class="hidden md:flex items-center gap-stack-lg">
+<a class="text-primary font-bold border-b-2 border-primary font-label-caps text-label-caps" href="#">Properties</a>
+<a class="text-muted hover:text-primary transition-colors font-label-caps text-label-caps" href="#">Services</a>
+<a class="text-muted hover:text-primary transition-colors font-label-caps text-label-caps" href="#">About</a>
+<a class="text-muted hover:text-primary transition-colors font-label-caps text-label-caps" href="#">Blog</a>
+<a class="text-muted hover:text-primary transition-colors font-label-caps text-label-caps" href="#">Contact</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 font-label-caps text-label-caps rounded-[4px] hover:bg-primary-container transition-all active:scale-95 duration-200">
+                Book an Inspection
+            </button>
+</div>
+</nav>
+<main class="page-transition">
+<!-- Hero Section -->
+<section class="relative min-h-[819px] flex items-stretch overflow-hidden border-b border-border">
+<!-- Vertical Property Number Decoration -->
+<div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[30%] rotate-[-90deg] select-none pointer-events-none hidden md:block">
+<span class="font-data-lg text-[220px] opacity-[0.07] text-primary">01</span>
+</div>
+<div class="max-w-max-width mx-auto px-margin-site w-full flex flex-col md:flex-row">
+<div class="w-full md:w-1/2 flex flex-col justify-center py-section-gap pr-0 md:pr-12">
+<h1 class="font-display-h1 text-display-h1 text-primary mb-stack-md leading-tight">
+                        Find your place in a beautifully managed estate.
+                    </h1>
+<div class="flex flex-wrap gap-stack-md mt-stack-lg mb-section-gap">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-[4px] font-label-caps text-label-caps hover:bg-primary-container transition-colors">
+                            Book Inspection
+                        </button>
+<button class="border border-primary text-primary px-8 py-4 rounded-[4px] font-label-caps text-label-caps hover:bg-surface-alt transition-colors">
+                            Browse Properties
+                        </button>
+</div>
+<div class="space-y-4 pt-stack-lg border-t border-border">
+<p class="font-data-md text-data-md text-muted">240+ PREMIUM RESIDENCES MANAGED</p>
+<p class="font-data-md text-data-md text-muted">15+ YEARS OF INSTITUTIONAL EXCELLENCE</p>
+<p class="font-data-md text-data-md text-muted">98% TENANT SATISFACTION RATE</p>
+</div>
+</div>
+<div class="w-full md:w-1/2 relative min-h-[400px] md:min-h-0">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="A high-end, contemporary luxury estate villa with expansive glass windows and pristine architecture, captured during a soft golden hour. The setting is manicured and serene, featuring a minimalist pool and lush greenery. The lighting is sophisticated, reflecting a quiet luxury aesthetic with deep greens and warm off-white tones, evoking a sense of institutional excellence and permanence." src="https://lh3.googleusercontent.com/aida/AP1WRLurLgSkHMhvmEiQ0SbBtD4Ut7Fdszc-0J5CG3fH-_zTAsr4WsM7gwBw5EW0PqHjmqq-aK3fKtJF51t7DJ8HFAuUKzcMMfKkz9-_IJwYFL0Yfwi1_xBurDdt9HftO6FId1z8fEyKWj0oC6TxFR9lyOP_Tz3Upg9tNrVVYRfdD6GRQcuzQkxsjIWSEeMThJK8Y7E-xVgcclwFMTevszlVYdydzCpjb9heEax3E6D_PqOGgkOHzPikz4EOUA"/>
+</div>
+</div>
+</section>
+<!-- Featured Properties Horizontal Scroll -->
+<section class="py-section-gap max-w-max-width mx-auto px-margin-site">
+<div class="flex justify-between items-end mb-stack-lg">
+<div>
+<span class="font-label-caps text-label-caps text-muted uppercase tracking-widest">Selected Portfolio</span>
+<h2 class="font-headline-section text-headline-section text-primary mt-2">Featured Residences</h2>
+</div>
+<div class="flex gap-2">
+<button class="p-2 border border-border rounded-full hover:bg-surface-alt transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 border border-border rounded-full hover:bg-surface-alt transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="flex gap-gutter overflow-x-auto no-scrollbar pb-stack-lg">
+<!-- Property Card 1 -->
+<div class="min-w-[320px] md:min-w-[380px] bg-surface border border-border rounded-[4px] group transition-all duration-300 hover:border-primary cursor-pointer flex-shrink-0">
+<div class="aspect-video relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Modernist luxury apartment interior with high ceilings and floor-to-ceiling windows overlooking a verdant private estate. The room is styled with bespoke minimalist furniture in muted earthy tones. The light is natural and airy, capturing a serene, high-end residential atmosphere consistent with the brand's quiet luxury identity." src="https://lh3.googleusercontent.com/aida/AP1WRLuAosb6ha6JyHYhuzjrBhIwTpP_ik0yngOJouGiOyEWV87mqwSZyo42zZ0AZkZcMoFFe7eadZ2NOt5t_35TXS3nJ-vGXw7AAXlfKFBvfYWiTs46MqBhEz6QcnqiMhjoKPJb2dto5pQelKnzDeFfyDY_yKRqm1wtmzs7mkoIBbAGHWjaIdrxyHCa5tqhAaI5cojZFgVG6wLWr2gRjvnC81qvXXTx7Ak6Jm14blIll32tgMSFzYtrkkgmRTM"/>
+<span class="absolute top-4 left-4 bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 font-label-caps text-[10px] rounded-[4px] uppercase tracking-wider">Premium</span>
+</div>
+<div class="p-stack-md space-y-2">
+<h3 class="font-headline-section text-[20px] text-primary">The Oakwood Penthouse</h3>
+<p class="font-data-md text-data-md text-muted">REF: EO-7702 | ACCRA, GH</p>
+<div class="flex justify-between items-center pt-2 border-t border-border mt-4">
+<span class="font-data-md text-primary">$4,500 / MO</span>
+<div class="flex gap-3 text-muted">
+<span class="flex items-center gap-1 font-data-md text-[12px]"><span class="material-symbols-outlined text-[16px]">bed</span> 3</span>
+<span class="flex items-center gap-1 font-data-md text-[12px]"><span class="material-symbols-outlined text-[16px]">bathtub</span> 2</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Property Card 2 -->
+<div class="min-w-[320px] md:min-w-[380px] bg-surface border border-border rounded-[4px] group transition-all duration-300 hover:border-primary cursor-pointer flex-shrink-0">
+<div class="aspect-video relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Exquisite estate exterior featuring a contemporary stone facade and warm outdoor lighting at dusk. The landscaping is architectural and meticulous. The photograph uses a balanced composition with a sophisticated color palette of deep charcoal, ivory, and soft amber, creating a welcoming yet institutional feel of permanence and security." src="https://lh3.googleusercontent.com/aida/AP1WRLvkZiGJnBCWElWTPpuNQBtSFi3TzLG-CZlpkdGA_Sk_kMSc7mE2YgVjqxuMIJlbkOgvyPg3K86K-b2hza0n4wdtt6sleMr2tpDjMcIBrxGnx1EIyMKGPWFZG1hFh9C4uZVkuoYFI1tTLQP3ft45MDYzyZd3EncHRVZPnpjkLLqwMDg1J1RJ73sXWRJaF-kGqwy_tEOtsxcpn3Z1x7jO8MH81ojXRyn6kPHuidbafyxs6vxEWrhfKKXjBwo"/>
+<span class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 font-label-caps text-[10px] rounded-[4px] uppercase tracking-wider">Exclusive</span>
+</div>
+<div class="p-stack-md space-y-2">
+<h3 class="font-headline-section text-[20px] text-primary">Emerald Gardens Villa</h3>
+<p class="font-data-md text-data-md text-muted">REF: EO-8199 | KUMASI, GH</p>
+<div class="flex justify-between items-center pt-2 border-t border-border mt-4">
+<span class="font-data-md text-primary">$1,200,000</span>
+<div class="flex gap-3 text-muted">
+<span class="flex items-center gap-1 font-data-md text-[12px]"><span class="material-symbols-outlined text-[16px]">bed</span> 5</span>
+<span class="flex items-center gap-1 font-data-md text-[12px]"><span class="material-symbols-outlined text-[16px]">square_foot</span> 4.5k</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Property Card 3 -->
+<div class="min-w-[320px] md:min-w-[380px] bg-surface border border-border rounded-[4px] group transition-all duration-300 hover:border-primary cursor-pointer flex-shrink-0">
+<div class="aspect-video relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Minimalist open-plan living space with premium hardwood floors and white marble surfaces. Soft morning light floods the room through oversized glass panes, highlighting the clean lines and disciplined design. The atmosphere is one of discreet luxury and functional clarity, aligning with the institutional excellence of the Special Gardens brand." src="https://lh3.googleusercontent.com/aida/AP1WRLuCUInYJQEHAAuCwCO2pYFkn0YoaVswOLS4PAYZXaBaDhrv8imwyE_ItlMwdpdTi0_9C9-Dh7VvmY09-Bq_t8yN3FKOoWsyew2aNzdmBvleJ-LsaR4xUl2upKOJdmlo7kDZLwIIFqM8MwhRTEKmU6nOlOeFZh0_oqZ2HUcPXFYngo8mggbopWBT6tQI9n3sTqv5dLPuG7csmzarm6lVs0tQ70ID2O7DQcbvE1H3qyfehj1QtOSJbgAvZA"/>
+<span class="absolute top-4 left-4 bg-secondary-container text-on-secondary-container px-3 py-1 font-label-caps text-[10px] rounded-[4px] uppercase tracking-wider">Available</span>
+</div>
+<div class="p-stack-md space-y-2">
+<h3 class="font-headline-section text-[20px] text-primary">Vista Mar Suites</h3>
+<p class="font-data-md text-data-md text-muted">REF: EO-2031 | TEMA, GH</p>
+<div class="flex justify-between items-center pt-2 border-t border-border mt-4">
+<span class="font-data-md text-primary">$3,200 / MO</span>
+<div class="flex gap-3 text-muted">
+<span class="flex items-center gap-1 font-data-md text-[12px]"><span class="material-symbols-outlined text-[16px]">bed</span> 2</span>
+<span class="flex items-center gap-1 font-data-md text-[12px]"><span class="material-symbols-outlined text-[16px]">pool</span> Yes</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="bg-surface-alt py-section-gap overflow-hidden">
+<div class="max-w-[800px] mx-auto px-margin-site text-center">
+<span class="material-symbols-outlined text-primary text-[48px] opacity-20 mb-stack-md" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+<div class="relative min-h-[160px]" id="testimonial-container">
+<blockquote class="font-headline-section text-[28px] md:text-[36px] italic leading-relaxed text-primary-dark transition-opacity duration-500">
+                        "The transition to our new estate was seamless. Special Gardens represents a standard of management we hadn't found elsewhere in the region."
+                    </blockquote>
+</div>
+<cite class="block mt-stack-lg font-label-caps text-label-caps text-muted uppercase tracking-[0.2em]">MR. KWAME ADU, RESIDENT SINCE 2019</cite>
+</div>
+</section>
+<!-- CTA Band -->
+<section class="bg-primary-container py-section-gap">
+<div class="max-w-max-width mx-auto px-margin-site flex flex-col md:flex-row items-center justify-between gap-stack-lg text-center md:text-left">
+<h2 class="font-headline-section text-headline-section text-white max-w-[600px]">
+                    Ready to experience institutional-grade estate management?
+                </h2>
+<button class="border border-white text-white px-10 py-5 rounded-[4px] font-label-caps text-label-caps hover:bg-white hover:text-primary-container transition-all">
+                    Schedule a Consultation
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-stack-lg px-margin-site flex flex-col items-center gap-stack-md bg-surface-alt border-t border-outline-variant">
+<div class="w-full max-w-max-width flex flex-col md:flex-row justify-between items-center gap-stack-md">
+<h2 class="font-headline-section text-headline-section text-primary">Special Gardens</h2>
+<div class="flex gap-stack-md">
+<a class="font-label-caps text-label-caps text-muted hover:text-primary transition-colors underline" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-muted hover:text-primary transition-colors underline" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-muted hover:text-primary transition-colors underline" href="#">Institutional Profile</a>
+<a class="font-label-caps text-label-caps text-muted hover:text-primary transition-colors underline" href="#">Contact Support</a>
+</div>
+</div>
+<div class="pt-stack-md border-t border-outline-variant/30 w-full text-center">
+<p class="font-body-sm text-body-sm text-muted">© 2024 Special Gardens Platform. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for route transition simulation
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#') {
+                    e.preventDefault();
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 180);
+                }
+            });
+        });
+
+        // Testimonial Rotator Logic
+        const testimonials = [
+            {
+                quote: "The transition to our new estate was seamless. Special Gardens represents a standard of management we hadn't found elsewhere in the region.",
+                author: "MR. KWAME ADU, RESIDENT SINCE 2019"
+            },
+            {
+                quote: "Quiet luxury isn't just a tagline here; it's a daily experience. Every detail from landscaping to security is handled with supreme discretion.",
+                author: "ELENA ROSS, SENIOR PARTNER"
+            },
+            {
+                quote: "Management that understands the value of time and privacy. The institutional excellence here is palpable in every interaction.",
+                author: "DR. SAMUEL OSEI, PENTHOUSE TENANT"
+            }
+        ];
+
+        let currentTestimonial = 0;
+        const quoteEl = document.querySelector('#testimonial-container blockquote');
+        const citeEl = document.querySelector('cite');
+
+        setInterval(() => {
+            quoteEl.style.opacity = '0';
+            setTimeout(() => {
+                currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+                quoteEl.textContent = `"${testimonials[currentTestimonial].quote}"`;
+                citeEl.textContent = testimonials[currentTestimonial].author;
+                quoteEl.style.opacity = '1';
+            }, 500);
+        }, 6000);
+    </script>
+</body></html>
