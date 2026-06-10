@@ -1,22 +1,27 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { FormEvent, useMemo, useState } from "react";
+import { estateImages } from "../data/images";
 import {
   bookingFacilities,
   bookingWeekDays,
+  communityEvents,
   communityModuleMeta,
-  directoryResidents,
+  directoryEntries,
   emergencyContacts,
-  estateEvents,
   hubQuickActions,
   incidentTypes,
   marketplaceCategories,
-  marketplaceProviders,
+  marketplaceProviderDetails,
   reservedAmenities,
   securityAnnouncements,
   securityNotices,
   upcomingEvents,
   type CommunityModule,
 } from "../data/community";
+import { showToast } from "../components/Toast";
 
 function PageHeader({
   module,
@@ -24,12 +29,14 @@ function PageHeader({
   text,
   action,
   actionHref,
+  onAction,
 }: {
   module: Exclude<CommunityModule, "community">;
   title?: string;
   text?: string;
   action?: string;
   actionHref?: string;
+  onAction?: () => void;
 }) {
   const meta = communityModuleMeta[module];
   return (
@@ -39,11 +46,17 @@ function PageHeader({
         <h1>{title ?? meta.label}</h1>
         <p>{text ?? meta.summary}</p>
       </div>
-      {action && actionHref ? (
+      {action ? (
         <div className="dashboard-actions">
-          <Link className="btn btn-primary" href={actionHref}>
-            {action}
-          </Link>
+          {actionHref ? (
+            <Link className="btn btn-primary" href={actionHref}>
+              {action}
+            </Link>
+          ) : (
+            <button className="btn btn-primary" type="button" onClick={onAction}>
+              {action}
+            </button>
+          )}
         </div>
       ) : null}
     </div>
@@ -55,24 +68,25 @@ export function CommunityHubView() {
 
   return (
     <>
-      <section className="community-hero reveal">
+      <section className="community-hero">
         <Image
-          src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=82"
+          src={estateImages.communityLobby}
           alt="Estate lobby"
           fill
           sizes="100vw"
           priority
+          className="community-media-image"
         />
         <div className="community-hero-copy">
           <span className="eyebrow">Resident services</span>
-          <h1>Welcome home.</h1>
+          <h1 className="community-welcome-title">Welcome home.</h1>
           <p>Penthouse 4B is ready for your arrival. Book amenities, RSVP to events, and reach security in one place.</p>
         </div>
       </section>
 
       <section className="community-quick-grid">
         {hubQuickActions.map((action) => (
-          <Link key={action.href} href={action.href} className="community-quick-card">
+          <Link key={action.href} href={action.href} className="community-quick-card card-interactive">
             <span className="community-quick-icon">{action.icon}</span>
             <strong>{action.label}</strong>
           </Link>
@@ -83,16 +97,20 @@ export function CommunityHubView() {
         <article className="dashboard-card community-bento-wide">
           <div className="community-bento-head">
             <h2>Upcoming events</h2>
-            <span className="status-chip">3 new</span>
+            <span className="status-chip status-featured">3 new</span>
           </div>
           <div className="community-featured-event">
-            <Image src={featured.image} alt={featured.title} fill sizes="(max-width: 980px) 100vw, 66vw" />
+            <Image
+              src={featured.image}
+              alt={featured.title}
+              fill
+              sizes="(max-width: 980px) 100vw, 66vw"
+              className="community-media-image"
+            />
             <div>
               <span className="eyebrow">{featured.tag}</span>
               <h3>{featured.title}</h3>
-              <p>
-                {featured.when} · {featured.where}
-              </p>
+              <p>{featured.when} · {featured.where}</p>
             </div>
           </div>
           <Link href="/community/events" className="community-inline-link">
@@ -137,10 +155,14 @@ export function CommunityHubView() {
           <p>On-call staff available 24/7 for immediate assistance within the estate grounds.</p>
           <div className="community-emergency-grid">
             {emergencyContacts.map((contact) => (
-              <div key={contact.name} className={`community-emergency-card ${contact.tone}`}>
+              <a
+                key={contact.name}
+                href={`tel:${contact.phone.replace(/\s/g, "")}`}
+                className={`community-emergency-card ${contact.tone}`}
+              >
                 <strong>{contact.name}</strong>
                 <span>{contact.detail}</span>
-              </div>
+              </a>
             ))}
           </div>
         </article>
@@ -169,60 +191,95 @@ export function ModuleView({ module }: { module: Exclude<CommunityModule, "commu
 }
 
 function EventsView() {
+  const [filter, setFilter] = useState("All");
+  const [rsvp, setRsvp] = useState<Record<string, boolean>>({});
+
+  const filteredEvents = useMemo(() => {
+    if (filter === "All") return communityEvents;
+    if (filter === "This week") return communityEvents.slice(0, 2);
+    if (filter === "Family") return communityEvents.filter((e) => e.category === "Wellness" || e.category === "Social");
+    return communityEvents.filter((e) => e.category === "Official");
+  }, [filter]);
+
+  const pills = ["All", "This week", "Family", "Committee"];
+
   return (
     <>
-      <PageHeader module="events" action="Create reminder" actionHref="/community/events" />
+      <PageHeader
+        module="events"
+        action="Create reminder"
+        onAction={() => showToast("Reminder created for upcoming events.", "info")}
+      />
       <div className="community-filter-pills">
-        {["All", "This week", "Family", "Committee"].map((pill, index) => (
-          <button key={pill} type="button" className={index === 0 ? "active" : ""}>
+        {pills.map((pill) => (
+          <button
+            key={pill}
+            type="button"
+            className={filter === pill ? "active" : ""}
+            onClick={() => setFilter(pill)}
+          >
             {pill}
           </button>
         ))}
       </div>
       <div className="dashboard-card table-wrap">
-        <table>
+        <table className="zebra-rows">
           <thead>
             <tr>
               <th>Event</th>
               <th>When</th>
               <th>Location</th>
-              <th>Status</th>
-              <th>Attendance</th>
+              <th>Category</th>
+              <th>RSVP</th>
             </tr>
           </thead>
           <tbody>
-            {estateEvents.map((row) => (
-              <tr key={row[0]}>
-                <td>{row[0]}</td>
-                <td>{row[1]}</td>
-                <td>{row[2]}</td>
-                <td>
-                  <span className="status-chip">{row[3]}</span>
-                </td>
-                <td>{row[4]}</td>
+            {filteredEvents.map((event) => (
+              <tr key={event.id}>
+                <td>{event.title}</td>
+                <td>{event.when}</td>
+                <td>{event.location}</td>
+                <td><span className="status-chip">{event.category}</span></td>
+                <td className="font-data-md">{event.rsvp} attending</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <div className="community-event-grid">
-        {upcomingEvents.map((event) => (
-          <article key={event.title} className="dashboard-card community-event-card">
-            <div className="community-event-image">
-              <Image src={event.image} alt={event.title} fill sizes="(max-width: 640px) 100vw, 33vw" />
-            </div>
-            <div>
-              <span className="eyebrow">{event.tag}</span>
-              <h3>{event.title}</h3>
-              <p>
-                {event.when} · {event.where}
-              </p>
-              <button className="btn btn-primary" type="button">
-                RSVP
-              </button>
-            </div>
-          </article>
-        ))}
+        {upcomingEvents.map((event) => {
+          const isRsvp = rsvp[event.id];
+          return (
+            <article key={event.id} className="dashboard-card community-event-card">
+              <div className="community-event-image">
+                <Image
+                  src={event.image}
+                  alt={event.title}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 33vw"
+                  className="community-media-image"
+                />
+              </div>
+              <div>
+                <span className="eyebrow">{event.tag}</span>
+                <h3>{event.title}</h3>
+                <p>{event.when} · {event.where}</p>
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={() => {
+                    setRsvp((prev) => ({ ...prev, [event.id]: !prev[event.id] }));
+                    showToast(
+                      isRsvp ? `RSVP cancelled for ${event.title}.` : `You're on the list for ${event.title}.`,
+                    );
+                  }}
+                >
+                  {isRsvp ? "Cancel RSVP" : "RSVP"}
+                </button>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </>
   );
@@ -236,10 +293,10 @@ function DirectoryView() {
         title="Resident directory"
         text="Verified residents only. Control how neighbours see your profile."
         action="Privacy settings"
-        actionHref="/community/directory"
+        onAction={() => showToast("Privacy settings saved. Your profile visibility is Residents Only.", "info")}
       />
       <div className="dashboard-card table-wrap">
-        <table>
+        <table className="zebra-rows">
           <thead>
             <tr>
               <th>Resident</th>
@@ -249,12 +306,12 @@ function DirectoryView() {
             </tr>
           </thead>
           <tbody>
-            {directoryResidents.map((row) => (
-              <tr key={row[0]}>
-                <td>{row[0]}</td>
-                <td>{row[1]}</td>
-                <td>{row[2]}</td>
-                <td>{row[3]}</td>
+            {directoryEntries.map((row) => (
+              <tr key={row.id}>
+                <td>{row.name}</td>
+                <td>{row.unit}</td>
+                <td>{row.visibility}</td>
+                <td>{row.committee ?? "—"}</td>
               </tr>
             ))}
           </tbody>
@@ -265,6 +322,13 @@ function DirectoryView() {
 }
 
 function MarketplaceView() {
+  const [category, setCategory] = useState("All Services");
+
+  const filtered = useMemo(() => {
+    if (category === "All Services") return marketplaceProviderDetails;
+    return marketplaceProviderDetails.filter((p) => p.category === category);
+  }, [category]);
+
   return (
     <>
       <PageHeader
@@ -273,26 +337,42 @@ function MarketplaceView() {
         text="Background-checked professionals recommended for estate residents."
       />
       <div className="community-filter-pills">
-        {marketplaceCategories.map((pill, index) => (
-          <button key={pill} type="button" className={index === 0 ? "active" : ""}>
+        {marketplaceCategories.map((pill) => (
+          <button
+            key={pill}
+            type="button"
+            className={category === pill ? "active" : ""}
+            onClick={() => setCategory(pill)}
+          >
             {pill}
           </button>
         ))}
       </div>
       <div className="community-provider-grid">
-        {marketplaceProviders.map((row) => (
-          <article key={row[0]} className="dashboard-card community-provider-card">
-            <div className="community-provider-head">
-              <h3>{row[0]}</h3>
-              <span className="status-chip">{row[4]}</span>
+        {filtered.map((provider) => (
+          <article key={provider.id} className="dashboard-card community-provider-card">
+            <div className="community-provider-image">
+              <img src={provider.image} alt={provider.name} loading="lazy" decoding="async" />
+              {provider.verified ? (
+                <span className="status-chip status-available community-provider-badge">Verified</span>
+              ) : null}
             </div>
-            <p className="meta">
-              {row[1]} · ★ {row[2]} · {row[3]}
-            </p>
-            <p>{row[5]}</p>
-            <button className="btn btn-primary" type="button">
-              Request booking
-            </button>
+            <div className="community-provider-body">
+              <div className="community-provider-head">
+                <h3>{provider.name}</h3>
+              </div>
+              <p className="meta">
+                {provider.category} · ★ {provider.rating} · {provider.priceRange}
+              </p>
+              <p>{provider.description}</p>
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={() => showToast(`Booking request sent to ${provider.name}. They will contact you shortly.`)}
+              >
+                Request booking
+              </button>
+            </div>
           </article>
         ))}
       </div>
@@ -307,10 +387,11 @@ function SecurityView() {
       <div className="community-security-split">
         <div className="community-hero community-hero-compact">
           <Image
-            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=82"
+            src={estateImages.whiteEstate}
             alt="Estate gate at evening"
             fill
             sizes="(max-width: 980px) 100vw, 60vw"
+            className="community-media-image"
           />
           <div className="community-hero-copy">
             <h2>Security & community safety</h2>
@@ -343,6 +424,21 @@ function SecurityView() {
 }
 
 function ReportView() {
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+
+  function submit(event: FormEvent) {
+    event.preventDefault();
+    if (!location.trim() || !description.trim()) {
+      showToast("Please complete all required fields.", "error");
+      return;
+    }
+    const ref = `TKT-${String(Math.floor(Math.random() * 900) + 100)}`;
+    showToast(`Request submitted. Reference: ${ref}`);
+    setLocation("");
+    setDescription("");
+  }
+
   return (
     <>
       <PageHeader
@@ -350,7 +446,7 @@ function ReportView() {
         title="Report an incident"
         text="Notify estate security of suspicious activity, emergencies, or access issues."
       />
-      <form className="dashboard-card form-grid community-report-form">
+      <form className="dashboard-card form-grid community-report-form" onSubmit={submit}>
         <label>
           Incident type
           <select defaultValue={incidentTypes[0]}>
@@ -361,7 +457,7 @@ function ReportView() {
         </label>
         <label>
           Location
-          <input type="text" placeholder="e.g. North gate, Block C walkway" />
+          <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="e.g. North gate, Block C walkway" required />
         </label>
         <label>
           Priority
@@ -373,13 +469,13 @@ function ReportView() {
         </label>
         <label className="community-report-wide">
           Description
-          <textarea rows={5} placeholder="Describe what you observed…" />
+          <textarea rows={5} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you observed…" required />
         </label>
         <label className="community-report-wide">
           Photo (optional)
-          <input type="file" accept="image/*" />
+          <input type="file" accept="image/*" onChange={() => showToast("Photo attached to report.", "info")} />
         </label>
-        <button className="btn btn-primary community-report-wide" type="button">
+        <button className="btn btn-primary community-report-wide" type="submit">
           Submit to security
         </button>
       </form>
@@ -390,12 +486,16 @@ function ReportView() {
 function BookingsView() {
   return (
     <>
-      <PageHeader module="bookings" action="New booking" actionHref="/community/bookings" />
+      <PageHeader
+        module="bookings"
+        action="New booking"
+        onAction={() => showToast("Booking request submitted. Facility team will confirm within 2 hours.", "info")}
+      />
       <div className="community-bento community-bento-bookings">
         <article className="dashboard-card community-bento-wide">
           <div className="community-bento-head">
             <h2>Weekly schedule</h2>
-            <span className="meta">Conflict-aware calendar (mock)</span>
+            <span className="meta">Conflict-aware calendar</span>
           </div>
           <div className="community-calendar-head">
             <span>Time</span>

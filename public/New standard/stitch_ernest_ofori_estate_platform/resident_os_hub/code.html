@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resident OS Hub | Special Gardens</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=DM+Sans:wght@400;500;600&amp;family=DM+Mono&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#466559",
+                    "muted": "#6B7A73",
+                    "surface": "#FFFFFF",
+                    "surface-alt": "#EDE8DF",
+                    "primary-fixed": "#c8eadb",
+                    "on-primary-fixed-variant": "#2f4d42",
+                    "outline-variant": "#c1c8c3",
+                    "on-secondary-container": "#52675d",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#dee4df",
+                    "on-secondary": "#ffffff",
+                    "background": "#f5fbf5",
+                    "surface-dim": "#d5dcd6",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#ecf2ed",
+                    "inverse-primary": "#adcec0",
+                    "primary-container": "#1c3a30",
+                    "surface-variant": "#dee4df",
+                    "secondary-container": "#cde5d8",
+                    "on-primary-container": "#84a497",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#e4eae4",
+                    "primary-dark": "#111F1A",
+                    "inverse-surface": "#2c322e",
+                    "border": "#D9D2C7",
+                    "tertiary-fixed-dim": "#f3bc7d",
+                    "tertiary": "#301b00",
+                    "on-surface": "#171d1a",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#0b1f17",
+                    "surface-container-low": "#eff5f0",
+                    "secondary": "#4e6359",
+                    "primary-fixed-dim": "#adcec0",
+                    "on-tertiary-fixed": "#2b1700",
+                    "secondary-fixed-dim": "#b4ccbf",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#012018",
+                    "on-tertiary-fixed-variant": "#633f0a",
+                    "outline": "#727975",
+                    "tertiary-container": "#4d2e00",
+                    "on-tertiary-container": "#c69459",
+                    "on-surface-variant": "#414845",
+                    "surface-container": "#e9efea",
+                    "secondary-fixed": "#d0e8db",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f5fbf5",
+                    "on-secondary-fixed-variant": "#364b41",
+                    "on-background": "#171d1a",
+                    "on-error-container": "#93000a",
+                    "primary": "#04241b",
+                    "tertiary-fixed": "#ffddb9",
+                    "page-bg": "#F6F2EC"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "margin-mobile": "20px",
+                    "gutter": "24px",
+                    "margin-site": "40px",
+                    "stack-lg": "32px",
+                    "max-width": "1180px",
+                    "stack-sm": "8px",
+                    "section-gap": "64px"
+            },
+            "fontFamily": {
+                    "headline-section": ["Playfair Display"],
+                    "data-md": ["DM Mono"],
+                    "body-md": ["DM Sans"],
+                    "body-sm": ["DM Sans"],
+                    "data-lg": ["DM Mono"],
+                    "label-caps": ["DM Sans"],
+                    "display-h1": ["Playfair Display"],
+                    "display-h1-mobile": ["Playfair Display"],
+                    "body-lg": ["DM Sans"]
+            },
+            "fontSize": {
+                    "headline-section": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "data-md": ["14px", {"lineHeight": "1", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "data-lg": ["20px", {"lineHeight": "1", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "display-h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-h1-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #F6F2EC; }
+        .sidebar-item-active { border-left: 2px solid #adcec0; background-color: #1c3a30; color: #ffffff; }
+        .institutional-input { border-bottom: 1px solid #D9D2C7; border-top: 0; border-left: 0; border-right: 0; border-radius: 0; background: transparent; }
+        .institutional-input:focus { border-bottom: 1px solid #04241b; ring: 0; outline: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- REIMS Sidebar (Shared Component Anchor) -->
+<aside class="fixed left-0 top-0 h-screen w-[220px] bg-primary-dark flex flex-col z-40 transition-all duration-300 ease-in-out">
+<div class="p-stack-md flex flex-col gap-2">
+<div class="font-headline-section text-headline-section text-on-primary-container">Resident OS</div>
+<div class="font-label-caps text-label-caps text-on-primary-container/70">Premium Living</div>
+</div>
+<nav class="flex-1 mt-stack-lg flex flex-col">
+<!-- Navigation Items Mapping from JSON -->
+<a class="sidebar-item-active px-4 py-3 flex items-center gap-3 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<a class="text-on-primary-container/70 px-4 py-3 flex items-center gap-3 hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">credit_card</span>
+<span class="font-label-caps text-label-caps">Payments</span>
+</a>
+<a class="text-on-primary-container/70 px-4 py-3 flex items-center gap-3 hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">build</span>
+<span class="font-label-caps text-label-caps">Maintenance</span>
+</a>
+<a class="text-on-primary-container/70 px-4 py-3 flex items-center gap-3 hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">pool</span>
+<span class="font-label-caps text-label-caps">Amenities</span>
+</a>
+<a class="text-on-primary-container/70 px-4 py-3 flex items-center gap-3 hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-label-caps text-label-caps">Community</span>
+</a>
+</nav>
+<div class="p-4 mt-auto border-t border-on-primary-container/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-tint rounded-full overflow-hidden">
+<img alt="Resident Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLuB6HfdPpjJ9jQQNvYb6M-HMC0V8WzItv6bLFXVvnDMUdNeGyoxEnPfmeSIW3YQ6ZUGc1fZlgK8gYxA16bQtqFRmDLp3r7TMhK9f3ZCWFrfQZq23cEIaBS5RP0DIjfNS_AlIEekPIVFeZD2GPCFPUUnBiyXPPEeefgfxr1PzPwtRj0WgQpOaWJ4eJ1U7u2FiiA443g3C4wJARkN4r04EgOB9iaVywCq17C9PuYA1eoFHxES-SPS_JL-40M"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-white">Alex Morgan</span>
+<span class="text-[10px] text-on-primary-container/50 uppercase tracking-widest">Unit 402-B</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[220px] min-h-screen">
+<!-- Welcome Strip -->
+<section class="relative w-full h-[300px] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A breathtaking, cinematic shot of a luxury estate garden at golden hour, featuring minimalist architectural lines, lush manicured greenery, and soft warm lighting that reflects off a calm water feature. The overall mood is one of quiet luxury and institutional excellence, with a color palette dominated by deep greens and warm off-whites." src="https://lh3.googleusercontent.com/aida/AP1WRLuI-9exYQi7YoQ5NgdoBOFXwmO1rOL2wyjf7cwgeRAFj_WYQigsafL_hccQIYzuJGzuG5U7-567z84-cVB9DlF6kjFz4qvEGwfrBhG7Zf8L3WBuqBGrZc_J9omkaQmCdgv0VX_G8afeZNKGsIUlq6g8PMMCl0CkC5w3ykU40Vm5uqd76DCdKwMlE9_jfRHHGPAmXMIEk5jL9DBhWQ7rfoGnGSDZXBZb1smAYZdOUAJCy_ZnkLdAHBfZTao"/>
+<div class="absolute inset-0 bg-gradient-to-t from-page-bg via-transparent to-transparent"></div>
+</section>
+<div class="max-w-max-width mx-auto px-margin-site -mt-16 relative z-10">
+<header class="mb-section-gap">
+<h1 class="font-display-h1 text-display-h1 text-primary mb-stack-sm">Welcome home, Alex.</h1>
+<p class="font-body-lg text-muted">Your daily estate briefing for Tuesday, October 24th.</p>
+</header>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-gutter pb-section-gap">
+<!-- Left Column: Quick Actions & Events -->
+<div class="col-span-3 flex flex-col gap-stack-lg">
+<!-- Quick Actions 2x2 -->
+<div>
+<h3 class="font-label-caps text-label-caps text-muted mb-stack-md">Quick Actions</h3>
+<div class="grid grid-cols-2 gap-2">
+<button class="bg-surface border border-border p-4 flex flex-col items-center justify-center gap-2 rounded-lg hover:bg-surface-alt transition-colors group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">qr_code_2</span>
+<span class="text-[11px] font-semibold uppercase tracking-tighter">Guest Pass</span>
+</button>
+<button class="bg-surface border border-border p-4 flex flex-col items-center justify-center gap-2 rounded-lg hover:bg-surface-alt transition-colors group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">payments</span>
+<span class="text-[11px] font-semibold uppercase tracking-tighter">Pay Rent</span>
+</button>
+<button class="bg-surface border border-border p-4 flex flex-col items-center justify-center gap-2 rounded-lg hover:bg-surface-alt transition-colors group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">support_agent</span>
+<span class="text-[11px] font-semibold uppercase tracking-tighter">Concierge</span>
+</button>
+<button class="bg-surface border border-border p-4 flex flex-col items-center justify-center gap-2 rounded-lg hover:bg-surface-alt transition-colors group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">history_edu</span>
+<span class="text-[11px] font-semibold uppercase tracking-tighter">Lease docs</span>
+</button>
+</div>
+</div>
+<!-- Upcoming Events -->
+<div class="flex flex-col gap-stack-md">
+<h3 class="font-label-caps text-label-caps text-muted">Upcoming Events</h3>
+<div class="bg-surface border border-border rounded-lg overflow-hidden group">
+<div class="h-32 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A sophisticated evening social event in a high-end estate lounge. The lighting is moody and warm, highlighting crystal glassware and dark velvet furniture. The scene exudes an air of exclusivity and institutional class, with a refined color palette of emerald and gold." src="https://lh3.googleusercontent.com/aida/AP1WRLtneOFuu4lrXLayWYL1pckcleXaqAYY1pTdXrhegsjW1bo8HbDKB1VimmMz3qqla1ndU0Rsb3bolYofMXDrZAw6YkD0kLqR-uWyVp7RVij00NmIthzWd8BXKm7Lc7aGNQFd7g6yFxi8g0qDaOQHpkIeKIk-sBcKkRFVShMUCvulqadHDsjb2ouMXkFmkUogklYCigYIOuPrW9zFV4WhHnOvMYdpA8bK-7Swx2SwiT0OmB6FAbMtaCl3b2k"/>
+</div>
+<div class="p-4">
+<span class="font-label-caps text-[10px] text-surface-tint">OCT 28 • 7:00 PM</span>
+<h4 class="font-headline-section text-lg mt-1">Wine &amp; Jazz Soirée</h4>
+<p class="text-body-sm text-muted mt-2">Join fellow residents for an evening of vintage jazz and sommelier-curated pairings.</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 py-2 border-b border-border/50">
+<div class="flex flex-col items-center min-w-[40px]">
+<span class="font-label-caps text-[10px] text-muted">NOV</span>
+<span class="font-display-h1 text-xl leading-none">02</span>
+</div>
+<div>
+<h5 class="font-label-caps text-body-sm">Roof Garden Yoga</h5>
+<p class="text-[12px] text-muted">08:00 AM • Terrace West</p>
+</div>
+</div>
+<div class="flex items-center gap-4 py-2 border-b border-border/50">
+<div class="flex flex-col items-center min-w-[40px]">
+<span class="font-label-caps text-[10px] text-muted">NOV</span>
+<span class="font-display-h1 text-xl leading-none">05</span>
+</div>
+<div>
+<h5 class="font-label-caps text-body-sm">Art Gallery Opening</h5>
+<p class="text-[12px] text-muted">06:00 PM • Main Lobby</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Center Column: Security & Notices -->
+<div class="col-span-6 flex flex-col gap-stack-lg">
+<div class="bg-surface border border-border p-stack-lg rounded-lg shadow-sm">
+<div class="flex justify-between items-center mb-stack-md">
+<h3 class="font-label-caps text-label-caps text-muted">Security &amp; Notices</h3>
+<span class="px-2 py-1 bg-primary-fixed text-on-primary-fixed-variant font-label-caps text-[10px] rounded">Live Updates</span>
+</div>
+<div class="space-y-6">
+<!-- Alert Item -->
+<div class="flex gap-4 p-4 border-l-4 border-error bg-error-container/10 rounded-r">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<h4 class="font-body-md font-bold text-on-surface">Main Gate Maintenance</h4>
+<p class="text-body-sm text-muted mt-1">Maintenance on the automatic recognition system between 22:00 and 02:00 tonight. Please use manual entry.</p>
+<span class="block mt-2 font-data-md text-[12px] text-error">Active • Log #4928</span>
+</div>
+</div>
+<!-- Standard Notice -->
+<div class="flex gap-4 p-4 border-l-4 border-surface-tint bg-surface-alt/20 rounded-r">
+<span class="material-symbols-outlined text-surface-tint">info</span>
+<div>
+<h4 class="font-body-md font-bold text-on-surface">Pool Deck Reservation</h4>
+<p class="text-body-sm text-muted mt-1">The north pool deck will be reserved for a private corporate event this Thursday from 14:00 to 18:00.</p>
+<span class="block mt-2 font-data-md text-[12px] text-muted">Scheduled • Log #4912</span>
+</div>
+</div>
+<!-- Routine Notice -->
+<div class="flex gap-4 p-4 border-l-4 border-outline-variant bg-surface-alt/10 rounded-r">
+<span class="material-symbols-outlined text-muted">shield</span>
+<div>
+<h4 class="font-body-md font-bold text-on-surface">Security Patrol Log</h4>
+<p class="text-body-sm text-muted mt-1">Night patrol completed all sectors (A-F) at 04:30. No irregularities reported.</p>
+<span class="block mt-2 font-data-md text-[12px] text-muted">Completed • 4 hours ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Facility Management / Amenities Status -->
+<div class="grid grid-cols-2 gap-gutter">
+<div class="bg-surface border border-border p-stack-md rounded-lg">
+<h4 class="font-label-caps text-[10px] text-muted mb-4 uppercase tracking-widest">Gym Occupancy</h4>
+<div class="flex items-end gap-2 mb-2">
+<span class="font-display-h1 text-3xl">22%</span>
+<span class="text-body-sm text-muted pb-1">Very Low</span>
+</div>
+<div class="w-full bg-surface-alt h-1.5 rounded-full overflow-hidden">
+<div class="bg-surface-tint h-full w-[22%] transition-all duration-1000"></div>
+</div>
+</div>
+<div class="bg-surface border border-border p-stack-md rounded-lg">
+<h4 class="font-label-caps text-[10px] text-muted mb-4 uppercase tracking-widest">EV Charging</h4>
+<div class="flex items-end gap-2 mb-2">
+<span class="font-display-h1 text-3xl">4/6</span>
+<span class="text-body-sm text-muted pb-1">Available</span>
+</div>
+<div class="w-full bg-surface-alt h-1.5 rounded-full overflow-hidden">
+<div class="bg-surface-tint h-full w-[66%] transition-all duration-1000"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Emergency & Stats -->
+<div class="col-span-3 flex flex-col gap-stack-lg">
+<!-- Emergency Contacts -->
+<div class="bg-primary-dark text-white p-stack-lg rounded-lg">
+<h3 class="font-label-caps text-label-caps text-on-primary-container/70 mb-stack-md uppercase">Emergency</h3>
+<div class="space-y-6">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-primary-container/50">ON-SITE SECURITY</span>
+<span class="font-data-lg text-data-lg tracking-widest">+233 24 000 9001</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-primary-container/50">MEDICAL RESPONSE</span>
+<span class="font-data-lg text-data-lg tracking-widest">+233 24 000 9002</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-[10px] text-on-primary-container/50">FIRE MARSHAL</span>
+<span class="font-data-lg text-data-lg tracking-widest">+233 24 000 9003</span>
+</div>
+</div>
+<button class="w-full mt-stack-lg py-3 bg-error text-white font-label-caps text-[11px] rounded-sm hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">emergency_home</span>
+                            BROADCAST EMERGENCY
+                        </button>
+</div>
+<!-- Market Value Insight -->
+<div class="bg-surface border border-border p-stack-md rounded-lg">
+<h3 class="font-label-caps text-label-caps text-muted mb-4 uppercase">Unit Valuation</h3>
+<div class="flex items-baseline gap-2">
+<span class="font-display-h1 text-3xl">$1.24M</span>
+<span class="text-surface-tint text-xs font-bold font-data-md">↑ 4.2%</span>
+</div>
+<p class="text-[11px] text-muted mt-1 uppercase tracking-tight">Estimated Market Value (Unit 402-B)</p>
+<canvas class="w-full h-24 mt-4" id="valuationChart"></canvas>
+</div>
+<!-- Management Team -->
+<div class="flex flex-col gap-stack-md">
+<h3 class="font-label-caps text-label-caps text-muted uppercase">Estate Management</h3>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-alt overflow-hidden border border-border">
+<img alt="Manager" src="https://lh3.googleusercontent.com/aida/AP1WRLur1xcDvANP-Lko4-W3Txm3sUmllIXMdMcFXvRtNNM1PT_5S7YuVFjEIvskbauJ99OVy_l5LnVpx34EQuYgMd9Ly8b8mXxUpYFjdUDoDdg9dVuN8SLxn6LN8PF8f8phmjpuyciDnW3yJf1MrEgWVo6v4ifIM7dYJdgznusPq8FCzNC4w-qerOyubHJPUBucJToWro-CTkBx2b2ROYOD4VE9vqE_XqCKqqNOWQdF1j7zZnsaLa7SKBFjCmM"/>
+</div>
+<div>
+<h5 class="text-sm font-bold">Special Gardens Team</h5>
+<p class="text-[11px] text-muted uppercase tracking-widest">Director of Operations</p>
+</div>
+</div>
+<button class="text-primary text-[12px] font-bold border-b border-primary w-fit hover:text-muted hover:border-muted transition-all">
+                            SCHEDULE PRIVATE CONSULTATION
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Global Footer -->
+<footer class="ml-[220px] bg-surface-alt/30 border-t border-border mt-stack-lg">
+<div class="max-w-max-width mx-auto px-margin-site py-stack-lg flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="font-body-sm text-body-sm text-muted">© 2024 Special Gardens Platform. All rights reserved.</span>
+<div class="flex gap-stack-md">
+<a class="font-label-caps text-label-caps text-muted hover:text-primary transition-colors underline" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-muted hover:text-primary transition-colors underline" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-muted hover:text-primary transition-colors underline" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+<!-- Mini chart script -->
+<script>
+        // Simple micro-interaction for the sidebar and valuation chart
+        window.onload = () => {
+            const ctx = document.getElementById('valuationChart');
+            if (ctx) {
+                const canvas = ctx.getContext('2d');
+                canvas.beginPath();
+                canvas.moveTo(0, 80);
+                canvas.bezierCurveTo(30, 70, 60, 90, 90, 60);
+                canvas.bezierCurveTo(120, 30, 150, 40, 180, 20);
+                canvas.bezierCurveTo(210, 0, 240, 30, 300, 10);
+                canvas.strokeStyle = '#466559';
+                canvas.lineWidth = 2;
+                canvas.stroke();
+            }
+        };
+    </script>
+</body></html>

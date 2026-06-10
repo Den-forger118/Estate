@@ -81,18 +81,18 @@ export function canManageLeases(role: UserRole): boolean {
 }
 
 export const defaultEmails: Record<UserRole, string> = {
-  admin: "admin@ernestofori.example",
-  manager: "manager@ernestofori.example",
-  owner: "owner@ernestofori.example",
-  landlord: "landlord@ernestofori.example",
-  tenant: "tenant@ernestofori.example",
-  maintenance: "maintenance@ernestofori.example",
+  admin: "admin@specialgardens.example",
+  manager: "manager@specialgardens.example",
+  owner: "owner@specialgardens.example",
+  landlord: "landlord@specialgardens.example",
+  tenant: "tenant@specialgardens.example",
+  maintenance: "maintenance@specialgardens.example",
 };
 
 export const seedLandlordApplications: LandlordApplication[] = [
   {
     id: "app-seed-1",
-    email: "owner@ernestofori.example",
+    email: "owner@specialgardens.example",
     name: "Daniel Reyes",
     property: "Oak Court Townhome",
     unit: "B-0311",
@@ -102,7 +102,7 @@ export const seedLandlordApplications: LandlordApplication[] = [
   },
   {
     id: "app-seed-2",
-    email: "pending.owner@ernestofori.example",
+    email: "pending.owner@specialgardens.example",
     name: "Priya Nair",
     property: "Cedar Terrace Apartment",
     unit: "C-0902",

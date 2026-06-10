@@ -1,21 +1,24 @@
 import Link from "next/link";
 import { Property } from "../data/site";
+import { availabilityClass } from "./statusBadge";
 
 export function PropertyCard({ property }: { property: Property }) {
   return (
-    <article className="property-card reveal">
+    <article className="property-card card-interactive">
       <Link href={`/properties/${property.slug}`} className="image-frame">
-        <img src={property.image} alt={property.name} />
-        <span className={`badge ${property.availability === "Reserved" ? "badge-muted" : ""}`}>
+        <img src={property.image} alt={property.name} loading="lazy" decoding="async" />
+        <span className={`badge status-chip ${availabilityClass(property.availability)}`}>
           {property.availability}
         </span>
       </Link>
       <div className="property-card-body">
         <div>
-          <p className="meta">{property.type} in {property.location}</p>
+          <p className="meta">
+            {property.type} · {property.location}
+          </p>
           <h3>{property.name}</h3>
         </div>
-        <strong>{property.price}</strong>
+        <strong className="font-data-lg">{property.price}</strong>
         <p>{property.description}</p>
         <div className="property-stats" aria-label="Property details">
           <span>{property.beds} beds</span>
@@ -30,21 +33,36 @@ export function PropertyCard({ property }: { property: Property }) {
   );
 }
 
+export function AmenityImageCard({ name, image }: { name: string; image: string }) {
+  return (
+    <article className="amenity-image-card card-interactive">
+      <div className="amenity-image-card-media">
+        <img src={image} alt={name} loading="lazy" decoding="async" />
+        <div className="amenity-image-card-shade" aria-hidden="true" />
+        <p className="amenity-image-card-label">{name}</p>
+      </div>
+    </article>
+  );
+}
+
 export function BlogCard({
   post,
 }: {
-  post: { title: string; category: string; date: string; excerpt: string; image: string };
+  post: { slug: string; title: string; category: string; date: string; excerpt: string; image: string };
 }) {
   return (
-    <article className="blog-card reveal">
+    <Link href={`/blog/${post.slug}`} className="blog-card card-interactive">
       <div className="image-frame">
-        <img src={post.image} alt={post.title} />
+        <img src={post.image} alt={post.title} loading="lazy" decoding="async" />
       </div>
-      <div>
-        <p className="meta">{post.category} / {post.date}</p>
+      <div className="property-card-body">
+        <p className="meta">
+          <span className="font-data-md">{post.date}</span> · {post.category}
+        </p>
         <h3>{post.title}</h3>
         <p>{post.excerpt}</p>
+        <span className="community-inline-link">Read more →</span>
       </div>
-    </article>
+    </Link>
   );
 }

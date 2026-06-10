@@ -3,11 +3,15 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useMemo, useState } from "react";
+import { AppSidebar } from "../components/AppSidebar";
+import { ContentTransition } from "../components/ContentTransition";
+import { DashboardTopbarTools } from "../components/DashboardTopbarTools";
 import {
   communityModuleMeta,
   communityNavItems,
   residentProfile,
 } from "../data/community";
+import { brand } from "../data/site";
 import {
   AUTH_KEY,
   canAccessCommunity,
@@ -20,6 +24,7 @@ export function CommunityShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [ready, setReady] = useState(false);
   const [role, setRole] = useState<UserRole>("tenant");
+  const year = new Date().getFullYear();
 
   useEffect(() => {
     const authed = window.localStorage.getItem(AUTH_KEY) === "true";
@@ -52,7 +57,7 @@ export function CommunityShell({ children }: { children: ReactNode }) {
   function signOut() {
     window.localStorage.removeItem(AUTH_KEY);
     document.cookie = "mock_auth=; Max-Age=0; path=/";
-    router.replace("/login");
+    router.replace("/");
   }
 
   if (!ready) {
@@ -65,94 +70,69 @@ export function CommunityShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="dashboard-shell">
-      <aside className="dashboard-sidebar">
-        <Link href="/community" className="dashboard-brand" aria-label="Resident services home">
-          <span>EO</span>
-          <div>
-            <strong>Resident OS</strong>
-            <small>{residentProfile.estate}</small>
-          </div>
-        </Link>
-
-        <Link href="/community/report" className="btn btn-primary dashboard-primary-action">
-          New Request
-        </Link>
-
-        <nav className="dashboard-nav" aria-label="Resident services navigation">
-          {communityNavItems.map((item) => {
-            const active =
-              item.href === "/community"
-                ? pathname === "/community"
-                : pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={active ? "dashboard-nav-active" : ""}
-              >
-                <span>{item.icon}</span>
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="dashboard-sidebar-resident">
-          <div className="dashboard-avatar" aria-hidden="true">
-            {residentProfile.initials}
-          </div>
-          <div>
-            <strong>{residentProfile.name}</strong>
-            <span>{residentProfile.unit}</span>
-          </div>
-        </div>
-
-        <div className="dashboard-sidebar-footer">
-          <Link href="/dashboard">REMS dashboard</Link>
-          <Link href="/">Public site</Link>
-          <button type="button" onClick={signOut}>
-            Sign Out
-          </button>
-        </div>
-      </aside>
-
-      <div className="dashboard-workspace">
-        <header className="dashboard-topbar">
-          <div className="dashboard-search">
-            <span aria-hidden="true">⌕</span>
-            <input placeholder={searchPlaceholder} aria-label="Search resident services" />
-          </div>
-          <div className="dashboard-user-tools">
-            <span className="community-notify-dot" aria-hidden="true" />
+      <AppSidebar
+        brandHref="/community"
+        brandIcon="◇"
+        brandTitle="Resident OS"
+        brandSubtitle="Premium Living"
+        primaryAction={{ href: "/community/report", label: "New Request" }}
+        mobileNavLabel="Resident services navigation"
+        navItems={communityNavItems.map((item) => {
+          const active =
+            item.href === "/community"
+              ? pathname === "/community"
+              : pathname === item.href || pathname.startsWith(`${item.href}/`);
+          return {
+            href: item.href,
+            label: item.label,
+            icon: item.icon,
+            active,
+          };
+        })}
+        residentCard={
+          <>
             <div className="dashboard-avatar" aria-hidden="true">
               {residentProfile.initials}
             </div>
-            <div className="dashboard-user-copy">
+            <div>
               <strong>{residentProfile.name}</strong>
               <span>{residentProfile.unit}</span>
             </div>
-          </div>
+          </>
+        }
+        footer={
+          <>
+            <Link href="/dashboard">REMS dashboard</Link>
+            <Link href="/">Public site</Link>
+            <button type="button" onClick={signOut}>
+              Sign Out
+            </button>
+          </>
+        }
+      />
+
+      <div className="dashboard-workspace">
+        <header className="dashboard-topbar">
+          <DashboardTopbarTools
+            displayName={residentProfile.name}
+            roleLabel={residentProfile.unit}
+            initials={residentProfile.initials}
+            searchPlaceholder={searchPlaceholder}
+            settingsHref="/community"
+          />
         </header>
 
-        <main className="dashboard-main page-transition">
-          <div className="dashboard-mobile-nav">
-            {communityNavItems.map((item) => {
-              const active =
-                item.href === "/community"
-                  ? pathname === "/community"
-                  : pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={active ? "dashboard-nav-active" : ""}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-          {children}
+        <main className="dashboard-main">
+          <ContentTransition>{children}</ContentTransition>
+
+          <footer className="dashboard-app-footer">
+            <span>© {year} {brand.name}</span>
+            <nav aria-label="Resident services footer">
+              <Link href="/contact">Support</Link>
+              <Link href="/dashboard">REMS</Link>
+              <Link href="/">Public Site</Link>
+            </nav>
+          </footer>
         </main>
       </div>
     </div>

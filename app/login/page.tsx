@@ -21,6 +21,8 @@ function LoginForm() {
   const [role, setRole] = useState<UserRole>("admin");
   const [email, setEmail] = useState(defaultEmails.admin);
   const [name, setName] = useState("Eleanor Vance");
+  const [password, setPassword] = useState("dashboard");
+  const [error, setError] = useState("");
   const next = searchParams.get("next") || "/dashboard";
 
   function onRoleChange(nextRole: UserRole) {
@@ -35,6 +37,11 @@ function LoginForm() {
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      setError("Please enter your email and password.");
+      return;
+    }
+    setError("");
     window.localStorage.setItem(AUTH_KEY, "true");
     window.localStorage.setItem(ROLE_KEY, role);
     window.localStorage.setItem(USER_EMAIL_KEY, email);
@@ -60,9 +67,10 @@ function LoginForm() {
         Email
         <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
       </label>
+      {error ? <p className="form-error">{error}</p> : null}
       <label>
         Password
-        <input type="password" defaultValue="dashboard" />
+        <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
       </label>
       <label>
         Role

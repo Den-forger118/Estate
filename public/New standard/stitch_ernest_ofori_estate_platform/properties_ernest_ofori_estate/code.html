@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Special Gardens | Our Properties</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=DM+Sans:wght@400;500;600&amp;family=DM+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..900&amp;family=Playfair+Display:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#466559",
+                        "muted": "#6B7A73",
+                        "surface": "#FFFFFF",
+                        "surface-alt": "#EDE8DF",
+                        "primary-fixed": "#c8eadb",
+                        "on-primary-fixed-variant": "#2f4d42",
+                        "outline-variant": "#c1c8c3",
+                        "on-secondary-container": "#52675d",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#dee4df",
+                        "on-secondary": "#ffffff",
+                        "background": "#f5fbf5",
+                        "surface-dim": "#d5dcd6",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#ecf2ed",
+                        "inverse-primary": "#adcec0",
+                        "primary-container": "#1c3a30",
+                        "surface-variant": "#dee4df",
+                        "secondary-container": "#cde5d8",
+                        "on-primary-container": "#84a497",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e4eae4",
+                        "primary-dark": "#111F1A",
+                        "inverse-surface": "#2c322e",
+                        "border": "#D9D2C7",
+                        "tertiary-fixed-dim": "#f3bc7d",
+                        "tertiary": "#301b00",
+                        "on-surface": "#171d1a",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#0b1f17",
+                        "surface-container-low": "#eff5f0",
+                        "secondary": "#4e6359",
+                        "primary-fixed-dim": "#adcec0",
+                        "on-tertiary-fixed": "#2b1700",
+                        "secondary-fixed-dim": "#b4ccbf",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#012018",
+                        "on-tertiary-fixed-variant": "#633f0a",
+                        "outline": "#727975",
+                        "tertiary-container": "#4d2e00",
+                        "on-tertiary-container": "#c69459",
+                        "on-surface-variant": "#414845",
+                        "surface-container": "#e9efea",
+                        "secondary-fixed": "#d0e8db",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f5fbf5",
+                        "on-secondary-fixed-variant": "#364b41",
+                        "on-background": "#171d1a",
+                        "on-error-container": "#93000a",
+                        "primary": "#04241b",
+                        "tertiary-fixed": "#ffddb9",
+                        "page-bg": "#F6F2EC"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "margin-site": "40px",
+                        "stack-lg": "32px",
+                        "max-width": "1180px",
+                        "stack-sm": "8px",
+                        "section-gap": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-section": ["Playfair Display"],
+                        "data-md": ["DM Mono"],
+                        "body-md": ["DM Sans"],
+                        "body-sm": ["DM Sans"],
+                        "data-lg": ["DM Mono"],
+                        "label-caps": ["DM Sans"],
+                        "display-h1": ["Playfair Display"],
+                        "display-h1-mobile": ["Playfair Display"],
+                        "body-lg": ["DM Sans"]
+                    },
+                    "fontSize": {
+                        "headline-section": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "data-md": ["14px", {"lineHeight": "1", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "data-lg": ["20px", {"lineHeight": "1", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "display-h1": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-h1-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F6F2EC; /* page-bg */
+            color: #171d1a; /* on-surface */
+        }
+        .vertical-signature {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+        .institutional-input {
+            border: none;
+            border-bottom: 1px solid #D9D2C7;
+            background: transparent;
+            border-radius: 0;
+            padding: 8px 0;
+        }
+        .institutional-input:focus {
+            box-shadow: none;
+            border-color: #04241b;
+            outline: none;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline sticky top-0 z-50 docked full-width">
+<div class="flex justify-between items-center w-full px-margin-site max-w-max-width mx-auto py-stack-md">
+<div class="flex items-center gap-stack-lg">
+<a class="font-display-h1 text-display-h1 text-primary dark:text-inverse-primary leading-none" href="#">
+                    Special Gardens
+                </a>
+</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-primary dark:text-inverse-primary font-bold border-b-2 border-primary py-2 font-label-caps text-label-caps" href="#">Properties</a>
+<a class="text-muted dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-caps text-label-caps" href="#">Services</a>
+<a class="text-muted dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-caps text-label-caps" href="#">About</a>
+<a class="text-muted dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-caps text-label-caps" href="#">Blog</a>
+<a class="text-muted dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-label-caps text-label-caps" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-stack-md">
+<button class="bg-[#1C3A30] text-white px-6 py-3 rounded-[4rem] font-body-md font-semibold hover:opacity-90 transition-all scale-95 duration-200">
+                    Book an Inspection
+                </button>
+</div>
+</div>
+</header>
+<main class="max-w-max-width mx-auto px-margin-site py-section-gap relative">
+<!-- Signature Vertical Number -->
+<div class="absolute left-0 top-[180px] hidden lg:block">
+<span class="vertical-signature font-display-h1 text-[120px] text-surface-alt font-extrabold leading-none opacity-50 select-none">
+                04
+            </span>
+</div>
+<!-- Hero Section -->
+<section class="mb-section-gap relative">
+<div class="max-w-2xl">
+<p class="font-label-caps text-label-caps text-muted mb-stack-sm">EXCLUSIVE PORTFOLIO</p>
+<h1 class="font-display-h1 text-display-h1 text-primary mb-stack-md">Our Properties</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    Discover a curated selection of refined architectural expressions, where institutional precision meets residential tranquility in the city's most coveted locales.
+                </p>
+</div>
+</section>
+<!-- Filter Bar -->
+<section class="mb-stack-lg">
+<div class="flex flex-wrap items-end gap-stack-lg border-b border-border pb-stack-sm">
+<div class="flex flex-col min-w-[140px]">
+<label class="font-label-caps text-label-caps text-muted mb-1">LOCATION</label>
+<select class="institutional-input font-body-sm appearance-none cursor-pointer">
+<option>All Districts</option>
+<option>Meadowline</option>
+<option>Oak Court</option>
+<option>Cedar Terrace</option>
+</select>
+</div>
+<div class="flex flex-col min-w-[140px]">
+<label class="font-label-caps text-label-caps text-muted mb-1">TYPE</label>
+<select class="institutional-input font-body-sm appearance-none cursor-pointer">
+<option>All Types</option>
+<option>Villas</option>
+<option>Townhomes</option>
+<option>Apartments</option>
+</select>
+</div>
+<div class="flex flex-col min-w-[140px]">
+<label class="font-label-caps text-label-caps text-muted mb-1">PRICE RANGE</label>
+<select class="institutional-input font-body-sm appearance-none cursor-pointer">
+<option>Any Price</option>
+<option>$300k - $500k</option>
+<option>$500k - $800k</option>
+<option>$800k+</option>
+</select>
+</div>
+<div class="ml-auto flex items-center gap-4 pb-2">
+<span class="font-label-caps text-label-caps text-muted">SORT BY: RELEVANCE</span>
+<button class="material-symbols-outlined text-primary">filter_list</button>
+</div>
+</div>
+</section>
+<!-- Property Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+<!-- Property 1 -->
+<article class="bg-surface border border-border rounded-lg overflow-hidden group transition-all duration-300 hover:border-primary">
+<div class="relative h-[480px] overflow-hidden">
+<img alt="Meadowline Villa" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A sprawling modern villa with clean geometric lines and large floor-to-ceiling glass windows, set against a lush green landscaped lawn during the soft light of a late afternoon. The building's white stone facade reflects the luxury aesthetic, featuring a minimalist pool area in the foreground. The overall atmosphere is quiet, expensive, and architecturally disciplined." src="https://lh3.googleusercontent.com/aida/AP1WRLtN0SGmiAp_VE05tnLtB6pLMloS1gn9ZNSz100gHl2AY_iXENDOAzAxWgCPjBpkeKpZbGiv8-AT76bHYCK37YegQzhEFQIvmqVShnTRy7xcAeDGfe4UoBCdtynKe1UZuzSHX5_JT-J5ZSasm0eKf2fwQ0_YKNu6CuWNmQTcgkJ6w_RHIUV_xjTDCF_ZJzWyrBSK6McBjtZQMWd66vH3KtXe31Df1bMYXI20Rvy-VRahUQ2B6t2Iz-YUr9Y"/>
+<div class="absolute top-6 right-6">
+<span class="bg-primary text-white font-label-caps text-label-caps px-4 py-2 rounded-lg">INSPECTION OPEN</span>
+</div>
+</div>
+<div class="p-stack-lg">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-section text-headline-section text-primary mb-1">Meadowline Villa</h3>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span class="font-body-sm">East Legon Residential</span>
+</div>
+</div>
+<p class="font-data-lg text-data-lg text-primary">$845,000</p>
+</div>
+<div class="flex items-center gap-stack-md pt-4 border-t border-surface-alt">
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">bed</span>
+<span class="font-data-md text-data-md">5 BEDS</span>
+</div>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">bathtub</span>
+<span class="font-data-md text-data-md">4 BATHS</span>
+</div>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">square_foot</span>
+<span class="font-data-md text-data-md">4,200 SQFT</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Property 2 -->
+<article class="bg-surface border border-border rounded-lg overflow-hidden group transition-all duration-300 hover:border-primary">
+<div class="relative h-[480px] overflow-hidden">
+<img alt="Oak Court Townhome" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="An elegant brick and dark wood townhome situated on a tree-lined avenue with high-end vehicles parked subtly nearby. The architecture shows classic institutional charm with a modern twist, featuring a black steel balcony and manicured entryway gardens. Soft evening lighting creates a warm, welcoming glow through the paned windows, emphasizing a sense of established prestige." src="https://lh3.googleusercontent.com/aida/AP1WRLtLJ-QH7Q672heV79VpkojL460K_Vu-u_erFJ4SfGLmK3ZcNtmWCOQnBOjVfb5tiwL5QmXcOkD3Tfqv1VkLGyBrm-m_nSL5uRA_JLjazCo7ub7I0AGlcYWe30DqKA84sQt1asQlgQ9Pq41B_dKauX8rqbyLGrKM_2SgGZjLL3UMT8WWFUZPmPsc9-pKaucmDPAFxFpm-uaOMVJqgXZdS_zgff07Pj20nmKvMl-IKFyh4dH0IW2O6IJ3tpo"/>
+<div class="absolute top-6 right-6">
+<span class="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-4 py-2 rounded-lg">AVAILABLE</span>
+</div>
+</div>
+<div class="p-stack-lg">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-section text-headline-section text-primary mb-1">Oak Court Townhome</h3>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span class="font-body-sm">Cantonments District</span>
+</div>
+</div>
+<p class="font-data-lg text-data-lg text-primary">$520,000</p>
+</div>
+<div class="flex items-center gap-stack-md pt-4 border-t border-surface-alt">
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">bed</span>
+<span class="font-data-md text-data-md">4 BEDS</span>
+</div>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">bathtub</span>
+<span class="font-data-md text-data-md">3 BATHS</span>
+</div>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">square_foot</span>
+<span class="font-data-md text-data-md">2,850 SQFT</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Property 3 -->
+<article class="bg-surface border border-border rounded-lg overflow-hidden group transition-all duration-300 hover:border-primary">
+<div class="relative h-[480px] overflow-hidden">
+<img alt="Cedar Terrace Apartment" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A high-rise luxury apartment complex with a sleek facade of glass and vertical concrete louvers. The building towers over a modern urban landscape under a clear blue sky. The composition focuses on a corner unit balcony featuring minimalist outdoor furniture and potted greenery, suggesting a sophisticated urban lifestyle. The lighting is bright and crisp, highlighting the high-quality building materials." src="https://lh3.googleusercontent.com/aida/AP1WRLv1PgIjOj3BaC5M_KsO993y5PYbMMQjgyrabERNzIKQh2wHVyTekPr_chdL810NaUt7MdyFyX6pgCQ-JbIE51DQ5bBU87qzKSmC860CVTabx3KoJ7QRMBmLFPMLNZhrolet9yWolvYDy32ha_N3stkSAHCY10rl2XJ4vGt3xLgqDnnWmvpvPxVSuPBFgND8b8XlIto-CuZewktEbgL8f31I4N1nR_sLv8ouzjzhquPbw67gYa5bwRsvMAU"/>
+<div class="absolute top-6 right-6">
+<span class="bg-tertiary-container text-on-tertiary-container font-label-caps text-label-caps px-4 py-2 rounded-lg">LIMITED UNITS</span>
+</div>
+</div>
+<div class="p-stack-lg">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-section text-headline-section text-primary mb-1">Cedar Terrace Apartment</h3>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span class="font-body-sm">Airport Residential Area</span>
+</div>
+</div>
+<p class="font-data-lg text-data-lg text-primary">$315,000</p>
+</div>
+<div class="flex items-center gap-stack-md pt-4 border-t border-surface-alt">
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">bed</span>
+<span class="font-data-md text-data-md">3 BEDS</span>
+</div>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">bathtub</span>
+<span class="font-data-md text-data-md">2 BATHS</span>
+</div>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">square_foot</span>
+<span class="font-data-md text-data-md">1,600 SQFT</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Property 4 -->
+<article class="bg-surface border border-border rounded-lg overflow-hidden group transition-all duration-300 hover:border-primary opacity-90">
+<div class="relative h-[480px] overflow-hidden grayscale-[0.2]">
+<img alt="Willow Garden Duplex" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A contemporary duplex with mirrored architectural design, featuring heavy timber accents and charcoal grey stone siding. The property is surrounded by tall, slender trees and a minimalist black iron fence. The mood is moody and exclusive, with dramatic shadows cast by a low sun. A paved driveway leads to integrated garages, emphasizing the functional luxury of the institutional design." src="https://lh3.googleusercontent.com/aida/AP1WRLtJqA6kCQTQVTzrL1y2iOHKQE9z0v4imJpNyc2ZQwONY-jLnNkXjQ_cUgrt7GM_1t5wDY1Orx_NnOXSA1teFSOYjWLt7GNGSxoPEnfdJjzFynNXxRqNc-s4fQ4gftOyCr4aNbmXsZgYVh6MJe3cg65CUMZyRpswnm4ngxGa6ZVYqxrM0-WMQt9ouI_PUrgRxE1T67Do9Qsm1shFZlAA8BWW6HtL9vnTJ_KNhsJGBKaUPNo_oPuKYh605y8"/>
+<div class="absolute top-6 right-6">
+<span class="bg-muted text-white font-label-caps text-label-caps px-4 py-2 rounded-lg">RESERVED</span>
+</div>
+</div>
+<div class="p-stack-lg">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-section text-headline-section text-primary mb-1">Willow Garden Duplex</h3>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span class="font-body-sm">Labone District</span>
+</div>
+</div>
+<p class="font-data-lg text-data-lg text-primary">$690,000</p>
+</div>
+<div class="flex items-center gap-stack-md pt-4 border-t border-surface-alt">
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">bed</span>
+<span class="font-data-md text-data-md">4 BEDS</span>
+</div>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">bathtub</span>
+<span class="font-data-md text-data-md">4 BATHS</span>
+</div>
+<div class="flex items-center gap-2 text-muted">
+<span class="material-symbols-outlined">square_foot</span>
+<span class="font-data-md text-data-md">3,100 SQFT</span>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- Pagination / Load More -->
+<div class="mt-section-gap flex flex-col items-center">
+<button class="bg-transparent border border-primary text-primary px-10 py-4 rounded-lg font-body-md font-semibold hover:bg-primary hover:text-white transition-all duration-300">
+                View Full Collection
+            </button>
+<p class="mt-stack-md font-label-caps text-label-caps text-muted">Showing 4 of 24 Exceptional Properties</p>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-alt dark:bg-inverse-surface border-t border-outline-variant w-full py-stack-lg px-margin-site flex flex-col items-center gap-stack-md mt-section-gap">
+<div class="max-w-max-width w-full flex flex-col md:flex-row justify-between items-center gap-stack-lg">
+<div class="font-headline-section text-headline-section text-primary">
+                Special Gardens
+            </div>
+<div class="flex gap-8">
+<a class="text-muted font-label-caps text-label-caps hover:text-primary transition-colors underline" href="#">Privacy Policy</a>
+<a class="text-muted font-label-caps text-label-caps hover:text-primary transition-colors underline" href="#">Terms of Service</a>
+<a class="text-muted font-label-caps text-label-caps hover:text-primary transition-colors underline" href="#">Institutional Profile</a>
+<a class="text-muted font-label-caps text-label-caps hover:text-primary transition-colors underline" href="#">Contact Support</a>
+</div>
+</div>
+<div class="w-full border-t border-border pt-stack-md flex justify-center">
+<p class="font-body-sm text-body-sm text-muted">© 2024 Special Gardens Platform. All rights reserved.</p>
+</div>
+</footer>
+<!-- Interactive Layer: Hover Effects for Inputs -->
+<script>
+        document.querySelectorAll('.institutional-input').forEach(select => {
+            select.addEventListener('focus', function() {
+                this.parentElement.querySelector('label').style.color = '#04241b';
+            });
+            select.addEventListener('blur', function() {
+                this.parentElement.querySelector('label').style.color = '#6B7A73';
+            });
+        });
+
+        // Simple smooth scroll for links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body></html>

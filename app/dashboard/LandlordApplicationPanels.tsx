@@ -11,6 +11,7 @@ import {
   submitLandlordApplication,
   type LandlordApplication,
 } from "../data/roles";
+import { showToast } from "../components/Toast";
 import { moduleMeta } from "../data/dashboard";
 
 export function LandlordApplicationSubmitPanel() {
@@ -37,6 +38,7 @@ export function LandlordApplicationSubmitPanel() {
     submitLandlordApplication({ name, email, property, unit, note });
     setSubmitted(true);
     setApplication(getOwnerApplicationForEmail(email));
+    showToast("Application submitted. Status: Pending Review.", "info");
   }
 
   const meta = moduleMeta["landlord-application"];
@@ -121,6 +123,10 @@ export function LandlordApplicationsReviewPanel() {
   function decide(id: string, decision: "approved" | "rejected") {
     reviewLandlordApplication(id, decision);
     refresh();
+    showToast(
+      decision === "approved" ? "Application approved." : "Application rejected.",
+      decision === "approved" ? "success" : "info",
+    );
   }
 
   const meta = moduleMeta["landlord-applications"];
