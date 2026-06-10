@@ -1,8 +1,5 @@
 /** Curated luxury estate photography — all URLs verified against images.unsplash.com */
 
-/** Local founder portrait — enhanced in /public/images (regenerate via scripts/enhance-founder-image.mjs) */
-export const founderPortrait = "/images/ernest-ofori-sarpong.jpg";
-
 export function estatePhoto(id: string, width = 1400) {
   return `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=82`;
 }

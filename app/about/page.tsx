@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { SignatureNumber } from "../components/SignatureNumber";
-import { estateImages, founderPortrait } from "../data/images";
+import founderPhoto from "../assets/dr-ernest-ofori-sarpong.jpg";
+import { estateImages } from "../data/images";
 import { PageShell, SectionIntro } from "../components/SiteChrome";
 
 const values = [
@@ -43,14 +43,13 @@ export default function AboutPage() {
 
       <section className="section split-section about-founder-section">
         <div className="about-founder-portrait">
-          <Image
-            src={founderPortrait}
-            alt="Ernest Ofori Sarpong, founder of Special Gardens"
-            width={1400}
-            height={1259}
-            priority
-            sizes="(max-width: 980px) min(100vw, 420px), min(45vw, 480px)"
-            quality={100}
+          <img
+            src={founderPhoto.src}
+            alt="Dr. Ernest Ofori Sarpong, founder of Special Gardens"
+            width={founderPhoto.width}
+            height={founderPhoto.height}
+            loading="eager"
+            decoding="async"
             className="about-founder-portrait-image"
           />
         </div>
