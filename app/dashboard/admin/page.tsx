@@ -58,7 +58,7 @@ export default function AdminExecutiveDashboard() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: "var(--muted)" }} />
               <YAxis tick={{ fontSize: 11, fill: "var(--muted)" }} tickFormatter={(v) => `${v / 1000}k`} />
-              <Tooltip formatter={(v: number) => `GH₵ ${v.toLocaleString()}`} />
+              <Tooltip formatter={(v) => `GH₵ ${Number(v).toLocaleString()}`} />
               <Bar dataKey="residential" name="Residential" fill="var(--primary)" radius={[2, 2, 0, 0]} />
               <Bar dataKey="commercial" name="Commercial" fill="var(--accent)" radius={[2, 2, 0, 0]} />
             </BarChart>
@@ -72,7 +72,7 @@ export default function AdminExecutiveDashboard() {
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: "var(--muted)" }} />
               <YAxis domain={[88, 96]} tick={{ fontSize: 11, fill: "var(--muted)" }} tickFormatter={(v) => `${v}%`} />
-              <Tooltip formatter={(v: number) => `${v}%`} />
+              <Tooltip formatter={(v) => `${Number(v)}%`} />
               <Line
                 type="monotone"
                 dataKey="rate"

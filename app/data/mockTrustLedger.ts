@@ -64,6 +64,42 @@ const trustLedgerSeed: TrustEntry[] = [
     validUntil: "Jan 10, 2026",
     status: "expired",
   },
+  {
+    reference: "PAY-20240324-001",
+    type: "payment",
+    party: "A. Sterling",
+    amount: 4250,
+    property: "Cedar Terrace, Apt 402",
+    issuedAt: "Mar 24, 2024",
+    status: "verified",
+  },
+  {
+    reference: "PAY-20240322-003",
+    type: "payment",
+    party: "E. Martinez",
+    amount: 3100,
+    property: "Heritage Lofts, 12A",
+    issuedAt: "Mar 22, 2024",
+    status: "verified",
+  },
+  {
+    reference: "PAY-20240320-004",
+    type: "payment",
+    party: "Dr. N. Boateng",
+    amount: 8500,
+    property: "Meadowline Villa",
+    issuedAt: "Mar 20, 2024",
+    status: "verified",
+  },
+  {
+    reference: "PAY-20240315-006",
+    type: "payment",
+    party: "A. Owusu",
+    amount: 2950,
+    property: "Cedar Terrace, Apt 308",
+    issuedAt: "Mar 15, 2024",
+    status: "verified",
+  },
 ];
 
 export function searchTrustLedger(query: string): TrustEntry | null {

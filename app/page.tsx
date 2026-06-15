@@ -4,6 +4,7 @@ import { HomeHero } from "./components/HomeHero";
 import { WhyChooseBand } from "./components/WhyChooseBand";
 import { SignatureNumber } from "./components/SignatureNumber";
 import { PageShell, SectionIntro } from "./components/SiteChrome";
+import Image from "next/image";
 
 import { blogPosts, estateAmenities, properties, testimonials } from "./data/site";
 
@@ -97,7 +98,7 @@ export default function PublicMarketingHome() {
 
               <div className="testimonial-author">
 
-                <img
+                <Image
                   className="testimonial-avatar"
                   src={item.avatar}
                   alt={item.name}

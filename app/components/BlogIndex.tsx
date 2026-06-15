@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatBlogDate, type BlogPost } from "../data/site";
 
-const categories = ["All", "Housing Tips", "Maintenance", "Community"] as const;
-
 export function BlogIndex({
   posts,
   featuredSlug,
@@ -14,7 +12,8 @@ export function BlogIndex({
   posts: BlogPost[];
   featuredSlug: string;
 }) {
-  const [activeCategory, setActiveCategory] = useState<(typeof categories)[number]>("All");
+  const categories = ["All", ...Array.from(new Set(posts.map((p) => p.category)))];
+  const [activeCategory, setActiveCategory] = useState("All");
   const gridRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 

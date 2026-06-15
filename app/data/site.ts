@@ -147,6 +147,38 @@ export const serviceGroups = [
   },
 ] as const;
 
+export type TechPillar = {
+  id: string;
+  num: string;
+  heading: string;
+  body: string;
+  learnMoreHref: string;
+};
+
+export const techPillars: TechPillar[] = [
+  {
+    id: "trust-layer",
+    num: "01",
+    heading: "Fraud-Proof Real Estate Investment",
+    body: "We eliminate double-selling and transaction anxiety. Every single land allocation, structural phase milestone, and financial transaction is assigned an unguessable, secure cryptographic tracking token. Buyers can publicly verify their legal ownership standing and pull up tamper-proof, masked digital transaction records at any time without needing a system login. Your investment is locked, logged, and entirely transparent.",
+    learnMoreHref: "/verify",
+  },
+  {
+    id: "gate-pass",
+    num: "02",
+    heading: "Frictionless Estate Access Management",
+    body: "Security at Special Gardens is seamless. Residents generate instant, scannable QR visitor passes straight from their mobile community portal to share with guests via SMS or WhatsApp. Our physical gate-guards utilize mobile terminal webviews to scan visitors in instantly, eliminating long queues at the perimeter and securing the ecosystem without bureaucratic bottlenecks.",
+    learnMoreHref: "/blog/day-in-the-life-gate-pass",
+  },
+  {
+    id: "dual-engine",
+    num: "03",
+    heading: "Proactive Upkeep, Guaranteed",
+    body: "Property devaluation is a thing of the past. Our backend scheduling engine works hand-in-hand with resident incident reporting. Whether a system issue is flag-logged automatically by estate management (like semi-annual utility overhauls) or submitted via a tenant's portal, everything converges onto a singular, real-time operational dashboard ensuring zero maintenance tickets slip through the cracks.",
+    learnMoreHref: "/blog/modern-landlord-rental-ecosystem",
+  },
+];
+
 export type BlogPost = {
   slug: string;
   title: string;

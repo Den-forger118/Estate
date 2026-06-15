@@ -12,14 +12,15 @@ const publicNavItems: { label: string; href: string; mobile?: boolean }[] = [
   { label: "Services", href: "/services" },
   { label: "About", href: "/about", mobile: true },
   { label: "Blog", href: "/blog" },
-  { label: "Verify", href: "/verify", mobile: true },
+  { label: "Verify Credentials", href: "/verify", mobile: true },
   { label: "Contact", href: "/contact", mobile: true },
 ];
 
 function resolvePortalHref(role: UserRole): string {
   if (role === "SUPER_ADMIN" || role === "ADMIN") return "/dashboard/admin";
   if (role === "OWNER") return "/community/portal";
-  if (role === "TENANT_STAFF") return "/community";
+  if (role === "TENANT") return "/community/portal";
+  if (role === "STAFF") return "/staff/gate-scanner";
   return "/login";
 }
 

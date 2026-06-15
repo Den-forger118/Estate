@@ -3,7 +3,8 @@ export type UserRole =
   | "SUPER_ADMIN"
   | "ADMIN"
   | "OWNER"
-  | "TENANT_STAFF"
+  | "TENANT"
+  | "STAFF"
   | "PROSPECT";
 
 export type LandlordApplicationStatus = "pending" | "approved" | "rejected";
@@ -30,7 +31,8 @@ export const roleHierarchy: UserRole[] = [
   "SUPER_ADMIN",
   "ADMIN",
   "OWNER",
-  "TENANT_STAFF",
+  "TENANT",
+  "STAFF",
   "PROSPECT",
 ];
 
@@ -38,7 +40,8 @@ export const roleLabels: Record<UserRole, string> = {
   SUPER_ADMIN: "Super Admin",
   ADMIN: "Admin",
   OWNER: "Owner",
-  TENANT_STAFF: "Tenant / Staff",
+  TENANT: "Tenant",
+  STAFF: "Staff",
   PROSPECT: "Prospect",
 };
 
@@ -46,7 +49,8 @@ export const roleDescriptions: Record<UserRole, string> = {
   SUPER_ADMIN: "Full estate operations, user oversight, and all approval workflows.",
   ADMIN: "Operations and finance management with reporting and lease oversight.",
   OWNER: "Property owner with estate access and community portal rights.",
-  TENANT_STAFF: "Resident or maintenance staff with community and operational access.",
+  TENANT: "Verified resident tenant with community access, lease history, and utility portal.",
+  STAFF: "Gate and maintenance staff with operations access and gate scanner.",
   PROSPECT: "Registered prospect awaiting admin approval before full platform access.",
 };
 
@@ -55,12 +59,12 @@ export const roleOptions = roleHierarchy.map((value) => ({
   label: roleLabels[value],
 }));
 
-/** PROSPECT and unrecognised roles cannot access resident community services. */
+/** PROSPECT, STAFF, and unrecognised roles cannot access resident community services. */
 export const communityAccessRoles: UserRole[] = [
   "SUPER_ADMIN",
   "ADMIN",
   "OWNER",
-  "TENANT_STAFF",
+  "TENANT",
 ];
 
 export function canAccessCommunity(role: UserRole): boolean {
@@ -79,7 +83,8 @@ export const defaultEmails: Record<UserRole, string> = {
   SUPER_ADMIN: "superadmin@specialgardens.example",
   ADMIN: "admin@specialgardens.example",
   OWNER: "owner@specialgardens.example",
-  TENANT_STAFF: "tenant@specialgardens.example",
+  TENANT: "tenant@specialgardens.example",
+  STAFF: "staff@specialgardens.example",
   PROSPECT: "prospect@specialgardens.example",
 };
 

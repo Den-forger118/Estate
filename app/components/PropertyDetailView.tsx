@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { brand, type Property } from "../data/site";
 import { MapEmbed } from "./MapEmbed";
-import { PropertyInquiryForm } from "./forms/PropertyInquiryForm";
+import { PropertyPurchaseInquiryForm } from "./forms/PropertyPurchaseInquiryForm";
 import { availabilityClass } from "./statusBadge";
 
 const dossierSections = [
@@ -259,7 +259,7 @@ export function PropertyDetailView({
               <a href={`mailto:${brand.email}`}>{brand.email}</a>
             </div>
           </div>
-          <PropertyInquiryForm propertyName={property.name} variant="dossier" />
+          <PropertyPurchaseInquiryForm propertyName={property.name} variant="dossier" />
         </div>
       </section>
 

@@ -20,10 +20,7 @@ import { RevenueChart } from "../components/charts/RevenueChart";
 import { Modal } from "../components/Modal";
 import { showToast } from "../components/Toast";
 import { statusClassForLabel } from "../components/statusBadge";
-import {
-  LandlordApplicationSubmitPanel,
-  LandlordApplicationsReviewPanel,
-} from "./LandlordApplicationPanels";
+import { LandlordApplicationsReviewPanel } from "./LandlordApplicationPanels";
 
 type TicketStatus = "New" | "In Progress" | "Resolved";
 
@@ -578,8 +575,444 @@ function TableModuleView({
   );
 }
 
+function PaymentsWithReceiptsView() {
+  const [modalOpen, setModalOpen] = useState(false);
+  return (
+    <>
+      <PageHeader module="payments" action="Record Payment" onAction={() => setModalOpen(true)} />
+      <QuickCreateModal
+        open={modalOpen}
+        title="Record Payment"
+        fieldLabel="Payment reference"
+        onClose={() => setModalOpen(false)}
+        onSubmit={(value) => showToast(`Record Payment: "${value}" recorded.`)}
+      />
+      <div className="dashboard-card table-card">
+        <table className="zebra-rows">
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Account</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Receipt</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paymentRecords.map((p) => (
+              <tr key={p.ref}>
+                <td className="font-data-md">{p.ref}</td>
+                <td>{p.tenant}</td>
+                <td>
+                  <span className={`status-chip ${statusClassForLabel(p.status)}`}>{p.status}</span>
+                </td>
+                <td className="font-data-md">GH₵ {p.amount.toLocaleString()}</td>
+                <td className="meta">{p.date}</td>
+                <td>
+                  {p.receipt_hash ? (
+                    <a href={`/receipt/${p.receipt_hash}`} target="_blank" rel="noreferrer">
+                      View Receipt ↗
+                    </a>
+                  ) : (
+                    <span className="meta">—</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+type OwnedUnit = {
+  unit: string;
+  property: string;
+  address: string;
+  status: "Occupied" | "Vacant";
+  rentMonthly: number;
+  tenant: {
+    name: string;
+    email: string;
+    phone: string;
+    leaseStart: string;
+    leaseEnd: string;
+    leaseStatus: string;
+  } | null;
+};
+
+const OWNER_UNITS: OwnedUnit[] = [
+  {
+    unit: "B-0311",
+    property: "Oak Court Townhome",
+    address: "Cantonments District, Accra",
+    status: "Occupied",
+    rentMonthly: 4800,
+    tenant: {
+      name: "Marcus Webb",
+      email: "marcus.webb@example.com",
+      phone: "+233 24 555 0192",
+      leaseStart: "Jan 1, 2024",
+      leaseEnd: "Dec 31, 2024",
+      leaseStatus: "Active",
+    },
+  },
+  {
+    unit: "A-0104",
+    property: "Meadowline Villa",
+    address: "East Legon Residential, Accra",
+    status: "Vacant",
+    rentMonthly: 9200,
+    tenant: null,
+  },
+];
+
+const OWNER_TENANTS_KEY = "ernest_owner_tenants";
+
+type NewTenantRecord = {
+  id: string;
+  unitId: string;
+  property: string;
+  tenantName: string;
+  tenantEmail: string;
+  tenantPhone: string;
+  leaseStart: string;
+  leaseEnd: string;
+  rentMonthly: number;
+  currency: "GHS" | "USD";
+  addedAt: string;
+};
+
+function OwnerInviteTenantModal({
+  unit,
+  onClose,
+  onTenantAdded,
+}: {
+  unit: OwnedUnit;
+  onClose: () => void;
+  onTenantAdded: (unitId: string, tenantName: string, leaseEnd: string) => void;
+}) {
+  const [tenantName, setTenantName] = useState("");
+  const [tenantEmail, setTenantEmail] = useState("");
+  const [tenantPhone, setTenantPhone] = useState("");
+  const [leaseStart, setLeaseStart] = useState("");
+  const [leaseEnd, setLeaseEnd] = useState("");
+  const [rentAmount, setRentAmount] = useState(String(unit.rentMonthly));
+  const [currency, setCurrency] = useState<"GHS" | "USD">("GHS");
+  const [error, setError] = useState("");
+
+  function handleSend(e: FormEvent) {
+    e.preventDefault();
+    if (!tenantName.trim() || !tenantEmail.trim() || !tenantPhone.trim() || !leaseStart || !leaseEnd) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+    setError("");
+
+    const record: NewTenantRecord = {
+      id: `tenant-${Date.now()}`,
+      unitId: unit.unit,
+      property: unit.property,
+      tenantName: tenantName.trim(),
+      tenantEmail: tenantEmail.trim(),
+      tenantPhone: tenantPhone.trim(),
+      leaseStart,
+      leaseEnd,
+      rentMonthly: Number(rentAmount) || unit.rentMonthly,
+      currency,
+      addedAt: new Date().toISOString(),
+    };
+
+    const existing = JSON.parse(
+      window.localStorage.getItem(OWNER_TENANTS_KEY) ?? "[]",
+    ) as NewTenantRecord[];
+    window.localStorage.setItem(
+      OWNER_TENANTS_KEY,
+      JSON.stringify([record, ...existing]),
+    );
+
+    showToast(`Lease created for ${tenantName} — unit ${unit.unit}`);
+    onTenantAdded(unit.unit, tenantName.trim(), leaseEnd);
+    onClose();
+  }
+
+  return (
+    <Modal open title={`Invite Tenant — ${unit.unit}`} onClose={onClose}>
+      <form className="form-grid" onSubmit={handleSend}>
+        <p className="meta">{unit.property} · {unit.unit}</p>
+
+        {error && <p className="form-error">{error}</p>}
+
+        <label>
+          Tenant full name <span className="form-required">*</span>
+          <input
+            value={tenantName}
+            onChange={(e) => setTenantName(e.target.value)}
+            placeholder="Full legal name"
+            required
+          />
+        </label>
+
+        <label>
+          Tenant email address <span className="form-required">*</span>
+          <input
+            type="email"
+            value={tenantEmail}
+            onChange={(e) => setTenantEmail(e.target.value)}
+            placeholder="tenant@example.com"
+            required
+          />
+        </label>
+
+        <label>
+          Tenant phone number <span className="form-required">*</span>
+          <input
+            type="tel"
+            value={tenantPhone}
+            onChange={(e) => setTenantPhone(e.target.value)}
+            placeholder="+233 24 000 0000"
+            required
+          />
+        </label>
+
+        <label>
+          Lease start date <span className="form-required">*</span>
+          <input
+            type="date"
+            value={leaseStart}
+            onChange={(e) => setLeaseStart(e.target.value)}
+            required
+          />
+        </label>
+
+        <label>
+          Lease end date <span className="form-required">*</span>
+          <input
+            type="date"
+            value={leaseEnd}
+            onChange={(e) => setLeaseEnd(e.target.value)}
+            required
+          />
+        </label>
+
+        <div className="invite-rent-row">
+          <label className="invite-rent-amount">
+            Monthly rent <span className="form-required">*</span>
+            <input
+              type="number"
+              min="0"
+              value={rentAmount}
+              onChange={(e) => setRentAmount(e.target.value)}
+              required
+            />
+          </label>
+          <label className="invite-rent-currency">
+            Currency
+            <select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value as "GHS" | "USD")}
+            >
+              <option value="GHS">GHS</option>
+              <option value="USD">USD</option>
+            </select>
+          </label>
+        </div>
+
+        <button className="btn btn-primary" type="submit">
+          Create Lease &amp; Invite Tenant
+        </button>
+      </form>
+    </Modal>
+  );
+}
+
+function OwnerManageTenantModal({
+  unit,
+  onClose,
+}: {
+  unit: OwnedUnit;
+  onClose: () => void;
+}) {
+  const t = unit.tenant;
+  if (!t) return null;
+
+  return (
+    <Modal open title={`Tenant Profile — ${unit.unit}`} onClose={onClose}>
+      <div className="my-rentals-profile-panel">
+        <div className="my-rentals-profile-avatar" aria-hidden="true">
+          {t.name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase()}
+        </div>
+        <div>
+          <strong className="my-rentals-profile-name">{t.name}</strong>
+          <span className="meta">{unit.property} · {unit.unit}</span>
+        </div>
+      </div>
+
+      <dl className="my-rentals-profile-fields">
+        <dt>Email</dt>
+        <dd>{t.email}</dd>
+
+        <dt>Phone</dt>
+        <dd>{t.phone}</dd>
+
+        <dt>Lease period</dt>
+        <dd>{t.leaseStart} — {t.leaseEnd}</dd>
+
+        <dt>Lease status</dt>
+        <dd>
+          <span className={`status-chip ${statusClassForLabel(t.leaseStatus)}`}>
+            {t.leaseStatus}
+          </span>
+        </dd>
+
+        <dt>Monthly rent</dt>
+        <dd className="font-data-md">GH₵ {unit.rentMonthly.toLocaleString()}</dd>
+      </dl>
+    </Modal>
+  );
+}
+
+function OwnerMyRentalsView() {
+  const [units, setUnits] = useState<OwnedUnit[]>([...OWNER_UNITS]);
+  const [inviting, setInviting] = useState<OwnedUnit | null>(null);
+  const [managing, setManaging] = useState<OwnedUnit | null>(null);
+
+  function handleTenantAdded(unitId: string, tenantName: string, leaseEnd: string) {
+    setUnits((prev) =>
+      prev.map((u) =>
+        u.unit === unitId
+          ? {
+              ...u,
+              status: "Occupied" as const,
+              tenant: {
+                name: tenantName,
+                email: "",
+                phone: "",
+                leaseStart: new Date().toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                }),
+                leaseEnd,
+                leaseStatus: "Active",
+              },
+            }
+          : u,
+      ),
+    );
+  }
+
+  const occupied = units.filter((u) => u.status === "Occupied").length;
+  const vacant = units.filter((u) => u.status === "Vacant").length;
+
+  return (
+    <>
+      {inviting && (
+        <OwnerInviteTenantModal
+          unit={inviting}
+          onClose={() => setInviting(null)}
+          onTenantAdded={handleTenantAdded}
+        />
+      )}
+      {managing && (
+        <OwnerManageTenantModal
+          unit={managing}
+          onClose={() => setManaging(null)}
+        />
+      )}
+
+      <div className="dashboard-page-header">
+        <div>
+          <span className="eyebrow">My Rentals</span>
+          <h1>My Properties</h1>
+          <p>Manage occupancy, invite new tenants, and view current lease details for your owned units.</p>
+        </div>
+      </div>
+
+      <div className="my-rentals-summary">
+        <div className="my-rentals-stat">
+          <span className="font-data-lg">{units.length}</span>
+          <span className="meta">Total units</span>
+        </div>
+        <div className="my-rentals-stat">
+          <span className="font-data-lg">{occupied}</span>
+          <span className="meta">Occupied</span>
+        </div>
+        <div className="my-rentals-stat">
+          <span className="font-data-lg">{vacant}</span>
+          <span className="meta">Vacant</span>
+        </div>
+      </div>
+
+      <div className="my-rentals-grid">
+        {units.map((u) => (
+          <article className="my-rentals-unit-card" key={u.unit}>
+            <div className="my-rentals-unit-header">
+              <div>
+                <span className="my-rentals-unit-badge">{u.unit}</span>
+                <p className="my-rentals-unit-property">{u.property}</p>
+                <p className="my-rentals-unit-address meta">{u.address}</p>
+              </div>
+              <span className={`status-chip ${statusClassForLabel(u.status)}`}>
+                {u.status}
+              </span>
+            </div>
+
+            <div className="my-rentals-rent-row">
+              <span className="meta">Monthly rent</span>
+              <span className="font-data-md">GH₵ {u.rentMonthly.toLocaleString()}</span>
+            </div>
+
+            {u.tenant ? (
+              <div className="my-rentals-tenant-panel">
+                <div className="my-rentals-tenant-avatar" aria-hidden="true">
+                  {u.tenant.name.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <strong>{u.tenant.name}</strong>
+                  <p className="meta">Lease ends {u.tenant.leaseEnd}</p>
+                </div>
+              </div>
+            ) : (
+              <p className="my-rentals-vacant-message">
+                This unit is currently vacant. Invite a tenant to begin the onboarding process.
+              </p>
+            )}
+
+            <div className="my-rentals-actions">
+              {u.status === "Vacant" ? (
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setInviting(u)}
+                >
+                  Invite New Tenant
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setManaging(u)}
+                >
+                  Manage Current Tenant
+                </button>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function TenantManagementView() {
+  return <OwnerMyRentalsView />;
+}
+
 export function ModuleView({ module }: { module: DashboardModule }) {
-  if (module === "landlord-application") return <LandlordApplicationSubmitPanel />;
+  if (module === "tenant-management") return <TenantManagementView />;
   if (module === "landlord-applications") return <LandlordApplicationsReviewPanel />;
   if (module === "properties") return <PropertiesView />;
   if (module === "maintenance") return <MaintenanceView />;
@@ -596,9 +1029,7 @@ export function ModuleView({ module }: { module: DashboardModule }) {
   if (module === "leases") {
     return <TableModuleView module="leases" action="New Lease" headers={["Lease", "Status", "Date", "Rent"]} rows={leases} />;
   }
-  if (module === "payments") {
-    return <TableModuleView module="payments" action="Record Payment" headers={["Reference", "Account", "Status", "Amount", "Date"]} rows={payments} />;
-  }
+  if (module === "payments") return <PaymentsWithReceiptsView />;
   if (module === "invoices") {
     return <TableModuleView module="invoices" action="Create Invoice" headers={["Invoice", "Vendor", "Status", "Amount"]} rows={invoices} />;
   }

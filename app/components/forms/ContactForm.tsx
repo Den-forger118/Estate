@@ -1,62 +1,93 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { showToast } from "../Toast";
+
+const SUBJECTS = [
+  "Property inquiry",
+  "Inspection booking",
+  "Lease & rental",
+  "Maintenance support",
+  "General enquiry",
+  "Other",
+];
 
 export function ContactForm() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  function submit(event: FormEvent) {
+  function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !phone.trim() || !message.trim()) {
-      setError("Please complete all fields.");
+    if (!name.trim() || !email.trim() || !subject || !message.trim()) {
+      setError("Please complete all fields before submitting.");
       return;
     }
     setError("");
-    setSuccess(true);
-    setFirstName("");
-    setLastName("");
+    showToast("Message sent. We'll respond within one business day.");
+    setName("");
     setEmail("");
-    setPhone("");
+    setSubject("");
     setMessage("");
   }
 
   return (
     <form className="form-card" onSubmit={submit}>
-      <h2>Send an enquiry</h2>
-      {success ? (
-        <p className="form-success">Thank you. We will be in touch within one business day.</p>
-      ) : null}
+      <h2>Send us a message</h2>
+      <p className="meta">
+        Estate management responds to all enquiries within one business day.
+      </p>
+
       {error ? <p className="form-error">{error}</p> : null}
-      <div className="form-grid two">
-        <label>
-          First name
-          <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Avery" required />
-        </label>
-        <label>
-          Last name
-          <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Morgan" required />
-        </label>
-      </div>
+
       <label>
-        Email
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="avery@example.com" required />
+        Full name
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Your name"
+          required
+        />
       </label>
+
       <label>
-        Phone
-        <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+233 24 000 0000" required />
+        Email address
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          required
+        />
       </label>
+
+      <label>
+        Subject
+        <select value={subject} onChange={(e) => setSubject(e.target.value)} required>
+          <option value="">Select a subject…</option>
+          {SUBJECTS.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+      </label>
+
       <label>
         Message
-        <textarea rows={5} value={message} onChange={(e) => setMessage(e.target.value)} placeholder="I would like to book an inspection for..." required />
+        <textarea
+          rows={5}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Tell us what you need…"
+          required
+        />
       </label>
+
       <button className="btn btn-primary" type="submit">
-        Submit Enquiry
+        Send Message
       </button>
     </form>
   );

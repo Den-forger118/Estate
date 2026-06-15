@@ -25,9 +25,9 @@ function primaryActionForRole(role: DashboardRole): { label: string; href: strin
     return { label: "New Property", href: "/dashboard/properties" };
   }
   if (role === "OWNER") {
-    return { label: "Apply for Lease Access", href: "/dashboard/landlord-application" };
+    return { label: "My Rentals", href: "/dashboard/tenant-management" };
   }
-  if (role === "TENANT_STAFF") {
+  if (role === "TENANT") {
     return { label: "New Maintenance Request", href: "/dashboard/maintenance" };
   }
   return null;
@@ -74,6 +74,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   const navItems = roleModules[role].map((module) => moduleMeta[module]);
   const isAdminSubRoute = pathname.startsWith("/dashboard/admin");
   const canAccess =
+    role === "PROSPECT" ||
     (isAdminSubRoute && (role === "SUPER_ADMIN" || role === "ADMIN")) ||
     (!isAdminSubRoute && roleModules[role].some((m) => moduleMeta[m].href === pathname));
   const primaryAction = primaryActionForRole(role);
@@ -131,7 +132,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         }))}
         footer={
           <>
-            {role !== "TENANT_STAFF" ? <Link href="/community">Resident Services</Link> : null}
+            {(role === "OWNER" || role === "TENANT") ? <Link href="/community">Resident Services</Link> : null}
             <Link href="/contact">Support</Link>
             <button type="button" onClick={signOut}>
               Sign Out

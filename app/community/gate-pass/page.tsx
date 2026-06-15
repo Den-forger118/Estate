@@ -1,5 +1,5 @@
-import { ResidentQRGenerator } from "../../components/ResidentQRGenerator";
+import { VisitorPassGenerationForm } from "../../components/forms/VisitorPassGenerationForm";
 
-export default function ResidentQRGeneratorPage() {
-  return <ResidentQRGenerator />;
+export default function ResidentGatePassPage() {
+  return <VisitorPassGenerationForm />;
 }

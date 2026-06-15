@@ -174,12 +174,12 @@ export const leases = [
 // ─── PAYMENTS ─────────────────────────────────────────────────────────────
 
 export const payments = [
-  { ref: "PAY-20240324-001", tenant: "Adrian Sterling", property: "Cedar Terrace, Apt 402", status: "Completed", amount: 4250, date: "2024-03-24", method: "Bank Transfer" },
-  { ref: "PAY-20240323-002", tenant: "Global Logistics Ltd", property: "Harbor Plaza, Ground Floor", status: "Pending", amount: 12800, date: "2024-03-23", method: "Cheque" },
-  { ref: "PAY-20240322-003", tenant: "Elena Martinez", property: "Heritage Lofts, 12A", status: "Completed", amount: 3100, date: "2024-03-22", method: "Mobile Money" },
-  { ref: "PAY-20240320-004", tenant: "Dr. Nana Boateng", property: "Meadowline Villa", status: "Completed", amount: 8500, date: "2024-03-20", method: "Bank Transfer" },
-  { ref: "PAY-20240318-005", tenant: "Kwame Asante", property: "Oak Court, 3B", status: "Overdue", amount: 4100, date: "2024-03-18", method: null },
-  { ref: "PAY-20240315-006", tenant: "Abena Owusu", property: "Cedar Terrace, Apt 308", status: "Completed", amount: 2950, date: "2024-03-15", method: "Mobile Money" },
+  { ref: "PAY-20240324-001", tenant: "Adrian Sterling", property: "Cedar Terrace, Apt 402", status: "Completed", amount: 4250, date: "2024-03-24", method: "Bank Transfer", receipt_hash: "PAY-20240324-001" },
+  { ref: "PAY-20240323-002", tenant: "Global Logistics Ltd", property: "Harbor Plaza, Ground Floor", status: "Pending", amount: 12800, date: "2024-03-23", method: "Cheque", receipt_hash: null },
+  { ref: "PAY-20240322-003", tenant: "Elena Martinez", property: "Heritage Lofts, 12A", status: "Completed", amount: 3100, date: "2024-03-22", method: "Mobile Money", receipt_hash: "PAY-20240322-003" },
+  { ref: "PAY-20240320-004", tenant: "Dr. Nana Boateng", property: "Meadowline Villa", status: "Completed", amount: 8500, date: "2024-03-20", method: "Bank Transfer", receipt_hash: "PAY-20240320-004" },
+  { ref: "PAY-20240318-005", tenant: "Kwame Asante", property: "Oak Court, 3B", status: "Overdue", amount: 4100, date: "2024-03-18", method: null, receipt_hash: null },
+  { ref: "PAY-20240315-006", tenant: "Abena Owusu", property: "Cedar Terrace, Apt 308", status: "Completed", amount: 2950, date: "2024-03-15", method: "Mobile Money", receipt_hash: "PAY-20240315-006" },
 ];
 
 // ─── MAINTENANCE ──────────────────────────────────────────────────────────
@@ -352,6 +352,63 @@ export const blogPosts = [
       "Setbacks, orientation, and landscaping create natural buffers between properties. Mature planting, staggered building lines, and limited frontage onto shared roads all reduce sightlines without requiring high walls on every boundary.",
       "Shared facilities should feel optional, not obligatory. A resident lounge, family parks, and fitness areas work best when they are accessible but separated from private driveways and home entrances.",
       "Management plays a quiet role too: clear rules on events, parking, and contractor access prevent the friction that makes residents feel exposed. At Special Gardens, we design community life around discretion — spaces to gather, and space to retreat.",
+    ],
+  },
+  {
+    id: "BLG-004",
+    slug: "diaspora-fraud-protection-ledger",
+    title: "Say Goodbye to Land Fraud: How Special Gardens Uses Cryptographic Verification to Protect Diaspora Buyers",
+    category: "Technology",
+    date: "2026-05-14",
+    excerpt:
+      "Cross-border property fraud costs diaspora families millions annually. Discover how Special Gardens' Trust Layer — built around unguessable cryptographic receipt hashes — makes every transaction independently verifiable, from London, New York, or anywhere on earth.",
+    readTime: "7 min read",
+    image: estateImages.networking,
+    content: [
+      "Property fraud targeting diaspora buyers is not a niche risk. It is the defining vulnerability of long-distance real estate investment in West Africa. Fake receipts, duplicate plot allocations, ghost developers, and compromised agents have cost Ghanaian families abroad — conservative estimates place the figure in the hundreds of millions of cedis each year. Distance is the root cause. When you cannot inspect, verify, or confront in person, you rely on documents. And documents can be forged.",
+      "Special Gardens Estate was designed to make document forgery irrelevant. Our Trust Layer transforms every financial transaction — initial deposits, structural phase payments, final property handovers — into a publicly verifiable entry in an immutable digital ledger. Think of it like a DHL tracking code for your investment, except the parcel is your title deed and the tracking number is cryptographically unique and cannot be duplicated.",
+      "The mechanism is straightforward. When a buyer's payment is processed, our system assigns a unique receipt hash — a long, algorithmically generated reference number that cannot be guessed, constructed, or reproduced by any third party. This hash is attached to the transaction in our internal records and simultaneously published to our public-facing Trust Ledger. At any point, the buyer's solicitor, family member, or bank can visit specialgardens.example/verify, enter the reference, and pull up a certificate displaying the property name, transaction amount, issue date, and current standing — all without a system login.",
+      "The critical design principle is that the institution confirms, not the counterparty. Just as a wire transfer is confirmed by the receiving bank rather than the sender, a Special Gardens receipt is confirmed by the estate's ledger rather than the agent or developer. An agent cannot fabricate a receipt that passes our verification check. A developer cannot claim a phase payment was received when it was not logged. The ledger is the single source of truth.",
+      "For diaspora buyers in particular, this eliminates the single most common attack vector: the fraudulent receipt. Previously, a buyer in Manchester would wire funds, receive a PDF receipt by email, and have no practical way to confirm its legitimacy without flying to Accra. With Special Gardens, that five-minute portal check carries the same legal and evidential weight as standing in our corporate offices with the document in hand.",
+      "Our Trust Layer currently covers all financial transactions against registered properties in the Special Gardens portfolio. As we expand, structural phase milestones and land allocation certificates will each receive their own verifiable entries. The goal is complete transparency: every material event in your property lifecycle logged, timestamped, and publicly confirmable — with no intermediary required and no opportunity for fraud.",
+    ],
+  },
+  {
+    id: "BLG-005",
+    slug: "day-in-the-life-gate-pass",
+    title: "Frictionless Borders: A Day in the Life of a Special Gardens Resident",
+    category: "Technology",
+    date: "2026-05-28",
+    excerpt:
+      "From generating a QR visitor pass for a delivery driver in thirty seconds flat to filing an instant hazard report on a cracked pavement — here is what daily estate life feels like when the technology actually works.",
+    readTime: "5 min read",
+    image: estateImages.gatedEntrance,
+    content: [
+      "It is 8:47 AM on a Wednesday. You are standing in the kitchen of your Special Gardens villa, coffee in hand, when your phone buzzes. A message from your plumber: he will arrive in roughly an hour. In a conventional estate, the next steps would be a phone call to the security desk, a prayer that someone picks up, a verbal handover of the plumber's name, and then anxious waiting to see whether the guard at the gate received the message at all. Queues. Confusion. Occasionally, a forty-minute delay while staff locate the right logbook.",
+      "Instead, you open the Resident OS on your phone, navigate to Gate Pass, and fill in a form that takes thirty seconds: your plumber's full name, his phone number, his expected arrival window, the purpose of the visit, and — since he is driving — his vehicle registration plate. You tap Generate Pass. A QR code appears on screen alongside a shareable URL. You copy the URL and send it to your plumber via WhatsApp. Done.",
+      "At the perimeter, your plumber arrives, presents the QR code on his phone screen, and the gate guard scans it with the estate's handheld terminal. The system confirms: pass is valid, time window matches, vehicle registration is logged. The barrier lifts within seconds. No queues. No paper logbooks. No human error in transcribing names. The entire access event is timestamped and added to the estate's digital gate log, which management can review at any time.",
+      "Later that morning, you notice a section of pavement along the eastern path has developed a crack — the kind of hazard that, left unaddressed, becomes a liability. In previous estate management models, reporting this would mean a phone call, waiting on hold, and eventually relying on someone to transcribe the issue correctly. At Special Gardens, you open the Incident Report module in the Resident OS, enter a title, select the category (Structural), set urgency (Medium), describe the location and nature of the crack, and optionally attach a photo. Tap Submit. The report is immediately logged as a resident-origin ticket on the estate's Dual-Engine Maintenance dashboard, visible to both estate management and the property owner.",
+      "No ticket is duplicated. No call goes unanswered. The resident who reported the hazard receives a confirmation with their ticket ID — the same ID that management uses to track progress from 'New' to 'In Progress' to 'Resolved'. When the pavement is repaired, the ticket is closed and the audit trail is preserved.",
+      "This is the everyday reality of the Special Gardens Resident OS: not a collection of impressive-sounding features, but a coherent operational system that removes friction at every interaction point — gate access, incident reporting, utility management, and visitor logistics — so that life inside the estate runs the way it should.",
+    ],
+  },
+  {
+    id: "BLG-006",
+    slug: "modern-landlord-rental-ecosystem",
+    title: "Hands-Off Wealth: The Modern Landlord's Guide to Our Digital Rental Ecosystem",
+    category: "Property Investment",
+    date: "2026-06-03",
+    excerpt:
+      "Own a unit in Special Gardens from London, New York, or Toronto and manage it entirely from your phone — linking tenants, tracking rental collections, and monitoring structural maintenance without paying a single predatory management agency fee.",
+    readTime: "6 min read",
+    image: estateImages.keysHandover,
+    content: [
+      "The classic diaspora landlord story has not changed in decades. You purchased a property in Accra. You handed it to a property management agency because managing remotely felt impossible. You now receive a monthly bank transfer with a single-line memo and an occasional WhatsApp message. You have no visibility into whether your unit is actually tenanted. You cannot verify whether rent was collected on time, or at all. Maintenance issues are handled — or not handled — entirely at the agency's discretion, with costs deducted from your income before you ever see a figure. You own the asset, but someone else controls it entirely.",
+      "The Special Gardens Owner Dashboard was built to end this arrangement permanently. Owners who log in to the platform see a real-time view of their complete portfolio: every unit they own, its current occupancy status, the name and contact details of the current tenant, the lease start and end date, and monthly rent denominated in either GHS or USD. There is no intermediary between the owner and this information. It updates in real time.",
+      "When a unit becomes vacant, the owner does not wait weeks for an agency to advertise, screen, and negotiate on their behalf. They open the My Rentals module, select the vacant unit, and click Invite New Tenant. A form appears asking for the prospective tenant's full name, email address, phone number, proposed lease dates, and agreed monthly rent. The owner fills this in — directly, with full control over the terms — and submits. The system generates a lease record, sends the tenant an onboarding invitation, and marks the unit as 'In Progress' until the tenant confirms.",
+      "Rental payments flow through the Trust Layer. When a tenant pays their monthly rent, the owner can see a verified badge against that transaction in the payment ledger — the same public-facing ledger that corporate executives and solicitors use to confirm transaction legitimacy. There is no delay, no bank statement required, and no agency withholding confirmation to maintain leverage. If a payment has been made, the ledger shows it. If it has not, the owner knows immediately.",
+      "Maintenance operates on a dual-engine model that further reduces the management burden on both owner and tenant. Estate management runs its own scheduled maintenance calendar — semi-annual utility overhauls, perimeter inspections, road resurfacing, fire suppression checks — and these appear on the dashboard as 'Estate-origin' tickets. When a tenant encounters an issue inside the unit — a leaking pipe, a faulty air conditioning unit, an intercom fault — they submit it directly through the Resident OS as a 'Resident-origin' ticket. Both streams converge on the same operational dashboard. Neither stream blocks the other. Nothing falls between the cracks.",
+      "The combined effect is a property ownership experience that, for the first time, genuinely feels like passive income. You own the asset, you see all activity in real time, you retain full control over tenanting decisions and lease terms, and the estate's operational infrastructure handles the daily logistics. Whether you are sitting in a boardroom in Toronto or on a beach in Portugal, your Special Gardens investment is running — and you can see exactly how.",
     ],
   },
 ];

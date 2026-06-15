@@ -8,6 +8,10 @@ export type ProspectRecord = {
   propertyInterest: string;
   registeredAt: string;
   status: "pending" | "approved" | "rejected";
+  nationality?: string;
+  idType?: "Ghana Card" | "Passport";
+  idNumber?: string;
+  idPhotoName?: string;
 };
 
 const seedProspects: ProspectRecord[] = [

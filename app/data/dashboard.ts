@@ -31,7 +31,8 @@ export type DashboardModule =
   | "settings"
   | "admin-overview"
   | "admin-onboarding"
-  | "admin-maintenance";
+  | "admin-maintenance"
+  | "tenant-management";
 
 export { roleLabels, roleOptions };
 
@@ -56,13 +57,15 @@ export const moduleMeta: Record<
   "admin-overview": { label: "Admin Overview", href: "/dashboard/admin", icon: "◈", summary: "Executive KPIs, revenue breakdown, and occupancy trend charts." },
   "admin-onboarding": { label: "Prospect Approvals", href: "/dashboard/admin/onboarding", icon: "✦", summary: "Review, approve, or reject incoming prospect registrations." },
   "admin-maintenance": { label: "Dual-Engine Kanban", href: "/dashboard/admin/maintenance", icon: "⚙", summary: "Unified maintenance board showing both ESTATE and RESIDENT tickets." },
+  "tenant-management": { label: "My Rentals", href: "/dashboard/tenant-management", icon: "R", summary: "Manage your owned units and generate tenant invite links." },
 };
 
 export const roleModules: Record<DashboardRole, DashboardModule[]> = {
   SUPER_ADMIN: ["dashboard", "properties", "units", "tenants", "leases", "payments", "maintenance", "invoices", "reports", "messages", "documents", "landlord-applications", "settings", "admin-overview", "admin-onboarding", "admin-maintenance"],
   ADMIN: ["dashboard", "properties", "units", "tenants", "leases", "payments", "maintenance", "invoices", "reports", "messages", "documents", "landlord-applications", "settings", "admin-overview", "admin-onboarding", "admin-maintenance"],
-  OWNER: ["dashboard", "properties", "payments", "messages", "documents", "landlord-application", "settings"],
-  TENANT_STAFF: ["dashboard", "leases", "payments", "maintenance", "messages", "documents", "settings"],
+  OWNER: ["dashboard", "properties", "payments", "messages", "documents", "tenant-management", "settings"],
+  TENANT: ["dashboard", "leases", "payments", "maintenance", "messages", "documents", "settings"],
+  STAFF: ["dashboard", "maintenance", "messages", "settings"],
   PROSPECT: ["settings"],
 };
 

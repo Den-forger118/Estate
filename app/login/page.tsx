@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useState } from "react";
 import { PageShell } from "../components/SiteChrome";
 import {
@@ -44,23 +44,31 @@ const loginOptions: LoginOption[] = [
     destination: "/community/portal",
   },
   {
-    value: "TENANT_STAFF",
-    label: "Tenant / Staff (Operations)",
-    description: "Resident or maintenance staff with community and operational access.",
+    value: "TENANT",
+    label: "Tenant (Verified Resident)",
+    description: "Verified resident tenant with community access, lease history, and utility portal.",
     defaultName: "Maya Chen",
-    destination: "/staff/gate-scanner",
+    destination: "/community/portal",
+  },
+  {
+    value: "STAFF",
+    label: "Staff (Gate & Maintenance)",
+    description: "Gate and maintenance staff with operations access and gate scanner.",
+    defaultName: "Kofi Mensah",
+    destination: "/staff",
   },
   {
     value: "PROSPECT",
     label: "Prospect (Unverified Buyer)",
     description: "Registered prospect awaiting admin approval before full platform access.",
-    defaultName: "Kofi Mensah Jr.",
-    destination: "/",
+    defaultName: "Samuel Osei",
+    destination: "/dashboard",
   },
 ];
 
 function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [selectedOption, setSelectedOption] = useState<LoginOption>(loginOptions[0]);
   const [email, setEmail] = useState(defaultEmails.SUPER_ADMIN);
   const [name, setName] = useState(loginOptions[0].defaultName);
@@ -86,7 +94,8 @@ function LoginForm() {
     window.localStorage.setItem(USER_EMAIL_KEY, email);
     window.localStorage.setItem(USER_NAME_KEY, name);
     document.cookie = "mock_auth=true; path=/; max-age=604800; SameSite=Lax";
-    router.push(selectedOption.destination);
+    const next = searchParams.get("next");
+    router.push(next ?? selectedOption.destination);
   }
 
   return (

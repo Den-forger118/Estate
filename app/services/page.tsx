@@ -1,8 +1,9 @@
-import { PageShell } from "../components/SiteChrome";
+import { SmartEstateOSAdvantageSection } from "../components/SmartEstateOSAdvantageSection";
 import { ServicesClosingBand } from "../components/ServicesClosingBand";
 import { ServicesHero } from "../components/ServicesHero";
 import { ServicesScopeBand } from "../components/ServicesScopeBand";
 import { ServicesZBand } from "../components/ServicesZBand";
+import { PageShell } from "../components/SiteChrome";
 import { serviceGroups } from "../data/site";
 
 export default function ServicesPage() {
@@ -23,6 +24,7 @@ export default function ServicesPage() {
           showCta={"showCta" in group ? Boolean(group.showCta) : false}
         />
       ))}
+      <SmartEstateOSAdvantageSection />
       <ServicesClosingBand />
     </PageShell>
   );
