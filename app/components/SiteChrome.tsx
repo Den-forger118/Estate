@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { brand } from "../data/site";
 import { ContentTransition } from "./ContentTransition";
-import { Header } from "./Header";
 
 const footerLinks = [
   ["About", "/about"],
@@ -43,7 +42,6 @@ export function Footer() {
 export function PageShell({ children }: { children: ReactNode }) {
   return (
     <>
-      <Header />
       <main>
         <ContentTransition>{children}</ContentTransition>
       </main>

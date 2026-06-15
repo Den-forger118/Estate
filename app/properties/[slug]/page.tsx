@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { PropertyConstructionTimeline } from "../../components/PropertyConstructionTimeline";
 import { PropertyDetailView } from "../../components/PropertyDetailView";
 import { PageShell } from "../../components/SiteChrome";
 import { properties } from "../../data/site";
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default async function PropertyDetailsPage({ params }: Props) {
+export default async function PropertyDetailWithTimeline({ params }: Props) {
   const { slug } = await params;
   const property = properties.find((item) => item.slug === slug);
 
@@ -33,6 +34,9 @@ export default async function PropertyDetailsPage({ params }: Props) {
   return (
     <PageShell>
       <PropertyDetailView property={property} similar={similar} />
+      <section className="section">
+        <PropertyConstructionTimeline activePhase={1} />
+      </section>
     </PageShell>
   );
 }

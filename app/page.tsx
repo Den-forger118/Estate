@@ -7,7 +7,7 @@ import { PageShell, SectionIntro } from "./components/SiteChrome";
 
 import { blogPosts, estateAmenities, properties, testimonials } from "./data/site";
 
-export default function Home() {
+export default function PublicMarketingHome() {
 
   return (
 

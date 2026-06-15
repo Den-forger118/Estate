@@ -33,7 +33,7 @@ export function LandlordApplicationSubmitPanel() {
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (getStoredRole() !== "owner") return;
+    if (getStoredRole() !== "OWNER") return;
 
     submitLandlordApplication({ name, email, property, unit, note });
     setSubmitted(true);

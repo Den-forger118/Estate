@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FormEvent, Suspense, useState } from "react";
 import { PageShell } from "../components/SiteChrome";
 import {
@@ -10,54 +10,108 @@ import {
   USER_EMAIL_KEY,
   USER_NAME_KEY,
   defaultEmails,
-  roleDescriptions,
-  roleOptions,
   type UserRole,
 } from "../data/roles";
 
+type LoginOption = {
+  value: UserRole;
+  label: string;
+  description: string;
+  defaultName: string;
+  destination: string;
+};
+
+const loginOptions: LoginOption[] = [
+  {
+    value: "SUPER_ADMIN",
+    label: "Super Admin (Executive)",
+    description: "Full estate operations, user oversight, and all approval workflows.",
+    defaultName: "Eleanor Vance",
+    destination: "/dashboard/admin",
+  },
+  {
+    value: "ADMIN",
+    label: "Admin (Operations & Finance)",
+    description: "Operations and finance management with reporting and lease oversight.",
+    defaultName: "Marcus Webb",
+    destination: "/dashboard/admin",
+  },
+  {
+    value: "OWNER",
+    label: "Owner (Resident / Investor)",
+    description: "Property owner with estate access and community portal rights.",
+    defaultName: "Daniel Reyes",
+    destination: "/community/portal",
+  },
+  {
+    value: "TENANT_STAFF",
+    label: "Tenant / Staff (Operations)",
+    description: "Resident or maintenance staff with community and operational access.",
+    defaultName: "Maya Chen",
+    destination: "/staff/gate-scanner",
+  },
+  {
+    value: "PROSPECT",
+    label: "Prospect (Unverified Buyer)",
+    description: "Registered prospect awaiting admin approval before full platform access.",
+    defaultName: "Kofi Mensah Jr.",
+    destination: "/",
+  },
+];
+
 function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [role, setRole] = useState<UserRole>("admin");
-  const [email, setEmail] = useState(defaultEmails.admin);
-  const [name, setName] = useState("Eleanor Vance");
-  const [password, setPassword] = useState("dashboard");
+  const [selectedOption, setSelectedOption] = useState<LoginOption>(loginOptions[0]);
+  const [email, setEmail] = useState(defaultEmails.SUPER_ADMIN);
+  const [name, setName] = useState(loginOptions[0].defaultName);
+  const [password, setPassword] = useState("demo");
   const [error, setError] = useState("");
-  const next = searchParams.get("next") || "/dashboard";
 
-  function onRoleChange(nextRole: UserRole) {
-    setRole(nextRole);
-    setEmail(defaultEmails[nextRole]);
-    if (nextRole === "owner") setName("Daniel Reyes");
-    else if (nextRole === "landlord") setName("Daniel Reyes");
-    else if (nextRole === "tenant") setName("Maya Chen");
-    else if (nextRole === "maintenance") setName("Sam Okafor");
-    else setName("Eleanor Vance");
+  function onRoleChange(value: string) {
+    const option = loginOptions.find((o) => o.value === value) ?? loginOptions[0];
+    setSelectedOption(option);
+    setEmail(defaultEmails[option.value]);
+    setName(option.defaultName);
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!email.trim() || !password.trim()) {
-      setError("Please enter your email and password.");
+      setError("Please fill in all fields.");
       return;
     }
     setError("");
     window.localStorage.setItem(AUTH_KEY, "true");
-    window.localStorage.setItem(ROLE_KEY, role);
+    window.localStorage.setItem(ROLE_KEY, selectedOption.value);
     window.localStorage.setItem(USER_EMAIL_KEY, email);
     window.localStorage.setItem(USER_NAME_KEY, name);
     document.cookie = "mock_auth=true; path=/; max-age=604800; SameSite=Lax";
-    router.push(next);
+    router.push(selectedOption.destination);
   }
 
   return (
     <form className="form-card auth-card" onSubmit={submit}>
-      <span className="eyebrow">Mock access</span>
+      <span className="eyebrow">Demo access</span>
       <h1>Sign in to estate services.</h1>
       <p>
-        Choose a role to preview the platform. Property owners apply to become landlords; only
-        administrators and property managers can approve. Maintenance staff use REMS only.
+        Select a role to preview the platform from that perspective. Each role unlocks a different
+        set of modules and routes.
       </p>
+
+      <label>
+        Role
+        <select
+          value={selectedOption.value}
+          onChange={(event) => onRoleChange(event.target.value)}
+        >
+          {loginOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      <p className="meta role-hint">{selectedOption.description}</p>
 
       <label>
         Full name
@@ -67,34 +121,30 @@ function LoginForm() {
         Email
         <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
       </label>
-      {error ? <p className="form-error">{error}</p> : null}
       <label>
         Password
-        <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
+        <input
+          type="password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          required
+        />
       </label>
-      <label>
-        Role
-        <select value={role} onChange={(event) => onRoleChange(event.target.value as UserRole)}>
-          {roleOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
-      <p className="meta role-hint">{roleDescriptions[role]}</p>
+
+      {error ? <p className="form-error">{error}</p> : null}
+
       <button className="btn btn-primary" type="submit">
         Enter platform
       </button>
       <div className="auth-links">
-        <Link href="/forgot-password">Forgot password?</Link>
+        <Link href="/register">New here? Register as a Prospect</Link>
         <Link href="/">Back to public site</Link>
       </div>
     </form>
   );
 }
 
-export default function LoginPage() {
+export default function SystemAuthentication() {
   return (
     <PageShell>
       <section className="auth-section">

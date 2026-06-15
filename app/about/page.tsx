@@ -1,4 +1,3 @@
-import { SignatureNumber } from "../components/SignatureNumber";
 import founderPhoto from "../assets/dr-ernest-ofori-sarpong.jpg";
 import { estateImages } from "../data/images";
 import { PageShell, SectionIntro } from "../components/SiteChrome";
@@ -27,8 +26,7 @@ const values = [
 export default function AboutPage() {
   return (
     <PageShell>
-      <section className="page-hero signature-anchor">
-        <SignatureNumber number="01" />
+      <section className="page-hero">
         <div className="page-hero-inner">
           <div className="stack">
             <span className="eyebrow">About Special Gardens</span>

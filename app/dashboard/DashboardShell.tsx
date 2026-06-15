@@ -14,22 +14,20 @@ import {
 } from "../data/dashboard";
 import { brand } from "../data/site";
 import {
-  AUTH_KEY,
+  ROLE_KEY,
   getStoredName,
   syncRoleAfterLandlordApproval,
 } from "../data/roles";
+import { useMockAuth } from "../hooks/useMockAuth";
 
 function primaryActionForRole(role: DashboardRole): { label: string; href: string } | null {
-  if (role === "owner") {
-    return { label: "Apply to Become Landlord", href: "/dashboard/landlord-application" };
-  }
-  if (role === "landlord") {
-    return { label: "New Lease", href: "/dashboard/leases" };
-  }
-  if (role === "admin" || role === "manager") {
+  if (role === "SUPER_ADMIN" || role === "ADMIN") {
     return { label: "New Property", href: "/dashboard/properties" };
   }
-  if (role === "tenant") {
+  if (role === "OWNER") {
+    return { label: "Apply for Lease Access", href: "/dashboard/landlord-application" };
+  }
+  if (role === "TENANT_STAFF") {
     return { label: "New Maintenance Request", href: "/dashboard/maintenance" };
   }
   return null;
@@ -39,13 +37,16 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [ready, setReady] = useState(false);
-  const [role, setRole] = useState<DashboardRole>("admin");
+  const [role, setRole] = useState<DashboardRole>("SUPER_ADMIN");
+  const { isAuthenticated, isLoading: authLoading, logout: clearAuthState } = useMockAuth();
   const displayName = getStoredName();
   const year = new Date().getFullYear();
 
+  // Auth guard: wait for localStorage read, then redirect or initialise role.
   useEffect(() => {
-    const authed = window.localStorage.getItem(AUTH_KEY) === "true";
-    if (!authed) {
+    if (authLoading) return;
+
+    if (!isAuthenticated) {
       router.replace("/login?next=/dashboard");
       return;
     }
@@ -53,10 +54,28 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     const activeRole = syncRoleAfterLandlordApproval();
     setRole(activeRole);
     setReady(true);
-  }, [router]);
+  }, [authLoading, isAuthenticated, router]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Admin-approval event: clear sessions for non-admin/manager roles.
+  useEffect(() => {
+    if (!ready) return;
+
+    function handleForceLogout() {
+      const storedRole = window.localStorage.getItem(ROLE_KEY);
+      if (storedRole !== "SUPER_ADMIN" && storedRole !== "ADMIN") {
+        signOut();
+      }
+    }
+
+    window.addEventListener("force_logout_event", handleForceLogout);
+    return () => window.removeEventListener("force_logout_event", handleForceLogout);
+  }, [ready]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const navItems = roleModules[role].map((module) => moduleMeta[module]);
-  const canAccess = roleModules[role].some((module) => moduleMeta[module].href === pathname);
+  const isAdminSubRoute = pathname.startsWith("/dashboard/admin");
+  const canAccess =
+    (isAdminSubRoute && (role === "SUPER_ADMIN" || role === "ADMIN")) ||
+    (!isAdminSubRoute && roleModules[role].some((m) => moduleMeta[m].href === pathname));
   const primaryAction = primaryActionForRole(role);
 
   useEffect(() => {
@@ -66,8 +85,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   }, [canAccess, ready, router]);
 
   function signOut() {
-    window.localStorage.removeItem(AUTH_KEY);
-    document.cookie = "mock_auth=; Max-Age=0; path=/";
+    clearAuthState();
     router.replace("/");
   }
 
@@ -76,6 +94,23 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       <main className="dashboard-loading">
         <div className="dashboard-card">Preparing your dashboard...</div>
       </main>
+    );
+  }
+
+  if (role === "PROSPECT") {
+    return (
+      <div className="dashboard-workspace">
+        <main className="dashboard-main">
+          <div className="dashboard-page-header">
+            <div>
+              <span className="eyebrow">Welcome</span>
+              <h1>Prospect Portal</h1>
+              <p>Your registration is under review. An administrator will approve your account shortly.</p>
+            </div>
+          </div>
+          <ContentTransition>{children}</ContentTransition>
+        </main>
+      </div>
     );
   }
 
@@ -96,7 +131,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         }))}
         footer={
           <>
-            {role !== "maintenance" ? <Link href="/community">Resident Services</Link> : null}
+            {role !== "TENANT_STAFF" ? <Link href="/community">Resident Services</Link> : null}
             <Link href="/contact">Support</Link>
             <button type="button" onClick={signOut}>
               Sign Out

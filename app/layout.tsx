@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Mono, DM_Sans, Playfair_Display } from "next/font/google";
+import { PersistentPublicHeader } from "./components/PersistentPublicHeader";
 import { ToastProvider } from "./components/Toast";
 import "./globals.css";
 
@@ -35,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${dmMono.variable} h-full antialiased`}>
       <body>
+        <PersistentPublicHeader />
         {children}
         <ToastProvider />
       </body>

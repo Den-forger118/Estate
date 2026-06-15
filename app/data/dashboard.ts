@@ -28,7 +28,10 @@ export type DashboardModule =
   | "documents"
   | "landlord-applications"
   | "landlord-application"
-  | "settings";
+  | "settings"
+  | "admin-overview"
+  | "admin-onboarding"
+  | "admin-maintenance";
 
 export { roleLabels, roleOptions };
 
@@ -50,15 +53,17 @@ export const moduleMeta: Record<
   settings: { label: "Settings", href: "/dashboard/settings", icon: "S", summary: "Profile, access, billing, notification, and platform controls." },
   "landlord-applications": { label: "Landlord Applications", href: "/dashboard/landlord-applications", icon: "A", summary: "Review property owner requests to lease units within the estate." },
   "landlord-application": { label: "Become a Landlord", href: "/dashboard/landlord-application", icon: "L", summary: "Apply for approval to rent your owned unit to tenants." },
+  "admin-overview": { label: "Admin Overview", href: "/dashboard/admin", icon: "◈", summary: "Executive KPIs, revenue breakdown, and occupancy trend charts." },
+  "admin-onboarding": { label: "Prospect Approvals", href: "/dashboard/admin/onboarding", icon: "✦", summary: "Review, approve, or reject incoming prospect registrations." },
+  "admin-maintenance": { label: "Dual-Engine Kanban", href: "/dashboard/admin/maintenance", icon: "⚙", summary: "Unified maintenance board showing both ESTATE and RESIDENT tickets." },
 };
 
 export const roleModules: Record<DashboardRole, DashboardModule[]> = {
-  admin: ["dashboard", "properties", "units", "tenants", "leases", "payments", "maintenance", "invoices", "reports", "messages", "documents", "landlord-applications", "settings"],
-  manager: ["dashboard", "properties", "units", "tenants", "leases", "payments", "maintenance", "reports", "messages", "documents", "landlord-applications", "settings"],
-  owner: ["dashboard", "properties", "payments", "messages", "documents", "landlord-application", "settings"],
-  landlord: ["dashboard", "properties", "units", "tenants", "leases", "payments", "reports", "messages", "documents", "settings"],
-  tenant: ["dashboard", "leases", "payments", "maintenance", "messages", "documents", "settings"],
-  maintenance: ["dashboard", "maintenance", "messages", "documents", "settings"],
+  SUPER_ADMIN: ["dashboard", "properties", "units", "tenants", "leases", "payments", "maintenance", "invoices", "reports", "messages", "documents", "landlord-applications", "settings", "admin-overview", "admin-onboarding", "admin-maintenance"],
+  ADMIN: ["dashboard", "properties", "units", "tenants", "leases", "payments", "maintenance", "invoices", "reports", "messages", "documents", "landlord-applications", "settings", "admin-overview", "admin-onboarding", "admin-maintenance"],
+  OWNER: ["dashboard", "properties", "payments", "messages", "documents", "landlord-application", "settings"],
+  TENANT_STAFF: ["dashboard", "leases", "payments", "maintenance", "messages", "documents", "settings"],
+  PROSPECT: ["settings"],
 };
 
 export const kpis = mockKpis;

@@ -1,11 +1,10 @@
 /** Platform role hierarchy (highest privilege first). */
 export type UserRole =
-  | "admin"
-  | "manager"
-  | "owner"
-  | "landlord"
-  | "tenant"
-  | "maintenance";
+  | "SUPER_ADMIN"
+  | "ADMIN"
+  | "OWNER"
+  | "TENANT_STAFF"
+  | "PROSPECT";
 
 export type LandlordApplicationStatus = "pending" | "approved" | "rejected";
 
@@ -25,33 +24,30 @@ export const ROLE_KEY = "ernest_dashboard_role";
 export const USER_EMAIL_KEY = "ernest_user_email";
 export const USER_NAME_KEY = "ernest_user_name";
 export const APPLICATIONS_KEY = "ernest_landlord_applications";
+export const PROSPECTS_KEY = "ernest_prospects";
 
-/** Display order matches estate hierarchy. */
 export const roleHierarchy: UserRole[] = [
-  "admin",
-  "manager",
-  "owner",
-  "landlord",
-  "tenant",
-  "maintenance",
+  "SUPER_ADMIN",
+  "ADMIN",
+  "OWNER",
+  "TENANT_STAFF",
+  "PROSPECT",
 ];
 
 export const roleLabels: Record<UserRole, string> = {
-  admin: "Administrator",
-  manager: "Property Manager",
-  owner: "Property Owner",
-  landlord: "Landlord",
-  tenant: "Tenant",
-  maintenance: "Maintenance Staff",
+  SUPER_ADMIN: "Super Admin",
+  ADMIN: "Admin",
+  OWNER: "Owner",
+  TENANT_STAFF: "Tenant / Staff",
+  PROSPECT: "Prospect",
 };
 
 export const roleDescriptions: Record<UserRole, string> = {
-  admin: "Full estate operations, user oversight, and landlord application approvals.",
-  manager: "Day-to-day estate management, leasing coordination, and landlord approvals.",
-  owner: "Purchased a home in the estate; can apply to become an approved landlord.",
-  landlord: "Approved property owner who may lease their unit to tenants.",
-  tenant: "Resident leasing a unit from a landlord within the estate.",
-  maintenance: "Assigned maintenance work orders only.",
+  SUPER_ADMIN: "Full estate operations, user oversight, and all approval workflows.",
+  ADMIN: "Operations and finance management with reporting and lease oversight.",
+  OWNER: "Property owner with estate access and community portal rights.",
+  TENANT_STAFF: "Resident or maintenance staff with community and operational access.",
+  PROSPECT: "Registered prospect awaiting admin approval before full platform access.",
 };
 
 export const roleOptions = roleHierarchy.map((value) => ({
@@ -59,13 +55,12 @@ export const roleOptions = roleHierarchy.map((value) => ({
   label: roleLabels[value],
 }));
 
-/** Everyone except maintenance staff may use resident services. */
+/** PROSPECT and unrecognised roles cannot access resident community services. */
 export const communityAccessRoles: UserRole[] = [
-  "admin",
-  "manager",
-  "owner",
-  "landlord",
-  "tenant",
+  "SUPER_ADMIN",
+  "ADMIN",
+  "OWNER",
+  "TENANT_STAFF",
 ];
 
 export function canAccessCommunity(role: UserRole): boolean {
@@ -73,20 +68,19 @@ export function canAccessCommunity(role: UserRole): boolean {
 }
 
 export function isReviewerRole(role: UserRole): boolean {
-  return role === "admin" || role === "manager";
+  return role === "SUPER_ADMIN" || role === "ADMIN";
 }
 
 export function canManageLeases(role: UserRole): boolean {
-  return role === "landlord" || role === "admin" || role === "manager";
+  return role === "OWNER" || role === "SUPER_ADMIN" || role === "ADMIN";
 }
 
 export const defaultEmails: Record<UserRole, string> = {
-  admin: "admin@specialgardens.example",
-  manager: "manager@specialgardens.example",
-  owner: "owner@specialgardens.example",
-  landlord: "landlord@specialgardens.example",
-  tenant: "tenant@specialgardens.example",
-  maintenance: "maintenance@specialgardens.example",
+  SUPER_ADMIN: "superadmin@specialgardens.example",
+  ADMIN: "admin@specialgardens.example",
+  OWNER: "owner@specialgardens.example",
+  TENANT_STAFF: "tenant@specialgardens.example",
+  PROSPECT: "prospect@specialgardens.example",
 };
 
 export const seedLandlordApplications: LandlordApplication[] = [
@@ -131,14 +125,14 @@ export function writeApplications(applications: LandlordApplication[]) {
 }
 
 export function getStoredRole(): UserRole {
-  if (typeof window === "undefined") return "admin";
+  if (typeof window === "undefined") return "SUPER_ADMIN";
   const stored = window.localStorage.getItem(ROLE_KEY) as UserRole | null;
-  return stored && stored in roleLabels ? stored : "admin";
+  return stored && stored in roleLabels ? stored : "SUPER_ADMIN";
 }
 
 export function getStoredEmail(): string {
-  if (typeof window === "undefined") return defaultEmails.admin;
-  return window.localStorage.getItem(USER_EMAIL_KEY) ?? defaultEmails.admin;
+  if (typeof window === "undefined") return defaultEmails.SUPER_ADMIN;
+  return window.localStorage.getItem(USER_EMAIL_KEY) ?? defaultEmails.SUPER_ADMIN;
 }
 
 export function getStoredName(): string {
@@ -146,22 +140,9 @@ export function getStoredName(): string {
   return window.localStorage.getItem(USER_NAME_KEY) ?? "Eleanor Vance";
 }
 
-/** Promote property owner to landlord after admin/manager approval. */
+/** OWNER and LANDLORD are now consolidated — simply returns the stored role. */
 export function syncRoleAfterLandlordApproval(): UserRole {
-  const role = getStoredRole();
-  const email = getStoredEmail().toLowerCase();
-  if (role !== "owner") return role;
-
-  const approved = readApplications().some(
-    (app) => app.email.toLowerCase() === email && app.status === "approved",
-  );
-
-  if (approved) {
-    window.localStorage.setItem(ROLE_KEY, "landlord");
-    return "landlord";
-  }
-
-  return role;
+  return getStoredRole();
 }
 
 export function submitLandlordApplication(input: {
@@ -203,14 +184,6 @@ export function reviewLandlordApplication(
 
   applications[index] = { ...applications[index], status: decision };
   writeApplications(applications);
-
-  if (decision === "approved") {
-    const { email } = applications[index];
-    if (getStoredEmail().toLowerCase() === email.toLowerCase()) {
-      window.localStorage.setItem(ROLE_KEY, "landlord");
-    }
-  }
-
   return applications[index];
 }
 

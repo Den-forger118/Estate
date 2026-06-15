@@ -13,22 +13,26 @@ import {
 } from "../data/community";
 import { brand } from "../data/site";
 import {
-  AUTH_KEY,
+  ROLE_KEY,
   canAccessCommunity,
   syncRoleAfterLandlordApproval,
   type UserRole,
 } from "../data/roles";
+import { useMockAuth } from "../hooks/useMockAuth";
 
 export function CommunityShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [ready, setReady] = useState(false);
-  const [role, setRole] = useState<UserRole>("tenant");
+  const [role, setRole] = useState<UserRole>("SUPER_ADMIN");
+  const { isAuthenticated, isLoading: authLoading, logout: clearAuthState } = useMockAuth();
   const year = new Date().getFullYear();
 
+  // Auth guard: redirect unauthenticated users and roles without community access.
   useEffect(() => {
-    const authed = window.localStorage.getItem(AUTH_KEY) === "true";
-    if (!authed) {
+    if (authLoading) return;
+
+    if (!isAuthenticated) {
       const next = pathname === "/community" ? "/community" : pathname;
       router.replace(`/login?next=${encodeURIComponent(next)}`);
       return;
@@ -38,12 +42,29 @@ export function CommunityShell({ children }: { children: ReactNode }) {
     setRole(activeRole);
 
     if (!canAccessCommunity(activeRole)) {
-      router.replace("/dashboard");
+      // Prospects are waiting for approval — send back to login.
+      // Maintenance staff use REMS only — send to dashboard.
+      router.replace(activeRole === "PROSPECT" ? "/login" : "/dashboard");
       return;
     }
 
     setReady(true);
-  }, [pathname, router]);
+  }, [authLoading, isAuthenticated, pathname, router]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Admin-approval event: clear sessions for non-admin/manager roles.
+  useEffect(() => {
+    if (!ready) return;
+
+    function handleForceLogout() {
+      const storedRole = window.localStorage.getItem(ROLE_KEY);
+      if (storedRole !== "SUPER_ADMIN" && storedRole !== "ADMIN") {
+        signOut();
+      }
+    }
+
+    window.addEventListener("force_logout_event", handleForceLogout);
+    return () => window.removeEventListener("force_logout_event", handleForceLogout);
+  }, [ready]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const searchPlaceholder = useMemo(() => {
     if (pathname === "/community") return "Search services, events, or documents…";
@@ -55,8 +76,7 @@ export function CommunityShell({ children }: { children: ReactNode }) {
   }, [pathname]);
 
   function signOut() {
-    window.localStorage.removeItem(AUTH_KEY);
-    document.cookie = "mock_auth=; Max-Age=0; path=/";
+    clearAuthState();
     router.replace("/");
   }
 
