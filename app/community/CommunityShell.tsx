@@ -48,6 +48,12 @@ export function CommunityShell({ children }: { children: ReactNode }) {
       return;
     }
 
+    // Directory is restricted to super admins only.
+    if (pathname.startsWith("/community/directory") && activeRole !== "SUPER_ADMIN") {
+      router.replace("/community");
+      return;
+    }
+
     setReady(true);
   }, [authLoading, isAuthenticated, pathname, router]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -97,18 +103,20 @@ export function CommunityShell({ children }: { children: ReactNode }) {
         brandSubtitle="Premium Living"
         primaryAction={{ href: "/community/report", label: "New Request" }}
         mobileNavLabel="Resident services navigation"
-        navItems={communityNavItems.map((item) => {
-          const active =
-            item.href === "/community"
-              ? pathname === "/community"
-              : pathname === item.href || pathname.startsWith(`${item.href}/`);
-          return {
-            href: item.href,
-            label: item.label,
-            icon: item.icon,
-            active,
-          };
-        })}
+        navItems={communityNavItems
+          .filter((item) => item.module !== "directory" || role === "SUPER_ADMIN")
+          .map((item) => {
+            const active =
+              item.href === "/community"
+                ? pathname === "/community"
+                : pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return {
+              href: item.href,
+              label: item.label,
+              icon: item.icon,
+              active,
+            };
+          })}
         residentCard={
           <>
             <div className="dashboard-avatar" aria-hidden="true">

@@ -1,5 +1,5 @@
-import { VisitorPassGenerationForm } from "../../components/forms/VisitorPassGenerationForm";
+import { redirect } from "next/navigation";
 
-export default function ResidentGatePassPage() {
-  return <VisitorPassGenerationForm />;
+export default function GatePassRedirect() {
+  redirect("/community/visitor-reg");
 }

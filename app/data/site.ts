@@ -167,7 +167,7 @@ export const techPillars: TechPillar[] = [
     id: "gate-pass",
     num: "02",
     heading: "Frictionless Estate Access Management",
-    body: "Security at Special Gardens is seamless. Residents generate instant, scannable QR visitor passes straight from their mobile community portal to share with guests via SMS or WhatsApp. Our physical gate-guards utilize mobile terminal webviews to scan visitors in instantly, eliminating long queues at the perimeter and securing the ecosystem without bureaucratic bottlenecks.",
+    body: "Security at Special Gardens is seamless. Residents pre-register expected visitors through the Resident OS in under a minute — entering the visitor's name, phone number, expected arrival window, and purpose of visit. Gate staff see a live visitor checklist on their dashboard and check guests in on arrival with a single tap. No phone calls, no paper logbooks, and no queues at the perimeter.",
     learnMoreHref: "/blog/day-in-the-life-gate-pass",
   },
   {

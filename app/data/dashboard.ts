@@ -32,7 +32,8 @@ export type DashboardModule =
   | "admin-overview"
   | "admin-onboarding"
   | "admin-maintenance"
-  | "tenant-management";
+  | "tenant-management"
+  | "visitor-log";
 
 export { roleLabels, roleOptions };
 
@@ -58,14 +59,15 @@ export const moduleMeta: Record<
   "admin-onboarding": { label: "Prospect Approvals", href: "/dashboard/admin/onboarding", icon: "✦", summary: "Review, approve, or reject incoming prospect registrations." },
   "admin-maintenance": { label: "Dual-Engine Kanban", href: "/dashboard/admin/maintenance", icon: "⚙", summary: "Unified maintenance board showing both ESTATE and RESIDENT tickets." },
   "tenant-management": { label: "My Rentals", href: "/dashboard/tenant-management", icon: "R", summary: "Manage your owned units and generate tenant invite links." },
+  "visitor-log": { label: "Visitor Log", href: "/dashboard/visitor-log", icon: "V", summary: "Expected visitors checklist — check guests in on arrival." },
 };
 
 export const roleModules: Record<DashboardRole, DashboardModule[]> = {
   SUPER_ADMIN: ["dashboard", "properties", "units", "tenants", "leases", "payments", "maintenance", "invoices", "reports", "messages", "documents", "landlord-applications", "settings", "admin-overview", "admin-onboarding", "admin-maintenance"],
   ADMIN: ["dashboard", "properties", "units", "tenants", "leases", "payments", "maintenance", "invoices", "reports", "messages", "documents", "landlord-applications", "settings", "admin-overview", "admin-onboarding", "admin-maintenance"],
-  OWNER: ["dashboard", "properties", "payments", "messages", "documents", "tenant-management", "settings"],
+  OWNER: ["dashboard", "properties", "leases", "payments", "maintenance", "messages", "documents", "tenant-management", "settings"],
   TENANT: ["dashboard", "leases", "payments", "maintenance", "messages", "documents", "settings"],
-  STAFF: ["dashboard", "maintenance", "messages", "settings"],
+  STAFF: ["dashboard", "visitor-log", "maintenance", "settings"],
   PROSPECT: ["settings"],
 };
 

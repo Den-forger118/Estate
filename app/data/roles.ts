@@ -50,7 +50,7 @@ export const roleDescriptions: Record<UserRole, string> = {
   ADMIN: "Operations and finance management with reporting and lease oversight.",
   OWNER: "Property owner with estate access and community portal rights.",
   TENANT: "Verified resident tenant with community access, lease history, and utility portal.",
-  STAFF: "Gate and maintenance staff with operations access and gate scanner.",
+  STAFF: "Gate and maintenance staff with operations access and visitor log.",
   PROSPECT: "Registered prospect awaiting admin approval before full platform access.",
 };
 

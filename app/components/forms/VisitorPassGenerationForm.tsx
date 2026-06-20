@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { showToast } from "../Toast";
+
+export const VISITOR_REG_KEY = "ernest_visitor_registrations";
 
 const PURPOSES = [
   "Family visit",
@@ -12,9 +13,7 @@ const PURPOSES = [
   "Other",
 ];
 
-const GATE_PASSES_KEY = "ernest_gate_passes";
-
-type GatePassRecord = {
+export type VisitorRegistration = {
   id: string;
   visitorName: string;
   phone: string;
@@ -22,19 +21,12 @@ type GatePassRecord = {
   time: string;
   vehicleReg: string | null;
   purpose: string;
+  checkedIn: boolean;
+  checkedInAt: string | null;
   createdAt: string;
 };
 
-function buildQrSeed(text: string): boolean[] {
-  const cells: boolean[] = [];
-  for (let i = 0; i < 49; i++) {
-    const charCode = text.charCodeAt(i % text.length);
-    cells.push((charCode + i * 7) % 3 !== 0);
-  }
-  return cells;
-}
-
-export function VisitorPassGenerationForm() {
+export function VisitorPreRegistrationForm() {
   const [visitorName, setVisitorName] = useState("");
   const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
@@ -42,7 +34,7 @@ export function VisitorPassGenerationForm() {
   const [hasVehicle, setHasVehicle] = useState(false);
   const [vehicleReg, setVehicleReg] = useState("");
   const [purpose, setPurpose] = useState("");
-  const [generatedPass, setGeneratedPass] = useState<GatePassRecord | null>(null);
+  const [confirmed, setConfirmed] = useState<VisitorRegistration | null>(null);
   const [error, setError] = useState("");
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -53,33 +45,28 @@ export function VisitorPassGenerationForm() {
     }
     setError("");
 
-    const pass: GatePassRecord = {
-      id: `GP-${Date.now()}`,
+    const reg: VisitorRegistration = {
+      id: `VR-${Date.now()}`,
       visitorName: visitorName.trim(),
       phone: phone.trim(),
       date,
       time,
       vehicleReg: hasVehicle && vehicleReg.trim() ? vehicleReg.trim() : null,
       purpose,
+      checkedIn: false,
+      checkedInAt: null,
       createdAt: new Date().toISOString(),
     };
 
     const existing = JSON.parse(
-      window.localStorage.getItem(GATE_PASSES_KEY) ?? "[]",
-    ) as GatePassRecord[];
-    window.localStorage.setItem(GATE_PASSES_KEY, JSON.stringify([pass, ...existing]));
-    setGeneratedPass(pass);
+      window.localStorage.getItem(VISITOR_REG_KEY) ?? "[]",
+    ) as VisitorRegistration[];
+    window.localStorage.setItem(VISITOR_REG_KEY, JSON.stringify([reg, ...existing]));
+    setConfirmed(reg);
   }
 
-  function handleShareUrl() {
-    const mockUrl = `https://gate.specialgardens.example/v/${generatedPass?.id}`;
-    navigator.clipboard.writeText(mockUrl).then(() => {
-      showToast("Pass URL copied to clipboard.");
-    });
-  }
-
-  function handleNewPass() {
-    setGeneratedPass(null);
+  function handleReset() {
+    setConfirmed(null);
     setVisitorName("");
     setPhone("");
     setDate("");
@@ -90,65 +77,52 @@ export function VisitorPassGenerationForm() {
     setError("");
   }
 
-  if (generatedPass) {
-    const qrCells = buildQrSeed(generatedPass.id + generatedPass.visitorName);
+  if (confirmed) {
+    const arrivalDate = new Date(confirmed.date + "T00:00").toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+    });
+
     return (
       <div className="gate-pass-result">
         <div className="gate-pass-result-header">
-          <span className="status-chip status-available">Active</span>
-          <h2>Visitor Pass Generated</h2>
+          <span className="status-chip status-available">Confirmed</span>
+          <h2>Visitor Registered</h2>
           <p className="meta">
-            Present this pass at the gate or share the URL with your visitor.
+            Security has been notified. {confirmed.visitorName} is expected at{" "}
+            {confirmed.time} on {arrivalDate}.
           </p>
         </div>
 
-        <div className="gate-pass-qr-wrap">
-          <div
-            className="gate-pass-qr-grid"
-            aria-label={`QR code for pass ${generatedPass.id}`}
-          >
-            {qrCells.map((filled, idx) => (
-              <div
-                key={idx}
-                className={`gate-pass-qr-cell${filled ? " gate-pass-qr-cell-filled" : ""}`}
-                aria-hidden="true"
-              />
-            ))}
-          </div>
+        <div className="gate-pass-meta" style={{ marginTop: "1.5rem" }}>
+          <dl className="gate-pass-meta-dl">
+            <dt>Visitor</dt>
+            <dd>{confirmed.visitorName}</dd>
 
-          <div className="gate-pass-meta">
-            <p className="gate-pass-meta-title">{generatedPass.id}</p>
-            <dl className="gate-pass-meta-dl">
-              <dt>Visitor</dt>
-              <dd>{generatedPass.visitorName}</dd>
+            <dt>Phone</dt>
+            <dd>{confirmed.phone}</dd>
 
-              <dt>Phone</dt>
-              <dd>{generatedPass.phone}</dd>
+            <dt>Expected at</dt>
+            <dd>
+              {confirmed.time} · {arrivalDate}
+            </dd>
 
-              <dt>Date &amp; time</dt>
-              <dd>
-                {generatedPass.date} at {generatedPass.time}
-              </dd>
+            <dt>Purpose</dt>
+            <dd>{confirmed.purpose}</dd>
 
-              <dt>Purpose</dt>
-              <dd>{generatedPass.purpose}</dd>
-
-              {generatedPass.vehicleReg ? (
-                <>
-                  <dt>Vehicle</dt>
-                  <dd>{generatedPass.vehicleReg}</dd>
-                </>
-              ) : null}
-            </dl>
-          </div>
+            {confirmed.vehicleReg && (
+              <>
+                <dt>Vehicle</dt>
+                <dd>{confirmed.vehicleReg}</dd>
+              </>
+            )}
+          </dl>
         </div>
 
         <div className="gate-pass-actions">
-          <button className="btn btn-primary" type="button" onClick={handleShareUrl}>
-            Share Pass URL
-          </button>
-          <button className="btn btn-secondary" type="button" onClick={handleNewPass}>
-            Generate New Pass
+          <button className="btn btn-primary" type="button" onClick={handleReset}>
+            Register Another Visitor
           </button>
         </div>
       </div>
@@ -159,10 +133,10 @@ export function VisitorPassGenerationForm() {
     <div className="gate-pass-container">
       <div className="gate-pass-header">
         <span className="eyebrow">Resident Services</span>
-        <h2 className="gate-pass-title">Generate Visitor Pass</h2>
+        <h2 className="gate-pass-title">Pre-Register a Visitor</h2>
         <p className="gate-pass-description">
-          Create a time-stamped QR pass for an expected visitor. The gate scanner
-          will verify this pass on arrival.
+          Let security know who to expect before they arrive. Gate staff will see your
+          visitor on their checklist and check them in on arrival — no phone calls needed.
         </p>
       </div>
 
@@ -212,11 +186,7 @@ export function VisitorPassGenerationForm() {
 
         <label>
           Purpose of visit <span className="form-required">*</span>
-          <select
-            value={purpose}
-            onChange={(e) => setPurpose(e.target.value)}
-            required
-          >
+          <select value={purpose} onChange={(e) => setPurpose(e.target.value)} required>
             <option value="">Select purpose…</option>
             {PURPOSES.map((p) => (
               <option key={p} value={p}>
@@ -250,7 +220,7 @@ export function VisitorPassGenerationForm() {
         </div>
 
         <button className="btn btn-primary" type="submit">
-          Generate Pass
+          Register Visitor
         </button>
       </form>
     </div>

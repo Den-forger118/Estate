@@ -20,7 +20,7 @@ function resolvePortalHref(role: UserRole): string {
   if (role === "SUPER_ADMIN" || role === "ADMIN") return "/dashboard/admin";
   if (role === "OWNER") return "/community/portal";
   if (role === "TENANT") return "/community/portal";
-  if (role === "STAFF") return "/staff/gate-scanner";
+  if (role === "STAFF") return "/dashboard";
   return "/login";
 }
 

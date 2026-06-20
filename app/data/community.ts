@@ -22,7 +22,7 @@ export type CommunityModule =
   | "report"
   | "bookings"
   | "portal"
-  | "gate-pass";
+  | "visitor-reg";
 
 export const residentProfile = {
   name: "Alex Morgan",
@@ -42,7 +42,7 @@ export const communityModuleMeta: Record<
   report: { label: "Report", href: "/community/report", icon: "R", summary: "Report suspicious activity or estate incidents to security.", searchPlaceholder: "Search reports…" },
   bookings: { label: "Bookings", href: "/community/bookings", icon: "B", summary: "Reserve pool, gym, meeting rooms, and parking without conflicts.", searchPlaceholder: "Search facilities…" },
   portal: { label: "Utility Portal", href: "/community/portal", icon: "U", summary: "Your utility readings, submitted tickets, and residence stats.", searchPlaceholder: "Search utility history…" },
-  "gate-pass": { label: "Gate Pass", href: "/community/gate-pass", icon: "G", summary: "Generate a QR gate pass for visitors and contractors.", searchPlaceholder: "Search passes…" },
+  "visitor-reg": { label: "Visitor Pre-Reg", href: "/community/visitor-reg", icon: "V", summary: "Pre-register expected visitors and notify security before they arrive.", searchPlaceholder: "Search visitor registrations…" },
 };
 
 export const communityNavItems = [
