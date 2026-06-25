@@ -73,8 +73,15 @@ export default async function BuyerPortalPage(
     return (
       <PortalShell email={email}>
         <div className="dashboard-card" style={{ padding: "2rem", textAlign: "center" }}>
-          <h2>No unit linked</h2>
-          <p className="meta">Your account is not yet linked to a unit. Please contact your developer.</p>
+          <h2>Your payment plan is being set up</h2>
+          <p className="meta" style={{ maxWidth: "400px", margin: "0.75rem auto 0" }}>
+            Your buyer account is active. Our sales team is finalising your unit assignment and
+            payment schedule — you will receive confirmation within one business day.
+          </p>
+          <p className="meta" style={{ marginTop: "0.5rem" }}>
+            Questions? Contact us at{" "}
+            <a href="mailto:sales@specialgardens.com">sales@specialgardens.com</a>.
+          </p>
         </div>
       </PortalShell>
     )
@@ -84,6 +91,25 @@ export default async function BuyerPortalPage(
     findProjectById(unit.projectId, developerId),
     findPaymentPlanByUnit(unit.id, developerId),
   ])
+
+  // No payment plan yet — unit exists but plan hasn't been created
+  if (!paymentPlan) {
+    return (
+      <PortalShell email={email}>
+        <div className="dashboard-card" style={{ padding: "2rem", textAlign: "center" }}>
+          <h2>Your payment plan is being set up</h2>
+          <p className="meta" style={{ maxWidth: "440px", margin: "0.75rem auto 0" }}>
+            Your unit <strong>{unit.code}</strong> has been reserved for you.
+            Our sales team is finalising your installment schedule — it will appear here shortly.
+          </p>
+          <p className="meta" style={{ marginTop: "0.5rem" }}>
+            Questions? Contact us at{" "}
+            <a href="mailto:sales@specialgardens.com">sales@specialgardens.com</a>.
+          </p>
+        </div>
+      </PortalShell>
+    )
+  }
 
   // Verify-on-return: if the buyer just completed a payment, confirm it server-side
   // with Paystack's verify API and reconcile before loading installments so the

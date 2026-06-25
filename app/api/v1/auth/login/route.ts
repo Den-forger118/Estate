@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { compare } from "bcryptjs"
 import { createSession, COOKIE_NAME, SESSION_TTL_MS } from "@/lib/auth"
-import { findUserByEmail } from "@/lib/repos/users"
+import { findUserByEmail, touchLastLogin } from "@/lib/repos/users"
 import { createAuditLog } from "@/lib/repos/auditLog"
 
 const schema = z.object({
@@ -29,8 +29,22 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  if (!user || !user.passwordHash) {
+  if (!user) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
+  }
+
+  if (user.status === "SUSPENDED") {
+    return NextResponse.json(
+      { error: "This account has been suspended. Please contact support." },
+      { status: 403 },
+    )
+  }
+
+  if (!user.passwordHash) {
+    return NextResponse.json(
+      { error: "Account setup incomplete. Please check your email for the set-password link." },
+      { status: 403 },
+    )
   }
 
   const valid = await compare(password, user.passwordHash)
@@ -39,6 +53,8 @@ export async function POST(req: NextRequest) {
   }
 
   const token = await createSession(user.id)
+
+  await touchLastLogin(user.id).catch(() => {})
 
   await createAuditLog({
     developerId: user.developerId,

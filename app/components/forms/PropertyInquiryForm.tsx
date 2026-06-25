@@ -28,7 +28,11 @@ export function PropertyInquiryForm({
       setErrorMsg("Please provide your name and phone number.");
       return;
     }
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!email.trim()) {
+      setErrorMsg("Please provide your email address.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setErrorMsg("Please enter a valid email address.");
       return;
     }
@@ -43,7 +47,7 @@ export function PropertyInquiryForm({
         body: JSON.stringify({
           fullName: name.trim(),
           phone: phone.trim(),
-          email: email.trim() || undefined,
+          email: email.trim(),
           message: message.trim() || undefined,
           unitId: unitId ?? undefined,
           _hp: "",
@@ -130,12 +134,13 @@ export function PropertyInquiryForm({
       </label>
 
       <label>
-        Email <span className="meta">(optional)</span>
+        Email <span aria-hidden="true">*</span>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
+          required
           disabled={state === "loading"}
         />
       </label>

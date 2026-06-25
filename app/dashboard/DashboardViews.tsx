@@ -19,6 +19,7 @@ import {
   LandlordApplicationSubmitPanel,
   LandlordApplicationsReviewPanel,
 } from "./LandlordApplicationPanels";
+import { AccountsView } from "./AccountsView";
 import { BuyersView } from "./BuyersView";
 import { LeadsView } from "./LeadsView";
 import { OffPlanPaymentsView } from "./OffPlanPaymentsView";
@@ -924,6 +925,7 @@ export function ModuleView({ module }: { module: DashboardModule }) {
   if (module === "landlord-application") return <LandlordApplicationSubmitPanel />;
   if (module === "landlord-applications") return <LandlordApplicationsReviewPanel />;
   if (module === "properties") return <PropertiesView />;
+  if (module === "accounts") return <AccountsView />;
   if (module === "buyers") return <BuyersView />;
   if (module === "leads") return <LeadsView />;
   if (module === "payment-plans") return <PaymentPlansView />;

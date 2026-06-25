@@ -841,6 +841,30 @@ export async function updateMaintenanceTicket(
     : liveUpdateMaintenanceTicket(id, status);
 }
 
+export type CreatePlanPayload = {
+  buyerId: string
+  downPayment: number
+  currency: "GHS" | "USD"
+  zeroInterest: boolean
+  installments: { sequence: number; amount: number; dueDate?: string }[]
+}
+
+export async function createPaymentPlan(
+  unitId: string,
+  payload: CreatePlanPayload,
+): Promise<{ plan: PaymentPlan; installments: Installment[] }> {
+  const res = await fetch(`/api/v1/units/${unitId}/payment-plan`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ error: "Failed to create payment plan" }))
+    throw new Error((body as { error?: string }).error ?? "Failed to create payment plan")
+  }
+  return res.json()
+}
+
 const mockDashboardOverview: DashboardOverview = {
   offPlan: {
     unitsSold: 2,

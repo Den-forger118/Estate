@@ -9,7 +9,7 @@ import { createAuditLog } from "@/lib/repos/auditLog"
 const schema = z.object({
   fullName:  z.string().min(2).max(120).trim(),
   phone:     z.string().min(6).max(30).trim(),
-  email:     z.string().email().max(200).trim().optional().or(z.literal("")),
+  email:     z.string().email("A valid email address is required").max(200).trim(),
   message:   z.string().max(2000).trim().optional(),
   // UUID format only — not RFC 4122 strict, matching what Postgres uuid type accepts.
   unitId:    z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, "Invalid UUID").optional(),
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
     unitId: unitId ?? null,
     fullName,
     phone,
-    email: email || null,
+    email,
     message: message || null,
     source: "website",
   })

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getBuyers, getUnits, getPaymentPlan, getMilestones } from "../../lib/api-client";
+import { FormEvent, useEffect, useState } from "react";
+import { getBuyers, getUnits, getPaymentPlan, getMilestones, createPaymentPlan } from "../../lib/api-client";
 import type { Buyer, Unit, PaymentPlan, Installment, Milestone } from "../data/types";
 import { formatGHS, formatCurrency, formatDate } from "../../lib/formatters";
 import { showToast } from "../components/Toast";
@@ -20,9 +20,118 @@ function getInstallmentStatusClass(status: string): string {
 
 type PlanMap = Map<string, { plan: PaymentPlan; installments: Installment[] }>;
 
+// ─── Create Plan Form ────────────────────────────────────────────────────────
+
+function CreatePlanForm({
+  buyers,
+  availableUnits,
+  onDone,
+}: {
+  buyers: Buyer[]
+  availableUnits: Unit[]
+  onDone: () => void
+}) {
+  const [selectedBuyerId, setSelectedBuyerId] = useState("")
+  const [selectedUnitId, setSelectedUnitId] = useState("")
+  const [downPayment, setDownPayment] = useState("")
+  const [numInstallments, setNumInstallments] = useState("3")
+  const [installmentAmount, setInstallmentAmount] = useState("")
+  const [currency, setCurrency] = useState<"GHS" | "USD">("GHS")
+  const [submitting, setSubmitting] = useState(false)
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    if (!selectedBuyerId || !selectedUnitId) {
+      showToast("Select a buyer and unit", "error")
+      return
+    }
+    const dp = parseFloat(downPayment)
+    const ia = parseFloat(installmentAmount)
+    const n = parseInt(numInstallments)
+    if (isNaN(dp) || dp < 0) { showToast("Invalid down payment", "error"); return }
+    if (isNaN(ia) || ia <= 0 || isNaN(n) || n < 1) { showToast("Invalid installment terms", "error"); return }
+
+    setSubmitting(true)
+    try {
+      const installments = Array.from({ length: n }, (_, i) => ({
+        sequence: i + 1,
+        amount: ia,
+      }))
+      await createPaymentPlan(selectedUnitId, {
+        buyerId: selectedBuyerId,
+        downPayment: dp,
+        currency,
+        zeroInterest: true,
+        installments,
+      })
+      showToast("Payment plan created", "success")
+      onDone()
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : "Failed to create plan", "error")
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <form className="dashboard-card" style={{ padding: "1.5rem", marginBottom: "1.5rem" }} onSubmit={handleSubmit}>
+      <h2 style={{ marginBottom: "1rem" }}>Assign Unit + Create Payment Plan</h2>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+        <label>
+          Buyer
+          <select value={selectedBuyerId} onChange={(e) => setSelectedBuyerId(e.target.value)} required>
+            <option value="">Select buyer…</option>
+            {buyers.map((b) => (
+              <option key={b.id} value={b.id}>{b.fullName} {b.email ? `— ${b.email}` : ""}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Available unit
+          <select value={selectedUnitId} onChange={(e) => setSelectedUnitId(e.target.value)} required>
+            <option value="">Select unit…</option>
+            {availableUnits.map((u) => (
+              <option key={u.id} value={u.id}>{u.code} — {formatGHS(u.priceTotal)}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Down payment ({currency})
+          <input type="number" min="0" step="0.01" value={downPayment} onChange={(e) => setDownPayment(e.target.value)} placeholder="e.g. 85500" required />
+        </label>
+        <label>
+          Currency
+          <select value={currency} onChange={(e) => setCurrency(e.target.value as "GHS" | "USD")}>
+            <option value="GHS">GHS</option>
+            <option value="USD">USD</option>
+          </select>
+        </label>
+        <label>
+          Number of installments
+          <input type="number" min="1" max="60" value={numInstallments} onChange={(e) => setNumInstallments(e.target.value)} required />
+        </label>
+        <label>
+          Amount per installment ({currency})
+          <input type="number" min="0.01" step="0.01" value={installmentAmount} onChange={(e) => setInstallmentAmount(e.target.value)} placeholder="e.g. 33166" required />
+        </label>
+      </div>
+      <p className="meta" style={{ marginTop: "0.5rem", fontSize: "0.8rem" }}>
+        Total = down payment + (installments × amount). Due dates can be set per-installment after creation.
+      </p>
+      <div style={{ display: "flex", gap: "0.75rem", marginTop: "1rem" }}>
+        <button className="btn btn-primary" type="submit" disabled={submitting}>
+          {submitting ? "Creating…" : "Create plan"}
+        </button>
+        <button className="btn btn-secondary" type="button" onClick={onDone}>Cancel</button>
+      </div>
+    </form>
+  )
+}
+
 export function PaymentPlansView() {
   const [buyers, setBuyers] = useState<Buyer[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
+  const [allUnits, setAllUnits] = useState<Unit[]>([]);
   const [planMap, setPlanMap] = useState<PlanMap>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +141,7 @@ export function PaymentPlansView() {
     installments: Installment[];
   } | null>(null);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [showCreate, setShowCreate] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -42,6 +152,7 @@ export function PaymentPlansView() {
           (u) => u.status === "SOLD" || u.status === "RESERVED",
         );
         setBuyers(buyersData);
+        setAllUnits(unitsData);
         setUnits(activeUnits);
 
         // Batch-fetch all plans so summary KPIs and down payment column are real
@@ -135,7 +246,38 @@ export function PaymentPlansView() {
           <h1>Installment Schedules</h1>
           <p>Milestone-linked payment plans for off-plan units.</p>
         </div>
+        <div className="dashboard-actions">
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={() => setShowCreate((v) => !v)}
+          >
+            {showCreate ? "Cancel" : "Assign Unit + Create Plan"}
+          </button>
+        </div>
       </div>
+
+      {showCreate && (
+        <CreatePlanForm
+          buyers={buyers}
+          availableUnits={allUnits.filter((u) => u.status === "AVAILABLE")}
+          onDone={async () => {
+            setShowCreate(false);
+            setLoading(true);
+            try {
+              const [buyersData, unitsData] = await Promise.all([getBuyers(), getUnits()]);
+              const activeUnits = unitsData.filter((u) => u.status === "SOLD" || u.status === "RESERVED");
+              setBuyers(buyersData);
+              setAllUnits(unitsData);
+              setUnits(activeUnits);
+              const plans = await Promise.all(activeUnits.map((u) => getPaymentPlan(u.id)));
+              const map: PlanMap = new Map();
+              activeUnits.forEach((u, i) => { const p = plans[i]; if (p) map.set(u.id, p); });
+              setPlanMap(map);
+            } catch { /* ignore */ } finally { setLoading(false); }
+          }}
+        />
+      )}
 
       <div className="dashboard-kpi-grid">
         <article className="dashboard-card kpi-card">

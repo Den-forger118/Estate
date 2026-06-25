@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { getSession } from "@/lib/auth"
-import { withTransaction } from "@/lib/db"
+import { withTransaction, queryOne } from "@/lib/db"
 import { findLeadById, updateLeadStatus } from "@/lib/repos/leads"
-import { createBuyer } from "@/lib/repos/buyers"
 import { createAuditLog } from "@/lib/repos/auditLog"
+import { issueSetPasswordToken, invalidatePriorTokens } from "@/lib/repos/passwordSetTokens"
+import { sendSetPasswordEmail } from "@/lib/notify"
 import type { PoolClient } from "pg"
 
 const patchSchema = z.discriminatedUnion("action", [
@@ -81,49 +82,97 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: "Lead is already converted" }, { status: 422 })
   }
 
-  // Must be at least QUALIFIED (or allow from any non-terminal status)
-  // Product choice: allow ADMIN|SALES to convert from any status so they
-  // are not blocked if they want to fast-track a verbal agreement.
+  if (!lead.email) {
+    return NextResponse.json(
+      { error: "Cannot convert: this lead has no email address. Edit the lead to add one first." },
+      { status: 400 },
+    )
+  }
 
   type BuyerRow = { id: string }
+  type UserCheckRow = { id: string }
 
-  const buyer = await withTransaction(async (client: PoolClient) => {
+  // Check for email conflict before opening transaction
+  const existingUser = await queryOne<UserCheckRow>(
+    "SELECT id FROM users WHERE email = $1",
+    [lead.email.toLowerCase()],
+  )
+  if (existingUser) {
+    return NextResponse.json(
+      { error: `A user account with email ${lead.email} already exists. Cannot create a duplicate.` },
+      { status: 409 },
+    )
+  }
+
+  type ConversionResult = { buyerId: string; userId: string; fullName: string; email: string }
+
+  const result = await withTransaction(async (client: PoolClient): Promise<ConversionResult> => {
     // 1. Create buyer from lead data
-    const { rows } = await client.query<BuyerRow>(
+    const { rows: buyerRows } = await client.query<BuyerRow>(
       `INSERT INTO buyers (developer_id, full_name, phone, email)
        VALUES ($1, $2, $3, $4)
        RETURNING id`,
-      [developerId, lead.fullName, lead.phone, lead.email ?? null],
+      [developerId, lead.fullName, lead.phone, lead.email],
     )
-    const buyerId = rows[0].id
+    const buyerId = buyerRows[0].id
 
-    // 2. Mark lead CONVERTED
+    // 2. Create BUYER user account (password_hash NULL = pending activation)
+    type UserRow = { id: string }
+    const { rows: userRows } = await client.query<UserRow>(
+      `INSERT INTO users (developer_id, email, role, buyer_id, password_hash, status)
+       VALUES ($1, $2, 'BUYER', $3, NULL, 'ACTIVE')
+       RETURNING id`,
+      [developerId, lead.email!.toLowerCase(), buyerId],
+    )
+    const userId = userRows[0].id
+
+    // 3. Mark lead CONVERTED
     await client.query(
       "UPDATE leads SET status = 'CONVERTED' WHERE id = $1 AND developer_id = $2",
       [id, developerId],
     )
 
-    // 3. Audit log inside transaction for consistency
+    // 4. Audit logs inside transaction
+    const logBase = [developerId, actorUserId]
     await client.query(
-      `INSERT INTO audit_logs (developer_id, actor_user_id, action, target, meta)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [
-        developerId,
-        actorUserId,
-        "lead.converted",
-        `leads/${id}`,
-        JSON.stringify({ leadId: id, buyerId, fullName: lead.fullName }),
-      ],
+      `INSERT INTO audit_logs (developer_id, actor_user_id, action, target, meta) VALUES ($1,$2,$3,$4,$5)`,
+      [...logBase, "LEAD_CONVERTED", `leads/${id}`, JSON.stringify({ leadId: id, buyerId })],
+    )
+    await client.query(
+      `INSERT INTO audit_logs (developer_id, actor_user_id, action, target, meta) VALUES ($1,$2,$3,$4,$5)`,
+      [...logBase, "BUYER_CREATED", `buyers/${buyerId}`, JSON.stringify({ fullName: lead.fullName })],
+    )
+    await client.query(
+      `INSERT INTO audit_logs (developer_id, actor_user_id, action, target, meta) VALUES ($1,$2,$3,$4,$5)`,
+      [...logBase, "BUYER_ACCOUNT_CREATED", `users/${userId}`, JSON.stringify({ buyerId, email: lead.email })],
     )
 
-    return { id: buyerId, fullName: lead.fullName, phone: lead.phone, email: lead.email }
+    return { buyerId, userId, fullName: lead.fullName, email: lead.email! }
   })
+
+  // Issue set-password token and send email (outside transaction — non-fatal if email fails)
+  try {
+    await invalidatePriorTokens(result.userId)
+    const rawToken = await issueSetPasswordToken(result.userId)
+    const appUrl = process.env.APP_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+    const setPasswordUrl = `${appUrl}/set-password?token=${rawToken}`
+
+    await sendSetPasswordEmail({
+      buyerEmail: result.email,
+      buyerName: result.fullName,
+      setPasswordUrl,
+    })
+  } catch (err) {
+    console.error("[convert] Failed to send set-password email:", err)
+  }
 
   return NextResponse.json(
     {
-      buyerId: buyer.id,
-      fullName: buyer.fullName,
-      message: `Lead converted — Buyer record created for ${buyer.fullName}.`,
+      buyerId: result.buyerId,
+      userId: result.userId,
+      fullName: result.fullName,
+      email: result.email,
+      message: `Buyer account created — set-password link sent to ${result.email}.`,
     },
     { status: 201 },
   )

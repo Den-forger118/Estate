@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { showToast } from "../components/Toast";
 import type { Lead, LeadStatus } from "../data/types";
@@ -38,6 +39,7 @@ export function LeadsView() {
   const [filterStatus, setFilterStatus] = useState<LeadStatus | "ALL">("ALL");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [acting, setActing] = useState(false);
+  const [convertedEmail, setConvertedEmail] = useState<string | null>(null);
 
   async function loadLeads() {
     setLoading(true);
@@ -69,14 +71,20 @@ export function LeadsView() {
     }
   }
 
-  async function convertLead(id: string) {
+  async function convertLead(id: string, leadEmail?: string) {
+    if (!leadEmail) {
+      showToast("Cannot convert: this lead has no email address. Edit the lead to add one first.", "error");
+      return;
+    }
     setActing(true);
+    setConvertedEmail(null);
     try {
       const result = await patchLead(id, { action: "convert" });
-      // refresh list to pick up CONVERTED status
       await loadLeads();
       setSelectedId(null);
-      showToast(`${String(result.fullName ?? "Lead")} converted to Buyer`, "success");
+      const email = String(result.email ?? leadEmail);
+      setConvertedEmail(email);
+      showToast(`Buyer account created — set-password link sent to ${email}`, "success");
     } catch (e) {
       showToast(e instanceof Error ? e.message : "Conversion failed", "error");
     } finally {
@@ -219,6 +227,14 @@ export function LeadsView() {
             )}
           </dl>
 
+          {/* No-email guard */}
+          {!selected.email && selected.status !== "CONVERTED" && selected.status !== "REJECTED" && (
+            <p className="form-error" style={{ marginBottom: "0.75rem" }}>
+              This lead has no email address. A valid email is required to convert and create a buyer account.
+              Please collect one before converting.
+            </p>
+          )}
+
           {/* Status actions — not shown for already-terminal statuses */}
           {selected.status !== "CONVERTED" && selected.status !== "REJECTED" && (
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
@@ -246,8 +262,9 @@ export function LeadsView() {
                 <button
                   className="btn btn-primary"
                   type="button"
-                  disabled={acting}
-                  onClick={() => convertLead(selected.id)}
+                  disabled={acting || !selected.email}
+                  title={!selected.email ? "Lead must have an email before converting" : undefined}
+                  onClick={() => convertLead(selected.id, selected.email)}
                 >
                   {acting ? "Converting…" : "Convert to Buyer"}
                 </button>
@@ -265,9 +282,22 @@ export function LeadsView() {
           )}
 
           {selected.status === "CONVERTED" && (
-            <p className="meta" style={{ color: "var(--success, green)" }}>
-              This lead has been converted to a Buyer.
-            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              <p className="meta" style={{ color: "var(--success, green)" }}>
+                This lead has been converted to a Buyer.
+              </p>
+              {selected.email && convertedEmail === selected.email && (
+                <p className="meta" style={{ color: "var(--success, green)" }}>
+                  Set-password link sent to <strong>{selected.email}</strong>.{" "}
+                  <Link href="/dashboard/accounts" style={{ color: "var(--brand)" }}>
+                    Resend anytime from Accounts.
+                  </Link>
+                </p>
+              )}
+              <Link href="/dashboard/accounts" className="btn btn-secondary" style={{ display: "inline-block", fontSize: "0.85rem", width: "fit-content" }}>
+                View in Accounts ledger →
+              </Link>
+            </div>
           )}
           {selected.status === "REJECTED" && (
             <p className="meta" style={{ color: "var(--error, #c0392b)" }}>
