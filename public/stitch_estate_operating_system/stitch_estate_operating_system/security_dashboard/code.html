@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resident OS | Security &amp; Incident Reporting</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#d8e3fb",
+                        "outline": "#75777d",
+                        "inverse-primary": "#bcc7de",
+                        "on-surface": "#0b1c30",
+                        "surface-tint": "#545f73",
+                        "secondary-fixed": "#dae2fd",
+                        "on-primary-container": "#8590a6",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary": "#00190e",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-secondary-container": "#5c647a",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "surface-variant": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "inverse-surface": "#213145",
+                        "outline-variant": "#c5c6cd",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "surface-container-high": "#dce9ff",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#00301e",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary": "#565e74",
+                        "primary": "#091426",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e5eeff",
+                        "primary-fixed-dim": "#bcc7de",
+                        "primary-container": "#1e293b",
+                        "on-surface-variant": "#45474c",
+                        "on-primary-fixed": "#111c2d",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-fixed": "#6ffbbe",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed": "#131b2e",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#00a472"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "container-max": "1440px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "margin-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "caption": ["Inter"],
+                        "title-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<div class="flex min-h-screen">
+<!-- SideNavBar Component -->
+<aside class="hidden md:flex flex-col h-screen sticky left-0 top-0 w-64 bg-surface border-r border-outline-variant py-stack-lg z-50">
+<div class="px-6 mb-10">
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface">Resident OS</h1>
+<p class="text-on-surface-variant font-label-md">Premium Estates</p>
+</div>
+<nav class="flex-1 space-y-1 px-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-body-md">Events</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-body-md">Directory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-body-md">Marketplace</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-primary font-semibold transition-colors bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-body-md">Security</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="report">report</span>
+<span class="font-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md">Bookings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<div class="flex items-center gap-3 p-3 rounded-xl border border-outline-variant bg-surface-container-lowest">
+<img alt="Resident profile avatar" class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a sophisticated resident in high-end business casual attire. The lighting is soft and flattering, set against a blurred minimalist architectural background with neutral tones of slate and white. The overall mood is approachable, trustworthy, and elite." src="https://lh3.googleusercontent.com/aida/AP1WRLskfhN4JdPchxvMEpZIOla3OW12JBJC1hNQSV8iTq-shsy1Z8sexFn2P9ES1tKklCEAA8o9zqBOersJN3ATV0cCZOLETCOjVc75BMOoxQ9Roe58mswDDoZWmvZV9mHXoXgOorKsu62TFna4ws-P69Pc_NG90ojFCB58da0WPW6O7-KYBIQnIFWAQJP_HqqxSEXtSSO7butEuFOe4lF0QuxJNn7bhBVg2E83r4KumnfufzQJ4VkDlhSkxVN0"/>
+<div class="overflow-hidden">
+<p class="font-label-md text-on-surface truncate">Alexander Sterling</p>
+<p class="text-caption text-on-surface-variant">Unit 402, North Wing</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 min-w-0">
+<!-- TopAppBar Component -->
+<header class="flex justify-between items-center w-full px-margin-desktop py-stack-md sticky top-0 bg-surface-bright shadow-sm z-40 border-b border-outline-variant">
+<div class="flex items-center gap-stack-md flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary-container text-body-md" placeholder="Search security protocols or history..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6 ml-stack-lg">
+<button class="relative text-on-surface-variant hover:bg-surface-container rounded-full p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container rounded-full p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<div class="px-margin-desktop py-stack-lg space-y-stack-lg max-w-container-max mx-auto">
+<!-- Hero & Emergency Action Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<div class="lg:col-span-8 relative h-80 rounded-xl overflow-hidden group shadow-sm">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A serene evening view of a luxury residential estate's main gate. The architecture is modern with glass and slate textures, illuminated by warm, indirect LED lighting. The atmosphere is quiet, safe, and impeccably maintained, reflecting a high-end corporate security presence in a peaceful environment." src="https://lh3.googleusercontent.com/aida/AP1WRLvsrusb7SMUZqoMyIrWSchC2S2F1RaRSiW_w4CwqdIRrOosAvIEcoxiFfGFw_yxlk9cuu8TREqorGm3TRzljTmsYBaWaDxB0ycTngOFgcRqQZs48wbA_YMi7NztnI8TnyXi-P6T-SIUG3y3UmW2Mx9LdhwETVAdKvREIXceKD2nOGiI5cJReUuzZzZ3mxMRlQr9Pv6r_uxxjtHD8FPpV_mgCxVcxAeERJxVaSsjpszj63qKtYvJO0dnRGaq"/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent flex flex-col justify-end p-stack-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-primary mb-2">Security &amp; Community Safety</h2>
+<p class="text-body-lg text-on-primary/80 max-w-lg">Continuous monitoring and rapid response services dedicated to your peace of mind within the estate grounds.</p>
+</div>
+</div>
+<!-- Emergency Quick Alert Button -->
+<div class="lg:col-span-4 bg-surface-container-highest rounded-xl p-stack-lg flex flex-col items-center justify-center text-center space-y-4 border border-outline-variant shadow-sm hover:shadow-md transition-shadow">
+<div class="p-5 bg-error-container rounded-full mb-2">
+<span class="material-symbols-outlined text-[48px] text-on-error-container" data-icon="emergency" data-weight="fill">emergency</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Emergency Quick Alert</h3>
+<p class="text-body-md text-on-surface-variant px-4">Instantly notify the on-site security detail and emergency services of your exact location.</p>
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-semibold text-body-lg hover:bg-primary/90 transition-all active:scale-[0.98]" onclick="triggerEmergency()">
+                            Signal Emergency
+                        </button>
+<p class="text-caption text-on-surface-variant mt-2 italic">Priority connection: 24/7 Command Center</p>
+</div>
+</section>
+<!-- Bento Grid Layout for Security Data -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Security Announcements -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl border border-outline-variant p-stack-md flex flex-col shadow-sm">
+<div class="flex items-center justify-between mb-4 px-2">
+<h3 class="font-title-lg text-title-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="campaign">campaign</span>
+                                Security Announcements
+                            </h3>
+<button class="text-primary font-label-md hover:underline">View Archive</button>
+</div>
+<div class="space-y-3">
+<div class="p-4 bg-surface-container rounded-lg border-l-4 border-primary group cursor-pointer transition-all hover:translate-x-1">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-md text-primary">New Security Infrastructure</span>
+<span class="text-caption text-on-surface-variant">Today, 09:15 AM</span>
+</div>
+<h4 class="font-semibold text-body-lg mb-1">CCTV Phase III Deployment Complete</h4>
+<p class="text-body-md text-on-surface-variant">Installation of AI-enhanced thermal monitoring along the perimeter forest path is now fully operational.</p>
+</div>
+<div class="p-4 bg-surface-container-low rounded-lg border-l-4 border-outline-variant group cursor-pointer transition-all hover:translate-x-1">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-md text-on-surface-variant">Maintenance Update</span>
+<span class="text-caption text-on-surface-variant">Oct 12, 2023</span>
+</div>
+<h4 class="font-semibold text-body-lg mb-1">Scheduled Gate Maintenance</h4>
+<p class="text-body-md text-on-surface-variant">The South Entrance biometric scanner will undergo routine calibration between 01:00 and 03:00 on Friday.</p>
+</div>
+</div>
+</div>
+<!-- Safety Tips Card -->
+<div class="bg-primary text-on-primary rounded-xl p-stack-lg shadow-xl relative overflow-hidden flex flex-col justify-between">
+<div class="relative z-10">
+<div class="bg-on-primary/20 w-12 h-12 rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-on-primary" data-icon="lightbulb">lightbulb</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-4 leading-tight">Safety Tips for Estate Residents</h3>
+<ul class="space-y-4 opacity-90">
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed shrink-0" data-icon="check_circle">check_circle</span>
+<p class="text-body-md">Ensure guest QR codes are shared only with verified visitors prior to their arrival.</p>
+</li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed shrink-0" data-icon="check_circle">check_circle</span>
+<p class="text-body-md">Report any malfunctioning landscape lighting via the incident portal immediately.</p>
+</li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed shrink-0" data-icon="check_circle">check_circle</span>
+<p class="text-body-md">Activate 'Away Mode' on your smart home hub when traveling for more than 48 hours.</p>
+</li>
+</ul>
+</div>
+<!-- Decorative glow -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-surface-variant/20 rounded-full blur-3xl"></div>
+</div>
+<!-- Incident History Table -->
+<div class="lg:col-span-3 bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+<div class="p-stack-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg">Incident History</h3>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-surface-container rounded transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="filter_list">filter_list</span>
+</button>
+<button class="p-1 hover:bg-surface-container rounded transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant font-label-md">
+<tr>
+<th class="px-6 py-3 font-semibold">Incident Details</th>
+<th class="px-6 py-3 font-semibold">Status</th>
+<th class="px-6 py-3 font-semibold">Resolution</th>
+<th class="px-6 py-3 font-semibold">Date</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant p-2 bg-surface rounded" data-icon="light">light</span>
+<div>
+<p class="font-semibold text-body-md">Street lamp repair</p>
+<p class="text-caption text-on-surface-variant">Zone 4 (East Grove)</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-tertiary-fixed-dim text-on-tertiary-fixed">
+                                                Resolved
+                                            </span>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">LED Panel Replaced</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Oct 14, 2023</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant p-2 bg-surface rounded" data-icon="water_drop">water_drop</span>
+<div>
+<p class="font-semibold text-body-md">Sprinkler Leak</p>
+<p class="text-caption text-on-surface-variant">Main Entrance Plaza</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-tertiary-fixed-dim text-on-tertiary-fixed">
+                                                Resolved
+                                            </span>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Valve Secured</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Oct 12, 2023</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant p-2 bg-surface rounded" data-icon="pets">pets</span>
+<div>
+<p class="font-semibold text-body-md">Stray Animal Sighting</p>
+<p class="text-caption text-on-surface-variant">Perimeter Fence West</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-fixed text-on-primary-fixed">
+                                                Monitoring
+                                            </span>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Patrol Dispatched</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">Oct 10, 2023</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- High-end Monitoring Tech Section (Visual Anchor) -->
+<section class="bg-inverse-surface rounded-xl p-stack-lg text-inverse-on-surface overflow-hidden relative">
+<div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-stack-lg items-center">
+<div class="space-y-6">
+<div class="inline-block px-4 py-1 bg-primary text-on-primary rounded-full font-label-md uppercase tracking-wider">Estate Technology</div>
+<h2 class="font-display-lg text-display-lg leading-tight">Advanced Guard Intelligence</h2>
+<p class="text-body-lg text-inverse-on-surface/80">Our estate utilizes cutting-edge biometric verification and neural-network CCTV analytics to provide a seamless yet impenetrable layer of security for all residents.</p>
+<div class="flex flex-wrap gap-4">
+<div class="flex items-center gap-2 px-4 py-3 bg-white/10 rounded-lg border border-white/20">
+<span class="material-symbols-outlined text-tertiary-fixed" data-icon="videocam">videocam</span>
+<span class="font-label-md">4K AI Surveillance</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-3 bg-white/10 rounded-lg border border-white/20">
+<span class="material-symbols-outlined text-tertiary-fixed" data-icon="fingerprint">fingerprint</span>
+<span class="font-label-md">Biometric Access</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-3 bg-white/10 rounded-lg border border-white/20">
+<span class="material-symbols-outlined text-tertiary-fixed" data-icon="shield">shield</span>
+<span class="font-label-md">24/7 Patrols</span>
+</div>
+</div>
+</div>
+<div class="relative h-96 md:h-[450px] rounded-xl overflow-hidden shadow-2xl">
+<img class="w-full h-full object-cover grayscale opacity-80" data-alt="A futuristic, high-end security monitoring command center with multiple glowing screens displaying real-time estate maps and digital surveillance feeds. The room is dark and sleek with blue and slate highlights, emphasizing professional expertise and technological sophistication. The style is cinematic and high-contrast." src="https://lh3.googleusercontent.com/aida/AP1WRLvm18CCZlzWpIYBEQSsdytgMChUbQLEja_ph_YRpJ_TPHdq06RVTvondywGQSwLhhwHranwBaQ3F0cqpwHj7fajyVbCy3lFclvb5SyeTovX5W3CNr8gMgrNQoJdZAtzk9_ztp4sbK5_H4K0Nsytrep1jZFmE-6SUNmrR72Ax2g5gn3C4mePy69GsxSQ0barNERw3Oh4k4q9TCYM3NN9d3klYtqW3P4VlQr9DIB-hWJvLnBvsCgPercPtys"/>
+<div class="absolute inset-0 bg-primary/20 mix-blend-overlay"></div>
+</div>
+</div>
+<!-- Decorative architectural lines -->
+<div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<path d="M0,20 L100,20 M0,50 L100,50 M0,80 L100,80 M20,0 L20,100 M50,0 L50,100 M80,0 L80,100" fill="none" stroke="currentColor" stroke-width="0.1"></path>
+</svg>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Micro-interaction for Emergency Alert -->
+<script>
+        function triggerEmergency() {
+            if (confirm("Confirm Emergency Alert? This will immediately notify the Command Center of your presence at North Wing, Unit 402.")) {
+                const btn = event.currentTarget;
+                const originalText = btn.innerText;
+                btn.innerText = "Alert Transmitting...";
+                btn.classList.replace('bg-primary', 'bg-error');
+                
+                setTimeout(() => {
+                    alert("Emergency alert successfully transmitted. Security response is en route (EST: 3 mins). Please remain where you are.");
+                    btn.innerText = originalText;
+                    btn.classList.replace('bg-error', 'bg-primary');
+                }, 1500);
+            }
+        }
+    </script>
+</body></html>

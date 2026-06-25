@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid #E2E8F0;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed": "#d8e3fb",
+            "outline": "#75777d",
+            "inverse-primary": "#bcc7de",
+            "on-surface": "#0b1c30",
+            "surface-tint": "#545f73",
+            "secondary-fixed": "#dae2fd",
+            "on-primary-container": "#8590a6",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-bright": "#f8f9ff",
+            "tertiary": "#00190e",
+            "on-secondary-fixed-variant": "#3f465c",
+            "on-secondary-container": "#5c647a",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container-lowest": "#ffffff",
+            "secondary-container": "#dae2fd",
+            "surface-variant": "#d3e4fe",
+            "error-container": "#ffdad6",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed-variant": "#005236",
+            "inverse-surface": "#213145",
+            "outline-variant": "#c5c6cd",
+            "on-error": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "on-background": "#0b1c30",
+            "surface-container-high": "#dce9ff",
+            "background": "#f8f9ff",
+            "tertiary-container": "#00301e",
+            "surface-container-highest": "#d3e4fe",
+            "secondary": "#565e74",
+            "primary": "#091426",
+            "on-secondary": "#ffffff",
+            "surface": "#f8f9ff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "primary-fixed-dim": "#bcc7de",
+            "primary-container": "#1e293b",
+            "on-surface-variant": "#45474c",
+            "on-primary-fixed": "#111c2d",
+            "on-error-container": "#93000a",
+            "surface-dim": "#cbdbf5",
+            "on-primary-fixed-variant": "#3c475a",
+            "on-tertiary-fixed": "#002113",
+            "tertiary-fixed": "#6ffbbe",
+            "tertiary-fixed-dim": "#4edea3",
+            "on-secondary-fixed": "#131b2e",
+            "error": "#ba1a1a",
+            "on-tertiary-container": "#00a472"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-mobile": "16px",
+            "stack-sm": "8px",
+            "container-max": "1440px",
+            "gutter": "24px",
+            "unit": "4px",
+            "stack-lg": "32px",
+            "stack-md": "16px",
+            "margin-desktop": "48px"
+          },
+          "fontFamily": {
+            "headline-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-md": ["Inter"],
+            "display-lg": ["Inter"],
+            "caption": ["Inter"],
+            "title-lg": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+            "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar Navigation Shell -->
+<header class="flex justify-between items-center w-full px-margin-desktop py-stack-md z-40 bg-surface-bright border-b border-outline-variant shadow-sm sticky top-0">
+<div class="flex items-center gap-stack-lg">
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface">Resident OS</h1>
+<div class="hidden md:flex items-center gap-stack-md">
+<nav class="flex items-center gap-gutter">
+<a class="font-body-md text-body-md text-on-surface-variant hover:bg-surface-container transition-all px-4 py-2 rounded-lg" href="#">Dashboard</a>
+<a class="font-body-md text-body-md text-primary border-b-2 border-primary px-4 py-2" href="#">Events</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:bg-surface-container transition-all px-4 py-2 rounded-lg" href="#">Directory</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:bg-surface-container transition-all px-4 py-2 rounded-lg" href="#">Marketplace</a>
+</nav>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="relative group">
+<button class="p-2 rounded-full hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+<img alt="Resident avatar" class="w-10 h-10 rounded-full border-2 border-outline-variant object-cover cursor-pointer" data-alt="A professional headshot of a refined individual in a luxury estate environment. The lighting is soft and natural, coming from a large window. The background is a blurred high-end interior with neutral tones and clean lines. The overall aesthetic is elegant, corporate, and minimalist, matching a premium hospitality brand." src="https://lh3.googleusercontent.com/aida/AP1WRLubAZxtET5UzaXEf2KPHacQUSGXuEHZVPkiV_SVdLcQwnJ2jpSTl4toiGDd-dK5cav5wk9QBy7OrVCENNW5Iqu_BvDuP8Ur5LTwNq9RkCrVcZ7dag7bk5lSOt7NSJxvXl5m6zFXe-Z2A0OkqyynAv3Kq3fJroD28ESYfXCMexwhyMFSoDhbKckb4NTYcshdqg_iDQOtm3xPFpKlSlFsOBQEdc7q5pL-5pM59ooKrcXZFhszgGwcP1B73-Vi"/>
+</div>
+</header>
+<main class="max-w-container-max mx-auto flex flex-col md:flex-row gap-gutter p-margin-mobile md:p-margin-desktop min-h-[calc(100vh-80px)]">
+<!-- Sidebar: Status Tracking -->
+<aside class="w-full md:w-80 flex-shrink-0 space-y-stack-lg">
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl border border-outline-variant transition-all">
+<h2 class="font-title-lg text-title-lg mb-stack-md text-primary">Recent Reports</h2>
+<div class="space-y-stack-md">
+<!-- Active Status Item -->
+<div class="p-stack-md rounded-lg bg-surface-container-low border border-primary-fixed-dim">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md uppercase tracking-wider text-primary">REF-2024-089</span>
+<span class="px-2 py-1 rounded text-[10px] font-bold uppercase bg-tertiary-container text-on-tertiary-container">Investigating</span>
+</div>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Main Gate Sensor Malfunction</p>
+<p class="font-caption text-caption text-on-surface-variant mt-1">Submitted 2 hours ago</p>
+</div>
+<!-- Resolved Status Item -->
+<div class="p-stack-md rounded-lg border border-outline-variant opacity-70">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline">REF-2024-072</span>
+<span class="px-2 py-1 rounded text-[10px] font-bold uppercase bg-surface-container-highest text-on-surface-variant">Resolved</span>
+</div>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Pool Area Light Repair</p>
+<p class="font-caption text-caption text-on-surface-variant mt-1">Resolved Yesterday</p>
+</div>
+</div>
+</div>
+<!-- Support Card -->
+<div class="bg-primary text-on-primary p-stack-lg rounded-xl shadow-lg relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="font-title-lg text-title-lg mb-2">Emergency Help</h3>
+<p class="font-body-md text-body-md opacity-80 mb-stack-md">For immediate security or medical emergencies, please use the direct line.</p>
+<button class="w-full py-stack-md bg-on-primary text-primary font-bold rounded-lg hover:bg-primary-fixed transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+            Call Security
+          </button>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined !text-9xl" data-icon="security_update_good">security_update_good</span>
+</div>
+</div>
+</aside>
+<!-- Main Content: Reporting Form -->
+<section class="flex-grow">
+<div class="bg-surface-container-lowest p-stack-lg md:p-stack-xl rounded-xl border border-outline-variant">
+<div class="mb-stack-lg">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Report an Incident</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Provide the details below and our estate management team will respond promptly.</p>
+</div>
+<form class="space-y-stack-lg" id="incidentForm">
+<!-- Incident Category -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase mb-2">Incident Category</label>
+<div class="grid grid-cols-2 gap-stack-sm">
+<button class="category-btn flex items-center gap-2 p-stack-md rounded-lg border border-outline-variant hover:bg-surface-container transition-all text-on-surface-variant active-category" data-category="Security" type="button">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-body-md">Security</span>
+</button>
+<button class="category-btn flex items-center gap-2 p-stack-md rounded-lg border border-outline-variant hover:bg-surface-container transition-all text-on-surface-variant" data-category="Maintenance" type="button">
+<span class="material-symbols-outlined" data-icon="build">build</span>
+<span class="font-body-md">Maintenance</span>
+</button>
+<button class="category-btn flex items-center gap-2 p-stack-md rounded-lg border border-outline-variant hover:bg-surface-container transition-all text-on-surface-variant" data-category="Noise" type="button">
+<span class="material-symbols-outlined" data-icon="volume_up">volume_up</span>
+<span class="font-body-md">Noise</span>
+</button>
+<button class="category-btn flex items-center gap-2 p-stack-md rounded-lg border border-outline-variant hover:bg-surface-container transition-all text-on-surface-variant" data-category="Other" type="button">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-body-md">Other</span>
+</button>
+</div>
+</div>
+<!-- Priority Level -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase mb-2">Priority Level</label>
+<div class="flex flex-col gap-stack-sm h-full">
+<div class="flex items-center gap-stack-md p-stack-md rounded-lg border border-outline-variant">
+<input class="w-full accent-primary h-2 bg-surface-container rounded-lg appearance-none cursor-pointer" id="priorityRange" max="3" min="1" type="range" value="1"/>
+<div class="flex flex-col min-w-[80px] text-center">
+<span class="font-body-md font-bold text-primary" id="priorityLabel">Normal</span>
+<span class="font-caption text-caption text-on-surface-variant">Response in 24h</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Location Selector -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase mb-2">Block/Tower</label>
+<select class="w-full p-stack-md rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary-fixed outline-none transition-all">
+<option>Emerald Tower</option>
+<option>Sapphire Wing</option>
+<option>North Garden Villa</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase mb-2">Floor</label>
+<input class="w-full p-stack-md rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary-fixed outline-none transition-all" placeholder="e.g. 14" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase mb-2">Unit</label>
+<input class="w-full p-stack-md rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary-fixed outline-none transition-all" placeholder="e.g. 1402" type="text"/>
+</div>
+</div>
+<!-- Description -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase mb-2">Detailed Description</label>
+<textarea class="w-full p-stack-md rounded-lg border border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary-fixed outline-none transition-all" placeholder="Please describe the incident in as much detail as possible..." rows="4"></textarea>
+</div>
+<!-- Photo Upload (Placeholder for UI) -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase mb-2">Attach Photos (Optional)</label>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-stack-lg flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined !text-4xl text-outline mb-2 group-hover:text-primary transition-colors" data-icon="cloud_upload">cloud_upload</span>
+<p class="font-body-md text-on-surface-variant">Click to upload or drag and drop files</p>
+<p class="font-caption text-caption text-outline-variant mt-1">PNG, JPG up to 10MB each</p>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row items-center justify-end gap-stack-md pt-stack-md">
+<button class="w-full sm:w-auto px-stack-lg py-stack-md font-body-md font-semibold text-on-surface-variant hover:text-primary transition-colors" type="button">Save as Draft</button>
+<button class="w-full sm:w-auto px-stack-xl py-stack-md bg-primary text-on-primary rounded-lg font-bold hover:shadow-lg active:scale-95 transition-all" type="submit">Submit Report</button>
+</div>
+</form>
+</div>
+</section>
+</main>
+<!-- SideNav (Responsive) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-outline-variant flex justify-around py-stack-md z-50">
+<a class="flex flex-col items-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center text-primary" href="#">
+<span class="material-symbols-outlined" data-icon="report">report</span>
+<span class="text-[10px]">Report</span>
+</a>
+<a class="flex flex-col items-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="text-[10px]">Directory</span>
+</a>
+<a class="flex flex-col items-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-[10px]">Profile</span>
+</a>
+</nav>
+<!-- Success Modal (Hidden by default) -->
+<div class="fixed inset-0 bg-primary/40 backdrop-blur-md flex items-center justify-center p-stack-lg z-[60] hidden" id="successModal">
+<div class="bg-surface-container-lowest w-full max-w-md rounded-2xl p-stack-xl shadow-2xl text-center">
+<div class="w-20 h-20 bg-tertiary-container text-on-tertiary-container rounded-full flex items-center justify-center mx-auto mb-stack-lg">
+<span class="material-symbols-outlined !text-4xl" data-icon="check_circle">check_circle</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Report Submitted</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-xl">Your incident has been logged successfully as <span class="font-bold text-primary">REF-2024-090</span>. You can track the progress in the status sidebar.</p>
+<button class="w-full py-stack-md bg-primary text-on-primary font-bold rounded-lg hover:shadow-md transition-all" id="closeModal">Back to Dashboard</button>
+</div>
+</div>
+<script>
+    // Priority Range Interactivity
+    const priorityRange = document.getElementById('priorityRange');
+    const priorityLabel = document.getElementById('priorityLabel');
+    const priorities = {
+      1: { label: 'Normal', desc: 'Response in 24h', color: 'text-primary' },
+      2: { label: 'High', desc: 'Response in 4h', color: 'text-error' },
+      3: { label: 'Urgent', desc: 'Immediate Response', color: 'text-error font-extrabold' }
+    };
+
+    priorityRange.addEventListener('input', (e) => {
+      const val = e.target.value;
+      priorityLabel.innerText = priorities[val].label;
+      priorityLabel.nextElementSibling.innerText = priorities[val].desc;
+      priorityLabel.className = `font-body-md ${priorities[val].color}`;
+    });
+
+    // Category Button Selection
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => {
+          b.classList.remove('bg-primary-container', 'text-on-primary', 'border-primary');
+          b.classList.add('border-outline-variant', 'text-on-surface-variant');
+        });
+        btn.classList.add('bg-primary-container', 'text-on-primary', 'border-primary');
+        btn.classList.remove('border-outline-variant', 'text-on-surface-variant');
+      });
+    });
+
+    // Form Submission Simulation
+    const incidentForm = document.getElementById('incidentForm');
+    const successModal = document.getElementById('successModal');
+    const closeModal = document.getElementById('closeModal');
+
+    incidentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      successModal.classList.remove('hidden');
+    });
+
+    closeModal.addEventListener('click', () => {
+      successModal.classList.add('hidden');
+      incidentForm.reset();
+    });
+
+    // Initial Active Category
+    categoryBtns[0].classList.add('bg-primary-container', 'text-on-primary', 'border-primary');
+  </script>
+</body></html>

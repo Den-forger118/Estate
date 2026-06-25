@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#d8e3fb",
+                    "outline": "#75777d",
+                    "inverse-primary": "#bcc7de",
+                    "on-surface": "#0b1c30",
+                    "surface-tint": "#545f73",
+                    "secondary-fixed": "#dae2fd",
+                    "on-primary-container": "#8590a6",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "surface-bright": "#f8f9ff",
+                    "tertiary": "#00190e",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "on-secondary-container": "#5c647a",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#dae2fd",
+                    "surface-variant": "#d3e4fe",
+                    "error-container": "#ffdad6",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "inverse-surface": "#213145",
+                    "outline-variant": "#c5c6cd",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "surface-container-high": "#dce9ff",
+                    "background": "#f8f9ff",
+                    "tertiary-container": "#00301e",
+                    "surface-container-highest": "#d3e4fe",
+                    "secondary": "#565e74",
+                    "primary": "#091426",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "surface-container-low": "#eff4ff",
+                    "surface-container": "#e5eeff",
+                    "primary-fixed-dim": "#bcc7de",
+                    "primary-container": "#1e293b",
+                    "on-surface-variant": "#45474c",
+                    "on-primary-fixed": "#111c2d",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#cbdbf5",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-fixed": "#6ffbbe",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-secondary-fixed": "#131b2e",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#00a472"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "stack-sm": "8px",
+                    "container-max": "1440px",
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "caption": ["Inter"],
+                    "title-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .luxury-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<div class="flex">
+<!-- Side Navigation (Shared Component Logic) -->
+<aside class="hidden md:flex flex-col h-screen sticky left-0 top-0 w-64 bg-surface border-r border-outline-variant py-stack-lg z-50">
+<div class="px-6 mb-stack-lg">
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface">Resident OS</h1>
+<p class="text-on-surface-variant font-label-md">Premium Estates</p>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="event">event</span>
+                    Events
+                </a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="groups">groups</span>
+                    Directory
+                </a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="storefront">storefront</span>
+                    Marketplace
+                </a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="security">security</span>
+                    Security
+                </a>
+<a class="flex items-center px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="report">report</span>
+                    Reports
+                </a>
+<a class="flex items-center px-6 py-3 text-primary font-semibold hover:bg-surface-container-low transition-colors transition-transform scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="calendar_today" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+                    Bookings
+                </a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low">
+<img alt="Resident Profile" class="w-10 h-10 rounded-full object-cover" data-alt="A professional close-up portrait of a sophisticated resident in a luxury setting. High-end lighting accentuates the subject's calm and authoritative expression. The background is a blurred high-end apartment interior with neutral tones and soft highlights, maintaining a corporate and exclusive atmosphere." src="https://lh3.googleusercontent.com/aida/AP1WRLuUHE8rkiVJc5VFOmy1SmCV9o9FUZ1cc4UoFMghU1oVNxBKPMumrI47lGqYmaTjXgdJxeD9E6sBmIYsTDgHKiYE3BhhC64ZGm2yjmALnTGmo5yPaqPrsFREMw061uZkC4_xUR0sGcuAGMcboqX-Eh1Ij3_ByW5xyrQ5q7HSlof_edqaSG4OpbCerr-HsbpWhilxUOFwK9oftqnWAuJLXdT8J6x3qc1kajwd9ufGh--Ob5p8FcqVELRpRx0"/>
+<div class="overflow-hidden">
+<p class="font-label-md text-on-surface truncate">Julian Voss</p>
+<p class="text-caption text-on-surface-variant">Penthouse A</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-grow min-h-screen">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-stack-md bg-surface-bright border-b border-outline-variant shadow-sm z-40 sticky top-0">
+<div class="flex items-center gap-4">
+<span class="md:hidden material-symbols-outlined text-on-surface" data-icon="menu">menu</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Amenities Booking</h2>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary-container text-body-md w-64" placeholder="Search facilities..." type="text"/>
+</div>
+<button class="p-2 hover:bg-surface-container rounded-full transition-all">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-full transition-all">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg">
+<!-- Bento Layout for Facilities & Stats -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-stack-lg">
+<!-- Calendar View (Main Bento Piece) -->
+<div class="lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Weekly Schedule</h3>
+<p class="text-body-md text-on-surface-variant">October 14 — October 20, 2023</p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-surface-container rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto hide-scrollbar">
+<div class="min-w-[800px]">
+<!-- Day Headers -->
+<div class="grid grid-cols-8 border-b border-outline-variant bg-surface-container-low">
+<div class="p-4 text-center border-r border-outline-variant font-label-md text-on-surface-variant">TIME</div>
+<div class="p-4 text-center border-r border-outline-variant">
+<p class="font-label-md text-on-surface-variant">MON</p>
+<p class="font-headline-md text-headline-md">14</p>
+</div>
+<div class="p-4 text-center border-r border-outline-variant bg-primary-fixed/30">
+<p class="font-label-md text-primary">TUE</p>
+<p class="font-headline-md text-headline-md text-primary">15</p>
+</div>
+<div class="p-4 text-center border-r border-outline-variant">
+<p class="font-label-md text-on-surface-variant">WED</p>
+<p class="font-headline-md text-headline-md">16</p>
+</div>
+<div class="p-4 text-center border-r border-outline-variant">
+<p class="font-label-md text-on-surface-variant">THU</p>
+<p class="font-headline-md text-headline-md">17</p>
+</div>
+<div class="p-4 text-center border-r border-outline-variant">
+<p class="font-label-md text-on-surface-variant">FRI</p>
+<p class="font-headline-md text-headline-md">18</p>
+</div>
+<div class="p-4 text-center border-r border-outline-variant">
+<p class="font-label-md text-on-surface-variant">SAT</p>
+<p class="font-headline-md text-headline-md">19</p>
+</div>
+<div class="p-4 text-center">
+<p class="font-label-md text-on-surface-variant">SUN</p>
+<p class="font-headline-md text-headline-md">20</p>
+</div>
+</div>
+<!-- Time Slots -->
+<div class="relative h-[400px] overflow-y-auto hide-scrollbar">
+<!-- Time column -->
+<div class="absolute left-0 top-0 bottom-0 w-[12.5%] grid grid-rows-8 border-r border-outline-variant bg-surface-container-low">
+<div class="p-2 text-center text-caption text-on-surface-variant border-b border-outline-variant">08:00 AM</div>
+<div class="p-2 text-center text-caption text-on-surface-variant border-b border-outline-variant">10:00 AM</div>
+<div class="p-2 text-center text-caption text-on-surface-variant border-b border-outline-variant">12:00 PM</div>
+<div class="p-2 text-center text-caption text-on-surface-variant border-b border-outline-variant">02:00 PM</div>
+<div class="p-2 text-center text-caption text-on-surface-variant border-b border-outline-variant">04:00 PM</div>
+<div class="p-2 text-center text-caption text-on-surface-variant border-b border-outline-variant">06:00 PM</div>
+<div class="p-2 text-center text-caption text-on-surface-variant border-b border-outline-variant">08:00 PM</div>
+<div class="p-2 text-center text-caption text-on-surface-variant">10:00 PM</div>
+</div>
+<!-- Grid overlay for selection -->
+<div class="ml-[12.5%] grid grid-cols-7 grid-rows-8 h-full">
+<!-- Row 1 -->
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant bg-tertiary-container/10 p-1">
+<div class="h-full w-full rounded bg-tertiary-fixed-dim/40 border-l-4 border-tertiary-fixed p-2 text-caption font-semibold text-on-tertiary-fixed">Gym Session</div>
+</div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<!-- Row 2 -->
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant bg-secondary-container/20 p-1">
+<div class="h-full w-full rounded bg-secondary-fixed/40 border-l-4 border-secondary p-2 text-caption font-semibold text-on-secondary-fixed">Private Event</div>
+</div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<!-- Additional rows would repeat... -->
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant bg-primary-container/10 p-1">
+<div class="h-full w-full rounded bg-primary-container text-white p-2 text-caption font-semibold">Your Booking</div>
+</div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-r border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+<div class="border-b border-outline-variant hover:bg-primary-fixed/10 cursor-pointer transition-colors"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Upcoming Bookings (Side Bento Piece) -->
+<div class="lg:col-span-4 space-y-gutter">
+<div class="bg-surface-container border border-outline-variant rounded-xl p-6 shadow-sm">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-4">My Bookings</h3>
+<div class="space-y-4">
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-lg flex items-start gap-4">
+<div class="bg-primary-fixed p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="pool">pool</span>
+</div>
+<div class="flex-grow">
+<p class="font-label-md text-on-surface">Infinity Pool</p>
+<p class="text-caption text-on-surface-variant">Today, Oct 15 • 04:00 PM</p>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="cancel">cancel</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-lg flex items-start gap-4 opacity-70">
+<div class="bg-secondary-fixed p-2 rounded-lg text-secondary">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+</div>
+<div class="flex-grow">
+<p class="font-label-md text-on-surface">Private Gym</p>
+<p class="text-caption text-on-surface-variant">Oct 17 • 09:00 AM</p>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="cancel">cancel</span>
+</button>
+</div>
+</div>
+<button class="w-full mt-6 py-3 border border-primary text-primary font-label-md rounded-lg hover:bg-primary hover:text-white transition-all">View History</button>
+</div>
+<!-- Quick Stats / Status -->
+<div class="bg-primary text-white rounded-xl p-6 shadow-xl relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-label-md mb-2 opacity-80">Remaining Credits</h4>
+<p class="font-display-lg text-display-lg mb-4">12 <span class="text-title-lg opacity-60">Hrs</span></p>
+<div class="w-full bg-white/20 h-2 rounded-full mb-2">
+<div class="bg-tertiary-fixed h-full rounded-full" style="width: 65%;"></div>
+</div>
+<p class="text-caption opacity-80">Refills in 12 days</p>
+</div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-[120px] opacity-10 rotate-12" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+</div>
+</section>
+<!-- Facility Cards Section -->
+<section>
+<div class="flex justify-between items-end mb-6">
+<div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Select a Facility</h3>
+<p class="text-body-lg text-on-surface-variant">Browse available amenities and their house rules.</p>
+</div>
+<div class="flex gap-2 bg-surface-container p-1 rounded-lg">
+<button class="px-4 py-2 bg-white shadow-sm rounded-md font-label-md text-primary">All</button>
+<button class="px-4 py-2 text-on-surface-variant font-label-md">Wellness</button>
+<button class="px-4 py-2 text-on-surface-variant font-label-md">Business</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-gutter">
+<!-- Facility Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:shadow-xl transition-all">
+<div class="relative h-48 overflow-hidden">
+<img alt="Infinity Pool" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A breathtaking infinity pool at sunset overlooking a modern city skyline. The water is crystal clear and perfectly still, reflecting the soft pink and orange hues of the twilight sky. Minimalist lounge chairs and elegant stone tiles surround the pool area, creating a serene and exclusive atmosphere that defines luxury hospitality." src="https://lh3.googleusercontent.com/aida/AP1WRLtpRhMmvBS8RGK3DTl-_PxKONedTSTq6RMuiarB7koqVoc3xxAdGwYJ8oGkmUJdWPmS9xoMcM3F9sAEanc842ZOJ_fJhwI9cbDyxN2YWQOssONr3bE9Pvtb9znELeWeC32ua5q2Ao_OouLUB2n4eZNuuNx18PtEBts3RKDRq_VbPQ4wk8M7MdYq3btIVdRquu42kRvMOV-LV3GpEMFtztJW3xCq-5LxneMTdw46EU1q6SRk2ShUERU-ou-z"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-caption font-bold text-primary">Wellness</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-title-lg text-title-lg text-on-surface">Infinity Pool</h4>
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="flex items-center gap-4 mb-4 text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="group">group</span>
+<span class="text-caption">Max 15</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+<span class="text-caption">6AM - 10PM</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-6 line-clamp-2">Maintain pool serenity. Proper swim attire required at all times.</p>
+<button class="w-full py-3 bg-primary text-white font-label-md rounded-lg hover:bg-primary-container active:scale-95 transition-all" onclick="openBookingModal('Infinity Pool')">Reserve Slot</button>
+</div>
+</div>
+<!-- Facility Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:shadow-xl transition-all">
+<div class="relative h-48 overflow-hidden">
+<img alt="Private Gym" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A state-of-the-art private fitness studio equipped with premium weights and modern exercise machines. The space features large floor-to-ceiling windows letting in soft natural light, polished wood flooring, and a minimalist design. The mood is energetic yet refined, providing a focused environment for a professional workout session." src="https://lh3.googleusercontent.com/aida/AP1WRLs98AcVUlwW2i8JW_zKVyO8QORrdVtoZ33dFd1QGcCVmTWghY3bwf1I8lT_EN7vmFWyEJ5D35sqDF1SAdow2oEQ1c67nGBFlB1v0b0McqAr2HCjfv1HD2tk5rY0dXtQ7tNPbVC5xZmxhGl6RA66VzLfR6ERfZLWBls1ketuxRKiKXi8Dge1OakMQIBfGIim7mxDZz2VE1iIrQc5L8ejhqt-hHxkWCL4EGHY1QNyYKfWHyfT5GzCeW4IXxk"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-caption font-bold text-primary">Wellness</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-title-lg text-title-lg text-on-surface">Private Gym</h4>
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="flex items-center gap-4 mb-4 text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="group">group</span>
+<span class="text-caption">Max 8</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+<span class="text-caption">24 Hours</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-6 line-clamp-2">Sanitize equipment after use. Personal training sessions available on request.</p>
+<button class="w-full py-3 bg-primary text-white font-label-md rounded-lg hover:bg-primary-container active:scale-95 transition-all" onclick="openBookingModal('Private Gym')">Reserve Slot</button>
+</div>
+</div>
+<!-- Facility Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:shadow-xl transition-all">
+<div class="relative h-48 overflow-hidden">
+<img alt="Conference Room" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="An elegant, modern conference room featuring a large walnut table and ergonomic leather chairs. The room is equipped with high-tech presentation screens and integrated connectivity. Minimalist architectural lighting creates a professional and sophisticated atmosphere suitable for executive meetings and corporate presentations in a high-end estate." src="https://lh3.googleusercontent.com/aida/AP1WRLsf3b7c2WJ6jvmYJlYDjQzc2ptI2xdPH4oZC_t-cmD7ydAHMcfbERs6Hbr4vJed4sFbKmS-pKW9uXOzT6cIqxNampKyOta0wNV6NUJADwNu_1_EHAsbhGWXP9YBsmoOgYXLzjHJ6_GtUDMbpiEzgKGgnO11l99rERMvtImoZECDYzLNR3M-cPmN7EOVzAVnO0J7Ydp3fSQ9ewV0yfW6EbSWb4tdpgG-7HiJT3rveu5KlydhcmopC05et0E"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-caption font-bold text-primary">Business</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-title-lg text-title-lg text-on-surface">Conference Room</h4>
+<span class="material-symbols-outlined text-outline" data-icon="star">star</span>
+</div>
+<div class="flex items-center gap-4 mb-4 text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="group">group</span>
+<span class="text-caption">Max 12</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+<span class="text-caption">8AM - 8PM</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-6 line-clamp-2">Equipped with 4K AV system. Complimentary water and coffee provided.</p>
+<button class="w-full py-3 bg-primary text-white font-label-md rounded-lg hover:bg-primary-container active:scale-95 transition-all" onclick="openBookingModal('Conference Room')">Reserve Slot</button>
+</div>
+</div>
+<!-- Facility Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:shadow-xl transition-all">
+<div class="relative h-48 overflow-hidden">
+<img alt="Rooftop Lounge" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A chic rooftop lounge with panoramic city views under a twilight sky. Modern outdoor sofas are arranged around low-profile fire pits, creating a warm and inviting social space. The design uses premium weather-resistant fabrics and architectural plants to evoke a sense of high-end metropolitan luxury and exclusivity." src="https://lh3.googleusercontent.com/aida/AP1WRLsU4uFZBGCJBdocE-PP9an6BB9BY2srFAUzESN9Ri-0rlIaot5FERaUYXTyN3UWu8QJz33CTXl02khO2--r6BPOn7IURHAY1n21zPZWyp3qZbg9nJV1ddfK4GeOFCSqA9Ibw7bsNlCpnfNTINbtEruGwVk4QUcms3KPwP2dcSuWXcplqX9GCti2Ug_VgbftPJLDE9vrWwbJpGxfjzeEqYDbQ_Gkb1nSvL2fta40tYeAXv-aDb_ubblWDA-V"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-caption font-bold text-primary">Social</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-title-lg text-title-lg text-on-surface">Rooftop Lounge</h4>
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="flex items-center gap-4 mb-4 text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="group">group</span>
+<span class="text-caption">Max 25</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+<span class="text-caption">10AM - 11PM</span>
+</div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-6 line-clamp-2">Ideal for sunset social gatherings. Catering must be pre-approved.</p>
+<button class="w-full py-3 bg-primary text-white font-label-md rounded-lg hover:bg-primary-container active:scale-95 transition-all" onclick="openBookingModal('Rooftop Lounge')">Reserve Slot</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Confirmation Overlay (Modal) -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center p-6" id="bookingModal">
+<div class="absolute inset-0 bg-black/40 backdrop-blur-md" onclick="closeBookingModal()"></div>
+<div class="relative w-full max-w-md bg-surface-container-lowest rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+<div class="p-8">
+<div class="w-16 h-16 bg-tertiary-fixed/20 text-on-tertiary-container rounded-full flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-3xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h3 class="text-center font-headline-md text-headline-md text-on-surface mb-2">Confirm Booking</h3>
+<p class="text-center text-primary font-bold mb-6" id="modalFacilityName">Infinity Pool</p>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between py-2 border-b border-outline-variant">
+<span class="text-on-surface-variant">Date</span>
+<span class="font-label-md text-on-surface">Wednesday, Oct 16</span>
+</div>
+<div class="flex justify-between py-2 border-b border-outline-variant">
+<span class="text-on-surface-variant">Time Slot</span>
+<span class="font-label-md text-on-surface">02:00 PM — 04:00 PM</span>
+</div>
+<div class="flex justify-between py-2 border-b border-outline-variant">
+<span class="text-on-surface-variant">Guests</span>
+<span class="font-label-md text-on-surface">3 People</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 border border-outline-variant rounded-lg font-label-md hover:bg-surface-container transition-colors" onclick="closeBookingModal()">Modify</button>
+<button class="flex-1 py-3 bg-primary text-white rounded-lg font-label-md hover:bg-primary-container transition-colors" onclick="confirmBooking()">Confirm &amp; Reserve</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Success Toast -->
+<div class="fixed bottom-10 right-10 z-[110] bg-on-surface text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 transform translate-y-24 opacity-0 transition-all duration-500" id="successToast">
+<span class="material-symbols-outlined text-tertiary-fixed" data-icon="check_circle">check_circle</span>
+<p class="font-label-md">Booking confirmed. Your digital key is active.</p>
+</div>
+<script>
+        function openBookingModal(facility) {
+            const modal = document.getElementById('bookingModal');
+            document.getElementById('modalFacilityName').innerText = facility;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        function confirmBooking() {
+            closeBookingModal();
+            const toast = document.getElementById('successToast');
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 4000);
+        }
+    </script>
+</body></html>

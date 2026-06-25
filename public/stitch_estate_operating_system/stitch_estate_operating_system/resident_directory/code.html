@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#d8e3fb",
+                        "outline": "#75777d",
+                        "inverse-primary": "#bcc7de",
+                        "on-surface": "#0b1c30",
+                        "surface-tint": "#545f73",
+                        "secondary-fixed": "#dae2fd",
+                        "on-primary-container": "#8590a6",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary": "#00190e",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-secondary-container": "#5c647a",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "surface-variant": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "inverse-surface": "#213145",
+                        "outline-variant": "#c5c6cd",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "surface-container-high": "#dce9ff",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#00301e",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary": "#565e74",
+                        "primary": "#091426",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e5eeff",
+                        "primary-fixed-dim": "#bcc7de",
+                        "primary-container": "#1e293b",
+                        "on-surface-variant": "#45474c",
+                        "on-primary-fixed": "#111c2d",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-fixed": "#6ffbbe",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed": "#131b2e",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#00a472"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "container-max": "1440px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "stack-lg": "32px",
+                        "stack-md": "16px",
+                        "margin-desktop": "48px"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="h-screen sticky left-0 top-0 w-64 border-r border-outline-variant dark:border-outline bg-surface dark:bg-inverse-surface flex flex-col py-stack-lg z-50">
+<div class="px-6 mb-10">
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface dark:text-inverse-on-surface">Resident OS</h1>
+<p class="text-on-surface-variant text-sm">Premium Estates</p>
+</div>
+<nav class="flex-1 space-y-2 px-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-body-md text-body-md">Events</span>
+</a>
+<!-- Active Item: Directory -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-primary dark:text-inverse-primary font-semibold bg-surface-container-low dark:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-body-md text-body-md">Directory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-body-md text-body-md">Marketplace</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-body-md text-body-md">Security</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="report">report</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Bookings</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<div class="flex items-center gap-3 p-3 rounded-xl bg-surface-container">
+<img alt="Resident profile avatar" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional close-up portrait of a sophisticated resident for a luxury estate app. The subject is a well-dressed professional with a friendly expression. The background is a softly blurred, high-end architectural interior with warm natural lighting and a minimalist aesthetic that conveys a sense of security and premium living." src="https://lh3.googleusercontent.com/aida/AP1WRLsX8VV9Ys9j4KXG2kSL85dBWFPcjeQS-8LuaelOSKjjHCOy7XzrJqx45PJ3NXxR4Fv3A6Y2-Y8SisGXYYA2zEUMQBbI04gU0vPwvkoDGtPDyguTEDz0zYgUgz9xiyuq0u4bLoLvzc_sIK7nUcCphz30yy6MFu3ppeFXZskZJfjayq7HSS3NJEjDVSGi7XR_MW7voHD8g9b6cYHM-4e0X7-J6VI7e78wg0w4M-g82Xfzx085Ch6yT8Bnx3KV"/>
+<div class="overflow-hidden">
+<p class="text-sm font-semibold truncate text-on-surface">Alex Thompson</p>
+<p class="text-xs text-on-surface-variant truncate">Penthouse 4B</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 min-w-0 flex flex-col">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-margin-desktop py-stack-md z-40 bg-surface-bright dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm sticky top-0">
+<div class="flex items-center gap-8 flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-sm focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Search residents by name or unit..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container transition-all text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container transition-all text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-margin-desktop space-y-stack-lg max-w-container-max mx-auto w-full">
+<!-- Section: Estate Committee (Priority Bento Layout) -->
+<section class="space-y-stack-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
+<h2 class="text-headline-md font-semibold tracking-tight text-on-surface">Estate Committee</h2>
+</div>
+<span class="text-caption font-label-md px-3 py-1 bg-primary text-on-primary rounded-full uppercase">Leadership</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Committee Card 1 -->
+<div class="glass-card border border-outline-variant p-stack-lg rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col gap-stack-md">
+<div class="flex justify-between items-start">
+<img class="w-16 h-16 rounded-lg object-cover border border-outline-variant" data-alt="A professional headshot of a female estate committee member in a corporate environment. She has a poised, authoritative look. The lighting is soft and professional, with a clean office background that suggests an organized and high-end management environment, using a palette of Slate and White." src="https://lh3.googleusercontent.com/aida/AP1WRLv1FcmRFuOrLI7XBZcN3xMHqSnaYD94Q1U3FYeVfhPd_B_GGfqxyGef_KBWdq1Vul6UBi9fr8ifMgb5CdpcAoL4mJhSu2klUp5f_ICAdcbS9I_Vkt5DNJH6l2dFj5P-W7M4E8sLZkAvPSr2g5RtVRIlxBJpVpb2W0GcNFO3MNR1Cd8qO5v3H4gdr2OFHIEZQ7PUKpI4Z5DwBZw6kJ-qcgFd5mBry3HovagaQccwCW0d8EWfLRGvz2RCicMQ"/>
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Sarah Chen</h3>
+<p class="text-on-surface-variant text-body-md">Estate Chairperson</p>
+<p class="text-caption text-outline mt-1">Block A • Unit 1201</p>
+</div>
+</div>
+<!-- Committee Card 2 -->
+<div class="glass-card border border-outline-variant p-stack-lg rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col gap-stack-md">
+<div class="flex justify-between items-start">
+<img class="w-16 h-16 rounded-lg object-cover border border-outline-variant" data-alt="A professional headshot of a male resident committee member. He is dressed in a smart-casual manner, looking friendly yet responsible. The environment is a bright, modern architectural space with high ceilings and clean lines, reflecting the premium quality of a luxury residential estate." src="https://lh3.googleusercontent.com/aida/AP1WRLtVFwyjx8ERkbxtd8K-bZxS3shysmFFHrUcmeO0i_owMhcQuzEDmaaPenfeo5j_5Gia0pqzTGEAm11NFadfy3s4l2XtWsQWuJa7_zjnWNvuVXxUQ31XJ8EpGQYgU_J86HgTXug8nSR-1x6N8JRUfMD_xt8gGV1EcoupUvGS-qUw-ZSgrumC2DKe4hid3Ii0jpH9Y3y50ntzaXtPqf3lTh_H7xV4nx6sXqAG7OVKzOULVu6LBQ8rjysCCzia"/>
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">David Miller</h3>
+<p class="text-on-surface-variant text-body-md">Security Liaison</p>
+<p class="text-caption text-outline mt-1">Block C • Unit 402</p>
+</div>
+</div>
+<!-- Committee Card 3 -->
+<div class="glass-card border border-outline-variant p-stack-lg rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col gap-stack-md">
+<div class="flex justify-between items-start">
+<img class="w-16 h-16 rounded-lg object-cover border border-outline-variant" data-alt="A professional headshot of a middle-aged woman for a resident directory. She is the community treasurer, presenting an air of reliability and competence. The setting is a minimalist atrium with lush indoor greenery, illuminated by soft morning light that emphasizes a calm, professional atmosphere." src="https://lh3.googleusercontent.com/aida/AP1WRLsCzo1sgpBlWXzQV7ZUbq9XYyQIYxaTjjtgHde-bysWWBPp-wJvbg-_6DIiaqhbxa6TeriPvadAYjsEr4ysIQFZy30Buk2YHeXp-b90twnV5859KDhaxdwKHDQfB7bAo2oLgPwWguv6wsZKbwO4D2qSlc_UfzoYSZpDByXv5hhRffr9nezfVM3izpMkBySVHor3ZfYtWpcRy1-HcFSo6upAEl9AZDjMFw6W-ncturP_wisPC_wdBX5sseH4"/>
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Elena Rodriguez</h3>
+<p class="text-on-surface-variant text-body-md">Treasurer</p>
+<p class="text-caption text-outline mt-1">Block B • Unit 805</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Filter Controls -->
+<div class="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-outline-variant">
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary text-sm font-semibold transition-all">All Blocks</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-low border border-outline-variant hover:bg-surface-container text-on-surface text-sm font-medium transition-all">Block A</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-low border border-outline-variant hover:bg-surface-container text-on-surface text-sm font-medium transition-all">Block B</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-low border border-outline-variant hover:bg-surface-container text-on-surface text-sm font-medium transition-all">Block C</button>
+</div>
+<div class="text-sm text-on-surface-variant">
+                        Showing <span class="font-semibold text-primary">124</span> Verified Residents
+                    </div>
+</div>
+<!-- Section: Resident Directory (Asymmetric Grid) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Resident Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 hover:border-primary transition-colors">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A portrait of a young professional resident. High-key lighting, minimalist background. The visual style is clean and modern, focusing on trust and neighborly connection within a luxury residential complex." src="https://lh3.googleusercontent.com/aida/AP1WRLtDijQqEn0iybU1XqcChw24fMV4BKHdBf4eKRRVBzgjd88gpLfbWs6KDwlGorQofZNwRe6PwWcA8r7Iweq8B9IfClEJg7NFbvQ0ilN8Z8kaSXoJFvBAz67V1Xfbw3qKTHUGv04PMZBH1JaX9L7FTx_p5CRwaAFoMqJGzvNAR7DYLIuyXdmESURwkQ0CodB-AG9UCCQDNErYEbqV962lq-3kdS8Keq5qztQAIz1pY4mTpLjSI4uM_rkHJplG"/>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-container text-on-tertiary-container rounded-full p-0.5 border-2 border-white">
+<span class="material-symbols-outlined text-[10px]" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Marcus Thorne</h4>
+<p class="text-caption text-on-surface-variant">Block A • Unit 1104</p>
+</div>
+</div>
+<!-- Resident Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 hover:border-primary transition-colors">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A portrait of a senior resident for a community directory. The mood is warm and respectful. The background features high-end architectural details of a modern estate lobby, consistent with a clean and safe corporate aesthetic." src="https://lh3.googleusercontent.com/aida/AP1WRLsMnLh8uwOkodKrxWx6gtj2izGEq0pLZi68dxOTxaZlQfIKQtqF2hzbk4YSwlYZlqI5eYMEJ06wODXaeFo4Otq6UXl9LKevXoDt9fe9x7Rn6KpzkhlVhNSU-JrmqA6x2DQSSCdMYulFwBnyTJuX2L4fHSgCpBNziVnky0K3dp0GIuzP4yCwDZMlvl3am_Z_LU-ECCGUkjZw2uZuVdRvC_B5kpg8VhXDP9xoF1Xla9vreK4kG4IhDcJVPJkI"/>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-container text-on-tertiary-container rounded-full p-0.5 border-2 border-white">
+<span class="material-symbols-outlined text-[10px]" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Julia Vane</h4>
+<div class="flex items-center gap-1">
+<p class="text-caption text-on-surface-variant">Block B • Unit 302</p>
+<span class="text-[10px] font-label-md px-1.5 py-0.5 bg-secondary-container text-on-secondary-container rounded uppercase">Floor Rep</span>
+</div>
+</div>
+</div>
+<!-- Resident Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 hover:border-primary transition-colors">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A friendly headshot of a tech professional residing in the estate. The image is bright and well-lit, emphasizing a safe and verified community feel. Minimalist and professional corporate style." src="https://lh3.googleusercontent.com/aida/AP1WRLuiIg3qTl4pRCwbIVjN-QNI2ARZpBO8q0p_jwnAD2U16oGoe0ECfaghQWgjsoMK4IRHJsnEpZ3HlCb9oUlXpfVQztejEW1ZJq64OZGfzB1O2PpbYBuUzH3cuBaSqMfjow2y_7WJ9cldGIfO9Q2JxvitUTR6pDIX-cCZZjygw6JHVrcvWhChNfyA_dqTDT-7Len-GjxmbbQKi5HYljlOniQw8NQ_FusXWWarqyaO1kFjgWVw2NxoOm0rDDN0"/>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-container text-on-tertiary-container rounded-full p-0.5 border-2 border-white">
+<span class="material-symbols-outlined text-[10px]" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Liam O'Connor</h4>
+<p class="text-caption text-on-surface-variant">Block A • Unit 905</p>
+</div>
+</div>
+<!-- Resident Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 hover:border-primary transition-colors">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A professional woman's portrait for a resident directory. Her expression is approachable. The backdrop is a sun-drenched balcony of a luxury apartment with soft, modern colors that evoke a peaceful and exclusive lifestyle." src="https://lh3.googleusercontent.com/aida/AP1WRLtV3uZB6NRO5lmbO39qeTq_8DmPQ3ClQ2OcFXYB0maVh8OPygyq7oJm4KUkdO7m5m-hRNWzUJc518lSVzdgANmN_7jYdHL-zyt9nCuQSBYcCYD0miES1n6Ucqtl1LY8DaWguruIMvwKKmF2bqTBPHHrF99_118S6j8ojC1LIK16N7MdggMtosSL0gEq9RGUuRf5gYf48RRDvnfkOzxYvuQdReWWjQ5yYvq0gqz8w_6KytVj-oIAkBesnTz2"/>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-container text-on-tertiary-container rounded-full p-0.5 border-2 border-white">
+<span class="material-symbols-outlined text-[10px]" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Sophia Grant</h4>
+<p class="text-caption text-on-surface-variant">Block C • Unit 1508</p>
+</div>
+</div>
+<!-- Resident Card 5 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 hover:border-primary transition-colors">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A portrait of a male resident for an upscale directory. He has a welcoming smile. The visual quality is high-end, utilizing soft focus backgrounds of premium common areas and a crisp, corporate finish." src="https://lh3.googleusercontent.com/aida/AP1WRLtyi-oYi6iT-xr9lbTyDQIKiKW2gjCsI3IW3HDKJm-dnBDSmmlhdxdNmGxzmERba7dy0nEWsvLhxhs6rCJba9m5BqChcjtVeYJw9xwJdwl377gHdHsv5uVuyKdzMcIsSAR2zKtg-mt4q6Zd4vPgRiS0cB7LHKZVYKeI9vp-KlNagN_qkf7pMm7xeVYV-OEtTsg3NH26DN6PNasmm4Y_t4ET6QiOccQPCIG7-qriNZeEncZvQet-cgAi_7Jj"/>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-container text-on-tertiary-container rounded-full p-0.5 border-2 border-white">
+<span class="material-symbols-outlined text-[10px]" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">James Wilson</h4>
+<p class="text-caption text-on-surface-variant">Block B • Unit 512</p>
+</div>
+</div>
+<!-- Resident Card 6 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 hover:border-primary transition-colors">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="Portrait of a female architect resident. She looks confident and professional. The background is minimalist and high-end, with plenty of white space and soft lighting that aligns with a clean corporate design language." src="https://lh3.googleusercontent.com/aida/AP1WRLs3N4qiQKx3hm7-kdc9D4zbxkWcSLOl4cMi5uHRBhoJwCORIqt3AUtSpisHx_1BhD8tr3eZzn2EL8cAuWh-6W2a5lWurL2mLuHzL2HLtICgBAMn6xhmz95C7m46SE-Vi97kWMyzPtkdT3EVnEdVUU0uFSjeH-nVAlsXbuFIZpCx2epeGvPvdyOAAooYzhgw11a1zyk4OiEpY73DF8OyiFN4iPJzhli_y09Yq5qv3mWtbSZ9V7QQdLoWwgeN"/>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-container text-on-tertiary-container rounded-full p-0.5 border-2 border-white">
+<span class="material-symbols-outlined text-[10px]" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Isabella Rossi</h4>
+<p class="text-caption text-on-surface-variant">Block C • Unit 104</p>
+</div>
+</div>
+<!-- Resident Card 7 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 hover:border-primary transition-colors">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="Portrait of a young male professional in a luxury residence. Lighting is natural and flattering. The setting is modern and expensive-looking, reinforcing the safe and elite nature of the community." src="https://lh3.googleusercontent.com/aida/AP1WRLtUp1FOkhQ2mhdeq-VVM1FPoRgYALb2KUVkMA9LTRbXXQWFsc-6b4SdrLxqFzNW0i_kBNOu2sObFXTqRV9LrvbrvhTZiQMzKAkrXxln81Ye-96Mey7ygLqGYL4Jo69Okpx7j2OpMkZ9eRtMsDqYcGT9BlTZgFCXhBSA52wXlatl9U5d7EGh7abAucftpmuAvWx2qWIQfNOsGkQyWB4oBp2IDkTy1_9OtxTLXCcpASSxT_EUv28myJkOdKc"/>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-container text-on-tertiary-container rounded-full p-0.5 border-2 border-white">
+<span class="material-symbols-outlined text-[10px]" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Kevin Zhang</h4>
+<p class="text-caption text-on-surface-variant">Block A • Unit 602</p>
+</div>
+</div>
+<!-- Resident Card 8 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center gap-4 hover:border-primary transition-colors">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover border border-outline-variant" data-alt="A sophisticated portrait for a secure residential directory. The woman has an approachable and calm expression. Background is a neutral, tastefully decorated high-end apartment room, glowing with soft ambient light." src="https://lh3.googleusercontent.com/aida/AP1WRLvJhy7RLpbzu35BqaKduypk_8tuGymRvBgQMY7TnwCHYMBoKDDDmcTZXpd_I1Rn3IHotQnk0hsuYX6vuAf2BDUDcGNfhmbYrkOwMRnnDZTrcaOpZ5_aIevcQh8umKjC3YVHTg19k9tvmnhAHWXUS-6NAdSMgZcydO2Vd_iFLt49NyH1zhVv9uKn2DFcoOLWERbAPiBi509vbhZ02GwscdR2Uvfkh9MbGma7NZtUyROd6hEbOlG48e1p7it0"/>
+<div class="absolute -bottom-1 -right-1 bg-tertiary-container text-on-tertiary-container rounded-full p-0.5 border-2 border-white">
+<span class="material-symbols-outlined text-[10px]" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Amara Okafor</h4>
+<div class="flex items-center gap-1">
+<p class="text-caption text-on-surface-variant">Block B • Unit 1403</p>
+<span class="text-[10px] font-label-md px-1.5 py-0.5 bg-secondary-container text-on-secondary-container rounded uppercase">Floor Rep</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Privacy & Security Disclaimer -->
+<div class="p-stack-lg bg-surface-container border-l-4 border-primary rounded-r-xl flex gap-stack-md items-start">
+<span class="material-symbols-outlined text-primary" data-icon="shield">shield</span>
+<div>
+<h4 class="font-semibold text-on-surface">Secure Directory Protocol</h4>
+<p class="text-sm text-on-surface-variant max-w-2xl mt-1">This directory is visible only to verified residents of Premium Estates. Resident contact details are hidden to maintain privacy. Use the Resident OS Messaging system for secure internal communication.</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Prevent real navigation for demo
+                if (link.getAttribute('href') === '#') e.preventDefault();
+            });
+        });
+
+        // Search Filter Interaction Simulation
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const residentCards = document.querySelectorAll('section:last-of-type > div');
+            
+            residentCards.forEach(card => {
+                const name = card.querySelector('h4').textContent.toLowerCase();
+                const unit = card.querySelector('p').textContent.toLowerCase();
+                if (name.includes(query) || unit.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body></html>

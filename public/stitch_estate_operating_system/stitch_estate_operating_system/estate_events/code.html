@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#d8e3fb",
+                    "outline": "#75777d",
+                    "inverse-primary": "#bcc7de",
+                    "on-surface": "#0b1c30",
+                    "surface-tint": "#545f73",
+                    "secondary-fixed": "#dae2fd",
+                    "on-primary-container": "#8590a6",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "surface-bright": "#f8f9ff",
+                    "tertiary": "#00190e",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "on-secondary-container": "#5c647a",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#dae2fd",
+                    "surface-variant": "#d3e4fe",
+                    "error-container": "#ffdad6",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "inverse-surface": "#213145",
+                    "outline-variant": "#c5c6cd",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "surface-container-high": "#dce9ff",
+                    "background": "#f8f9ff",
+                    "tertiary-container": "#00301e",
+                    "surface-container-highest": "#d3e4fe",
+                    "secondary": "#565e74",
+                    "primary": "#091426",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "surface-container-low": "#eff4ff",
+                    "surface-container": "#e5eeff",
+                    "primary-fixed-dim": "#bcc7de",
+                    "primary-container": "#1e293b",
+                    "on-surface-variant": "#45474c",
+                    "on-primary-fixed": "#111c2d",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#cbdbf5",
+                    "on-primary-fixed-variant": "#3c475a",
+                    "on-tertiary-fixed": "#002113",
+                    "tertiary-fixed": "#6ffbbe",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-secondary-fixed": "#131b2e",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#00a472"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "stack-sm": "8px",
+                    "container-max": "1440px",
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "caption": ["Inter"],
+                    "title-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen sticky left-0 top-0 w-64 bg-surface border-r border-outline-variant py-stack-lg z-50">
+<div class="px-6 mb-10">
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface">Resident OS</h1>
+<p class="font-label-md text-label-md text-on-surface-variant tracking-wider uppercase">Premium Estates</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-semibold transition-colors bg-surface-container-low group" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event</span>
+<span class="font-body-md text-body-md">Events</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md text-body-md">Directory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-body-md text-body-md">Marketplace</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-body-md text-body-md">Security</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">report</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-md text-body-md">Bookings</span>
+</a>
+</nav>
+<div class="px-6 pt-6 border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<img alt="Resident profile avatar" class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a sophisticated middle-aged man with a friendly expression. He is wearing a tailored navy blazer and a white linen shirt, set against a softly blurred background of a modern architectural estate. The lighting is bright and airy, reflecting a high-end, luxury lifestyle aesthetic with clean, minimalist tones." src="https://lh3.googleusercontent.com/aida/AP1WRLumqHC6hfAw7vzYBW50O039h5n-cpObhvQeYz12qlBvAFvBfFphU3DUq6l-MxSM9vASEFNy2XLHm-8dZZHizl2aW7z0F2X6Hat2_uIBegb8u1XYJmrV9sovmZxbZDmze1Ffz3uvhaFE09eov2v9K5kbLz1WBH6M8UcRQqb-0J3x5si-8jTssSE0-vWdf_KLG0-Xj03yAOa5gMayrAyD4gynHLAwnv_fxK6J7RwzwdxEVtmWqU28T0tIzFGo"/>
+<div>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Arthur Sterling</p>
+<p class="font-caption text-caption text-on-surface-variant">Penthouse 402</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-w-0 bg-background">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-margin-desktop py-stack-md z-40 bg-surface-bright shadow-sm sticky top-0">
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-outline">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary-container text-body-md w-64 transition-all" placeholder="Search events..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-all">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 px-margin-desktop py-stack-lg max-w-container-max mx-auto w-full">
+<!-- Page Header & Toggles -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-stack-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Community Events</h2>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md">Estate Meeting</span>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md">Family Fun Day</span>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md">Resident Networking</span>
+</div>
+</div>
+<div class="flex bg-surface-container-low p-1 rounded-xl">
+<button class="flex items-center gap-2 px-6 py-2 rounded-lg bg-surface-container-lowest text-primary font-semibold shadow-sm transition-all" id="listViewBtn">
+<span class="material-symbols-outlined">list</span>
+<span class="font-body-md text-body-md">List View</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-all" id="calendarViewBtn">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-body-md text-body-md">Calendar</span>
+</button>
+</div>
+</div>
+<!-- Views Container -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter" id="viewContainer">
+<!-- Left Column: Main Content (List/Calendar) -->
+<div class="lg:col-span-8 space-y-gutter" id="mainView">
+<!-- List View (Default) -->
+<div class="space-y-6" id="listView">
+<!-- Event Card 1 -->
+<div class="group relative overflow-hidden rounded-xl bg-surface-container-lowest border border-outline-variant hover:shadow-xl transition-all duration-300">
+<div class="h-64 relative overflow-hidden">
+<img alt="Elegant gala event" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A wide shot of a sophisticated gala dinner held in an elegant, modern estate garden at twilight. Long tables are decorated with pristine white linens, crystal glassware, and minimalist floral arrangements. Warm fairy lights are strung overhead between manicured trees, creating a soft, golden glow against the deep blue dusk. The atmosphere is exclusive and serene, reflecting high-end hospitality and professional event management." src="https://lh3.googleusercontent.com/aida/AP1WRLurmwwQloD_bAKzznoL0kAlvUH4drz-xL7eqmjRDx1QtkjrBqzhiCgDynxFuh5-x-QjKAPOdR_Y5B4EIEahSMKiXbAUT0LzEtSCrHI59c0gWlOdZeuqijzWDBhm-vj91__oSQDmtrp3cVY3xMOx6hTjdqVH1_eO9zhOq3p2xDcHSePCSuQYzhA1brdFpjYOG2NsOAVZLqA08-gL9xHLH3xMyxs0y5KqqmV-M7QTVOirARwPUOt7e8SBiN2U"/>
+<div class="absolute top-4 left-4">
+<span class="px-3 py-1 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg">RESIDENT NETWORKING</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-title-lg text-title-lg text-primary mb-1">Annual Spring Gala &amp; Networking</h3>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="flex items-center gap-1 font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                                    May 12, 2024
+                                                </span>
+<span class="flex items-center gap-1 font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                                    Estate Gardens
+                                                </span>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-primary">18:00</p>
+<p class="font-caption text-caption text-on-surface-variant">RSVP Deadline: May 10</p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div class="flex -space-x-2">
+<img alt="Attendee 1" class="w-8 h-8 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="Close-up portrait of a chic professional woman in an art gallery setting. The lighting is soft and flattering, highlighting her sophisticated minimalist jewelry." src="https://lh3.googleusercontent.com/aida/AP1WRLsVwOSL-SgDrzM3ZZG58W14oG5FMav_oBxozYdsQmWRGlNdnfCd81JBAI4hOnuJp724aFCKD29wLMpiNV-RYBPdl0UfcnQ6h_9k98lKklK2j7apLAyTILULKqepN7l8iG2Ph9U82-lxDXlUqXEIAOMz3BXGM9aH3EHT3K8yyef6-tLLPiwud-V95uvGu0kAODhvRVMCtv_NpktcpBtP3wyd1Kcfbnj3FO_eWCHggeMuXX1W7pPryXlmJIbZ"/>
+<img alt="Attendee 2" class="w-8 h-8 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="A portrait of a stylish man in a modern workspace with soft natural light streaming in from large windows." src="https://lh3.googleusercontent.com/aida/AP1WRLtzwdKS6TAcaDv60rBshhgeKuHJZm5xDBE0z0rIXJDlaquQ1zgbGPSaD9N1y1HpmsawGX3m4FgTTElZ2NFvBSzhbVViIsxOXFZgO3sxJR6_Ng_Nl292mZp8l-w6P4nNCv9BtMXIymy_4VxV-zhh8x9Hw_sfNCHstnC9NVeRBLPLaQwdGl7mdwCkwrVZOWHmfzWlEXuuIrhFT9hUf-i-XfMUVqIBeGNOl4F-5VX6J7yg1jwbV9mq_HkoqiW6"/>
+<img alt="Attendee 3" class="w-8 h-8 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="A professional young woman laughing in a luxury hotel lobby, featuring warm ambient lighting and rich textures." src="https://lh3.googleusercontent.com/aida/AP1WRLusZPGpTS1K7v03Vv3BfJ9htNFm1JsELXaxY2gsJzZz6ewx9Zcw1dlIxOvEw2CS7RTQICIV_I0PgLXduH1_wB2gVtgaE79H2rG8cdgajspz2xoYFh0d1lh2uzUUYzh2ripDdchk6-sSeW9ABnyn3nEbO7IIqvDmQW4gL1V9fHjnMITd2x1XHTYSMTdHlic6EjXJzrqZi3d9aef9A-Dj6Cuj1_r-fH8pAT-2Zd--kb3yG5hmxN6N5_-OxgUr"/>
+<div class="w-8 h-8 rounded-full bg-surface-container border-2 border-surface-container-lowest flex items-center justify-center font-label-md text-label-md text-on-surface-variant">+42</div>
+</div>
+<button class="bg-primary text-on-primary px-8 py-2 rounded-lg font-body-md text-body-md hover:opacity-90 active:scale-95 transition-all">RSVP Now</button>
+</div>
+</div>
+</div>
+<!-- Event Card 2 -->
+<div class="group relative overflow-hidden rounded-xl bg-surface-container-lowest border border-outline-variant hover:shadow-xl transition-all duration-300">
+<div class="h-64 relative overflow-hidden">
+<img alt="Modern boardroom" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="An ultra-modern, glass-walled boardroom within a luxury residential complex. A large, minimalist dark wood table is surrounded by ergonomic designer chairs. The room overlooks a lush, manicured cityscape at golden hour, with soft sunlight reflecting off architectural surfaces. The atmosphere is professional, quiet, and authoritative, emphasizing premium corporate-style estate management." src="https://lh3.googleusercontent.com/aida/AP1WRLsOnLN_uk-Bihdzme9xduU5T45qLREZyXc-iYQNVD5cRbOX4rQ6_-3EcGSzAAv3Z3pAdsfBub_lOh44Mv85VpQbVWf6koFgFuoEOfQ6hMymRbuyKchggfUnclVScSsGpFWL8Rh6aupZ4p78Kl4ftrYqFSFSoOifWjDEs2E2RNpX8EmPT3M695JwdESq9mVH6IS64SomXqypkglHjuaPiOXiALFrNjv5OE6baJtUWyKTx1tI7KlJm9hfYPa3"/>
+<div class="absolute top-4 left-4">
+<span class="px-3 py-1 bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-lg">ESTATE MEETING</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-title-lg text-title-lg text-primary mb-1">Quarterly Resident Council Meeting</h3>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="flex items-center gap-1 font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                                    June 05, 2024
+                                                </span>
+<span class="flex items-center gap-1 font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                                    Main Clubhouse
+                                                </span>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-primary">14:00</p>
+<p class="font-caption text-caption text-on-surface-variant">Attendance Mandatory</p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+<span class="font-body-md text-body-md text-on-surface-variant">12 Registered Representatives</span>
+</div>
+<button class="border border-outline text-primary px-8 py-2 rounded-lg font-body-md text-body-md hover:bg-surface-container transition-all">Add to Calendar</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Calendar View (Hidden by Default) -->
+<div class="hidden bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden" id="calendarView">
+<div class="p-6 border-b border-outline-variant flex items-center justify-between">
+<h3 class="font-title-lg text-title-lg text-primary">May 2024</h3>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-surface-container rounded-full transition-all"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-2 hover:bg-surface-container rounded-full transition-all"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<div class="calendar-grid bg-outline-variant/30 gap-[1px]">
+<!-- Day Headers -->
+<div class="bg-surface-container-lowest p-4 text-center font-label-md text-label-md text-on-surface-variant uppercase">Sun</div>
+<div class="bg-surface-container-lowest p-4 text-center font-label-md text-label-md text-on-surface-variant uppercase">Mon</div>
+<div class="bg-surface-container-lowest p-4 text-center font-label-md text-label-md text-on-surface-variant uppercase">Tue</div>
+<div class="bg-surface-container-lowest p-4 text-center font-label-md text-label-md text-on-surface-variant uppercase">Wed</div>
+<div class="bg-surface-container-lowest p-4 text-center font-label-md text-label-md text-on-surface-variant uppercase">Thu</div>
+<div class="bg-surface-container-lowest p-4 text-center font-label-md text-label-md text-on-surface-variant uppercase">Fri</div>
+<div class="bg-surface-container-lowest p-4 text-center font-label-md text-label-md text-on-surface-variant uppercase">Sat</div>
+<!-- Calendar Days (simplified) -->
+<div class="bg-surface-container-low/30 h-32 p-3 text-on-surface-variant/40">28</div>
+<div class="bg-surface-container-low/30 h-32 p-3 text-on-surface-variant/40">29</div>
+<div class="bg-surface-container-low/30 h-32 p-3 text-on-surface-variant/40">30</div>
+<div class="bg-surface-container-lowest h-32 p-3">1</div>
+<div class="bg-surface-container-lowest h-32 p-3">2</div>
+<div class="bg-surface-container-lowest h-32 p-3">3</div>
+<div class="bg-surface-container-lowest h-32 p-3">4</div>
+<!-- Row 2 -->
+<div class="bg-surface-container-lowest h-32 p-3">5</div>
+<div class="bg-surface-container-lowest h-32 p-3">6</div>
+<div class="bg-surface-container-lowest h-32 p-3">7</div>
+<div class="bg-surface-container-lowest h-32 p-3">8</div>
+<div class="bg-surface-container-lowest h-32 p-3">9</div>
+<div class="bg-surface-container-lowest h-32 p-3">10</div>
+<div class="bg-surface-container-lowest h-32 p-3">11</div>
+<!-- Row 3 with Event -->
+<div class="bg-surface-container-lowest h-32 p-3">
+<span class="block mb-2">12</span>
+<div class="bg-primary-container text-on-primary-container p-2 rounded text-[11px] leading-tight font-semibold shadow-sm">
+                                        Spring Gala @ 18:00
+                                    </div>
+</div>
+<div class="bg-surface-container-lowest h-32 p-3">13</div>
+<div class="bg-surface-container-lowest h-32 p-3">14</div>
+<div class="bg-surface-container-lowest h-32 p-3">15</div>
+<div class="bg-surface-container-lowest h-32 p-3">16</div>
+<div class="bg-surface-container-lowest h-32 p-3">17</div>
+<div class="bg-surface-container-lowest h-32 p-3">18</div>
+<!-- Fill rest (simplified) -->
+<div class="bg-surface-container-lowest h-32 p-3">19</div>
+<div class="bg-surface-container-lowest h-32 p-3">20</div>
+<div class="bg-surface-container-lowest h-32 p-3">21</div>
+<div class="bg-surface-container-lowest h-32 p-3">22</div>
+<div class="bg-surface-container-lowest h-32 p-3">23</div>
+<div class="bg-surface-container-lowest h-32 p-3">24</div>
+<div class="bg-surface-container-lowest h-32 p-3">25</div>
+<div class="bg-surface-container-lowest h-32 p-3">26</div>
+<div class="bg-surface-container-lowest h-32 p-3">27</div>
+<div class="bg-surface-container-lowest h-32 p-3">28</div>
+<div class="bg-surface-container-lowest h-32 p-3">29</div>
+<div class="bg-surface-container-lowest h-32 p-3">30</div>
+<div class="bg-surface-container-lowest h-32 p-3">31</div>
+<div class="bg-surface-container-low/30 h-32 p-3 text-on-surface-variant/40">1</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Bento Sidebar -->
+<div class="lg:col-span-4 space-y-gutter">
+<!-- Estate Announcements Card -->
+<div class="glass-card p-6 rounded-xl border border-outline-variant shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16"></div>
+<h4 class="font-title-lg text-title-lg text-primary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">campaign</span>
+                                Estate Updates
+                            </h4>
+<div class="space-y-4">
+<div class="border-l-2 border-primary-container pl-4">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">MAY 01</p>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Poolside terrace closed for maintenance until Friday.</p>
+</div>
+<div class="border-l-2 border-outline-variant pl-4">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">APR 28</p>
+<p class="font-body-md text-body-md text-on-surface">New parking permits available at the front desk.</p>
+</div>
+</div>
+</div>
+<!-- Featured Event Card -->
+<div class="bg-inverse-surface text-inverse-on-surface p-6 rounded-xl shadow-xl relative overflow-hidden group">
+<div class="absolute inset-0 opacity-20 transition-opacity group-hover:opacity-30">
+<img alt="Luxury pool" class="w-full h-full object-cover" data-alt="A cinematic, high-angle shot of a pristine infinity pool at an ultra-luxury estate at sunset. The water is crystal clear, reflecting the vibrant pink and orange hues of the sky. Elegant lounge chairs are arranged symmetrically along the edge. The lighting is dramatic and moody, capturing a high-end hospitality vibe with a modern corporate architectural feel." src="https://lh3.googleusercontent.com/aida/AP1WRLvxvhxBusz0NzYOrcAfNKWSrxptDjFsl7FRw3WadOpTwkCxxOHULkmIqEtB8NuhOiMkBLC8DiO55Msxt1CUmKQLLpdkVo8y12vloHgoF301e0HOEbUE9IY_e38sL9yamSJ_cFeRwhS9BuOWeD61s0JUwMHXV5iM0SA_PT2VLYHdEgf_B_GbBKfmnvTrXxkvWyBCz7bl1XbxJyfCvyCAJP_Qj3J1Fz0OgVlE7befjJPHIGfFj3U0utL5e25M"/>
+</div>
+<div class="relative z-10">
+<span class="inline-block px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md rounded mb-4">MEMBER EXCLUSIVE</span>
+<h4 class="font-headline-md text-headline-md mb-2">Summer Launch Party</h4>
+<p class="font-body-md text-body-md opacity-80 mb-6">Experience the pinnacle of estate living with our annual rooftop infinity pool opening.</p>
+<button class="w-full py-3 bg-surface-container-lowest text-primary font-semibold rounded-lg hover:bg-white transition-all">Secure Invitation</button>
+</div>
+</div>
+<!-- Mini Calendar Filter -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant">
+<h4 class="font-body-md text-body-md font-bold text-on-surface mb-4">Quick Filters</h4>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md hover:border-primary transition-all">This Weekend</button>
+<button class="px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md hover:border-primary transition-all">Free Events</button>
+<button class="px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md hover:border-primary transition-all">Family Friendly</button>
+<button class="px-3 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-md hover:border-primary transition-all">Sports &amp; Wellness</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Area -->
+<footer class="mt-auto px-margin-desktop py-stack-lg border-t border-outline-variant text-center md:text-left">
+<p class="font-caption text-caption text-on-surface-variant">© 2024 Resident OS. Managed by Premium Estates International.</p>
+</footer>
+</main>
+</div>
+<!-- Mobile Navigation Shell (Bottom Bar) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant flex justify-around items-center py-stack-md z-50">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event</span>
+<span class="font-label-md text-label-md">Events</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label-md text-label-md">Shop</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="font-label-md text-label-md">Profile</span>
+</button>
+</nav>
+<script>
+        const listViewBtn = document.getElementById('listViewBtn');
+        const calendarViewBtn = document.getElementById('calendarViewBtn');
+        const listView = document.getElementById('listView');
+        const calendarView = document.getElementById('calendarView');
+
+        listViewBtn.addEventListener('click', () => {
+            listView.classList.remove('hidden');
+            calendarView.classList.add('hidden');
+            
+            listViewBtn.classList.add('bg-surface-container-lowest', 'text-primary', 'font-semibold', 'shadow-sm');
+            listViewBtn.classList.remove('text-on-surface-variant');
+            
+            calendarViewBtn.classList.remove('bg-surface-container-lowest', 'text-primary', 'font-semibold', 'shadow-sm');
+            calendarViewBtn.classList.add('text-on-surface-variant');
+        });
+
+        calendarViewBtn.addEventListener('click', () => {
+            calendarView.classList.remove('hidden');
+            listView.classList.add('hidden');
+            
+            calendarViewBtn.classList.add('bg-surface-container-lowest', 'text-primary', 'font-semibold', 'shadow-sm');
+            calendarViewBtn.classList.remove('text-on-surface-variant');
+            
+            listViewBtn.classList.remove('bg-surface-container-lowest', 'text-primary', 'font-semibold', 'shadow-sm');
+            listViewBtn.classList.add('text-on-surface-variant');
+        });
+    </script>
+</body></html>
