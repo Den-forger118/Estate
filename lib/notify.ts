@@ -77,7 +77,9 @@ export async function sendPaymentReceipt(params: ReceiptParams): Promise<void> {
     return
   }
 
-  const fromAddress = process.env.NOTIFY_FROM_EMAIL ?? "receipts@mail.specialgardens.com"
+  // Default to Resend's pre-verified test sender so emails deliver during dev.
+  // In production set NOTIFY_FROM_EMAIL to an address on your verified domain.
+  const fromAddress = process.env.NOTIFY_FROM_EMAIL ?? "onboarding@resend.dev"
 
   try {
     const resend = new Resend(key)
@@ -139,7 +141,12 @@ export async function sendSetPasswordEmail(params: SetPasswordParams): Promise<v
     return
   }
 
-  const fromAddress = process.env.NOTIFY_FROM_EMAIL ?? "onboarding@mail.specialgardens.com"
+  // Default to Resend's pre-verified test sender so emails deliver during dev.
+  // IMPORTANT: with the test sender (onboarding@resend.dev), Resend only delivers
+  // to the email address the Resend account was signed up with. To test end-to-end,
+  // convert a lead whose email matches your Resend account email.
+  // In production set NOTIFY_FROM_EMAIL to an address on your verified domain.
+  const fromAddress = process.env.NOTIFY_FROM_EMAIL ?? "onboarding@resend.dev"
 
   try {
     const resend = new Resend(key)
