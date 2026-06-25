@@ -21,9 +21,18 @@ const IDS = {
   leaseDirect:     "88888888-0000-0000-0000-000000000002",
   planBoateng:   "bbbbbbbb-0000-0000-0000-000000000001",
   installments: [
-    "cccccccc-0000-0000-0000-000000000001", // seq 1 — PAID (down payment)
-    "cccccccc-0000-0000-0000-000000000002", // seq 2 — DUE (ready to collect)
-    "cccccccc-0000-0000-0000-000000000003", // seq 3 — PENDING (milestone-linked)
+    "cccccccc-0000-0000-0000-000000000001", // seq 1 — PAID  (down payment, Aug 2025)
+    "cccccccc-0000-0000-0000-000000000002", // seq 2 — PAID  (Oct 2025, milestone 1 complete)
+    "cccccccc-0000-0000-0000-000000000003", // seq 3 — DUE   (milestone 2 complete, due Apr 2026)
+    "cccccccc-0000-0000-0000-000000000004", // seq 4 — PENDING (milestone 3 in progress)
+    "cccccccc-0000-0000-0000-000000000005", // seq 5 — PENDING
+    "cccccccc-0000-0000-0000-000000000006", // seq 6 — PENDING
+    "cccccccc-0000-0000-0000-000000000007", // seq 7 — PENDING
+    "cccccccc-0000-0000-0000-000000000008", // seq 8 — PENDING (final)
+  ],
+  constructionUpdates: [
+    "dddddddd-0000-0000-0000-000000000001", // milestone 1 photo
+    "dddddddd-0000-0000-0000-000000000002", // milestone 2 photo
   ],
   rentPay: [
     "99999999-0000-0000-0000-000000000001",
@@ -53,16 +62,21 @@ const IDS = {
 async function buildPool(connectionString: string): Promise<Pool> {
   const url = new URL(connectionString)
   const hostname = url.hostname
-  const ip = await new Promise<string>((res, rej) =>
-    dns.resolve4(hostname, (err, addrs) => (err ? rej(err) : res(addrs[0]))),
-  )
+  const ip = await new Promise<string | null>((resolve) => {
+    const timer = setTimeout(() => resolve(null), 4000)
+    dns.resolve4(hostname, (err, addrs) => {
+      clearTimeout(timer)
+      resolve(err || !addrs?.length ? null : addrs[0])
+    })
+  })
   return new Pool({
-    host: ip,
+    host: ip ?? hostname,
     port: parseInt(url.port) || 5432,
     database: url.pathname.slice(1),
     user: url.username,
     password: decodeURIComponent(url.password),
     ssl: { servername: hostname, rejectUnauthorized: true },
+    connectionTimeoutMillis: 10000,
   })
 }
 
@@ -147,9 +161,11 @@ async function run(client: PoolClient) {
   ]
 
   for (let i = 0; i < milestoneNames.length; i++) {
-    const status = i === 0 ? "COMPLETED" : i === 1 ? "IN_PROGRESS" : "NOT_STARTED"
-    const completedAt = i === 0 ? new Date("2025-09-30") : null
-    const targetDate = i === 1 ? new Date("2026-04-30") : null
+    const status = i <= 1 ? "COMPLETED" : i === 2 ? "IN_PROGRESS" : "NOT_STARTED"
+    const completedAt =
+      i === 0 ? new Date("2025-09-30") :
+      i === 1 ? new Date("2026-01-15") : null
+    const targetDate = i === 2 ? new Date("2026-06-30") : null
 
     await client.query(
       `INSERT INTO milestones (id, developer_id, project_id, name, sequence, status, target_date, completed_at)
@@ -186,12 +202,13 @@ async function run(client: PoolClient) {
     [IDS.buyerUserBoateng, IDS.developer, "buyer@specialgardens.example", buyerHash, IDS.buyerDrBoateng],
   )
 
-  // Unit CT-501: HANDED_OVER — linked to Dr. Boateng (off-plan lifecycle path)
+  // Unit CT-501: HANDED_OVER — buyer link is now via residents.buyer_id (lifecycle bridge),
+  // not via units.buyer_id, so findUnitByBuyer won't surface this completed unit.
   await client.query(
-    `INSERT INTO units (id, developer_id, project_id, code, type, size_sqm, price_total, status, buyer_id)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, 'HANDED_OVER', $8)
+    `INSERT INTO units (id, developer_id, project_id, code, type, size_sqm, price_total, status)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, 'HANDED_OVER')
      ON CONFLICT (id) DO NOTHING`,
-    [IDS.unitCT501, IDS.developer, IDS.cedarTerrace, "CT-501", "Penthouse", 250.0, 680000, IDS.buyerDrBoateng],
+    [IDS.unitCT501, IDS.developer, IDS.cedarTerrace, "CT-501", "Penthouse", 250.0, 680000],
   )
 
   // Unit ML-003: HANDED_OVER — direct rental (no prior off-plan buyer)
@@ -268,11 +285,11 @@ async function run(client: PoolClient) {
     )
   }
 
-  // ── Off-plan payment plan — Dr. Boateng buying ML-001 (Detached Villa, 845,000 GHS)
+  // ── Off-plan payment plan — Dr. Boateng buying ML-001 (Detached Villa, GH₵845,000)
   // Demonstrates the full installment → payment → reconcile flow.
-  // Mark ML-001 as RESERVED so it's no longer available as a lead unit.
+  // Mark ML-001 as SOLD (down payment + installment 2 paid → committed buyer).
   await client.query(
-    "UPDATE units SET status = 'RESERVED', buyer_id = $1 WHERE id = $2",
+    "UPDATE units SET status = 'SOLD', buyer_id = $1 WHERE id = $2",
     [IDS.buyerDrBoateng, IDS.unitML001],
   )
 
@@ -283,28 +300,53 @@ async function run(client: PoolClient) {
     [IDS.planBoateng, IDS.developer, IDS.unitML001, IDS.buyerDrBoateng],
   )
 
-  // Installment 1: down payment — PAID (253,500 GHS = 30%)
-  await client.query(
-    `INSERT INTO installments (id, developer_id, payment_plan_id, sequence, amount, status, paid_amount, paid_at)
-     VALUES ($1, $2, $3, 1, 253500, 'PAID', 253500, '2025-08-15T00:00:00Z')
-     ON CONFLICT (id) DO NOTHING`,
-    [IDS.installments[0], IDS.developer, IDS.planBoateng],
-  )
+  // 8-installment schedule: 30% down + 7 × GH₵84,500 (total GH₵845,000)
+  // Paid so far: GH₵338,000 (40%). Next: seq 3 DUE, rest PENDING.
+  const installmentRows = [
+    { seq: 1, amount: 253500, status: "PAID",    paid: 253500, paidAt: "2025-08-15T00:00:00Z", due: null,                  milestone: null              },
+    { seq: 2, amount:  84500, status: "PAID",    paid:  84500, paidAt: "2025-10-15T00:00:00Z", due: null,                  milestone: IDS.milestones[0] },
+    { seq: 3, amount:  84500, status: "DUE",     paid:      0, paidAt: null,                   due: "2026-04-30T00:00:00Z", milestone: IDS.milestones[1] },
+    { seq: 4, amount:  84500, status: "PENDING", paid:      0, paidAt: null,                   due: "2026-07-31T00:00:00Z", milestone: IDS.milestones[2] },
+    { seq: 5, amount:  84500, status: "PENDING", paid:      0, paidAt: null,                   due: "2026-10-31T00:00:00Z", milestone: IDS.milestones[3] },
+    { seq: 6, amount:  84500, status: "PENDING", paid:      0, paidAt: null,                   due: "2027-01-31T00:00:00Z", milestone: IDS.milestones[4] },
+    { seq: 7, amount:  84500, status: "PENDING", paid:      0, paidAt: null,                   due: "2027-04-30T00:00:00Z", milestone: IDS.milestones[5] },
+    { seq: 8, amount:  84500, status: "PENDING", paid:      0, paidAt: null,                   due: "2027-07-31T00:00:00Z", milestone: IDS.milestones[6] },
+  ]
+  for (const r of installmentRows) {
+    await client.query(
+      `INSERT INTO installments
+         (id, developer_id, payment_plan_id, sequence, amount, status, paid_amount, paid_at, due_date, linked_milestone_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       ON CONFLICT (id) DO NOTHING`,
+      [
+        IDS.installments[r.seq - 1], IDS.developer, IDS.planBoateng,
+        r.seq, r.amount, r.status, r.paid, r.paidAt, r.due, r.milestone,
+      ],
+    )
+  }
 
-  // Installment 2: milestone-based payment — DUE (253,500 GHS; milestone 1 completed)
+  // Construction update photos — one per completed milestone
   await client.query(
-    `INSERT INTO installments (id, developer_id, payment_plan_id, sequence, amount, status, paid_amount, due_date, linked_milestone_id)
-     VALUES ($1, $2, $3, 2, 253500, 'DUE', 0, '2026-03-31T00:00:00Z', $4)
+    `INSERT INTO construction_updates (id, developer_id, milestone_id, caption, photo_url, posted_by_id, posted_at)
+     VALUES ($1, $2, $3, $4, $5, $6, '2025-10-02T09:00:00Z')
      ON CONFLICT (id) DO NOTHING`,
-    [IDS.installments[1], IDS.developer, IDS.planBoateng, IDS.milestones[0]],
+    [
+      IDS.constructionUpdates[0], IDS.developer, IDS.milestones[0],
+      "Foundation & substructure complete — concrete cured and inspected.",
+      "https://picsum.photos/seed/estate-foundation/800/500",
+      IDS.adminUser,
+    ],
   )
-
-  // Installment 3: future milestone — PENDING (338,000 GHS = remaining 40%)
   await client.query(
-    `INSERT INTO installments (id, developer_id, payment_plan_id, sequence, amount, status, paid_amount, linked_milestone_id)
-     VALUES ($1, $2, $3, 3, 338000, 'PENDING', 0, $4)
+    `INSERT INTO construction_updates (id, developer_id, milestone_id, caption, photo_url, posted_by_id, posted_at)
+     VALUES ($1, $2, $3, $4, $5, $6, '2026-01-16T10:30:00Z')
      ON CONFLICT (id) DO NOTHING`,
-    [IDS.installments[2], IDS.developer, IDS.planBoateng, IDS.milestones[1]],
+    [
+      IDS.constructionUpdates[1], IDS.developer, IDS.milestones[1],
+      "Superstructure at full height — roofline ready for waterproofing works.",
+      "https://picsum.photos/seed/estate-superstructure/800/500",
+      IDS.adminUser,
+    ],
   )
 
   // Maintenance tickets — mix of priorities and statuses
@@ -330,7 +372,8 @@ async function run(client: PoolClient) {
   console.log(`  Units     : 5 (ML-001, ML-002, ML-003, CT-401, CT-501)`)
   console.log(`  Milestones: ${milestoneNames.length} (Meadowline)`)
   console.log(`  Residents : 2 (CT-501 / Dr. Boateng via off-plan; ML-003 / A. Sterling direct)`)
-  console.log(`  Payment plan: ML-001 / Dr. Boateng — 3 installments (1 PAID, 1 DUE, 1 PENDING)`)
+  console.log(`  Payment plan: ML-001 / Dr. Boateng — 8 installments (2 PAID GH₵338k, 1 DUE, 5 PENDING)`)
+  console.log(`  Milestones: 2 COMPLETED (with photos), 1 IN_PROGRESS, 5 NOT_STARTED`)
   console.log(`  Leases    : 2  Rent payments: 6  Maintenance tickets: 5`)
   console.log(`  Users     : admin@specialgardens.example / Admin1234!`)
   console.log(`              sales@specialgardens.example / Sales1234!`)

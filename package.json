@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "db:migrate": "tsx db/migrate.ts",
-    "db:seed": "tsx db/seed.ts"
+    "db:seed": "tsx db/seed.ts",
+    "db:reseed": "tsx db/reseed.ts",
+    "dev:tunnel": "ngrok http 3000"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

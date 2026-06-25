@@ -35,6 +35,7 @@ import {
   getUnits,
   updateMaintenanceTicket,
 } from "../../lib/api-client";
+import { formatGHS } from "../../lib/formatters";
 import type {
   DashboardOverview,
   Lease,
@@ -298,13 +299,6 @@ export function DashboardOverview() {
       .catch(() => {});
   }, []);
 
-  const fmt = (n: number) =>
-    n >= 1_000_000
-      ? `GH₵ ${(n / 1_000_000).toFixed(1)}M`
-      : n >= 1_000
-        ? `GH₵ ${(n / 1_000).toFixed(0)}k`
-        : `GH₵ ${n}`;
-
   return (
     <>
       <PageHeader
@@ -329,7 +323,7 @@ export function DashboardOverview() {
           />
           <KpiCard
             label="Off-Plan Collected"
-            value={fmt(overview.offPlan.totalGhsCollected)}
+            value={formatGHS(overview.offPlan.totalGhsCollected, { compact: true })}
             trend={`${overview.offPlan.unitsSold} units sold`}
             text={`${overview.offPlan.unitsAvailable} units still available`}
           />
@@ -654,7 +648,7 @@ export function ReportsView() {
       {overview ? (
         <div className="dashboard-kpi-grid">
           <KpiCard label="Occupancy Rate" value={`${overview.residency.occupancyPct}%`} trend={`${overview.residency.occupiedUnits}/${overview.residency.totalUnits} units`} text="Active leases vs total units" />
-          <KpiCard label="Off-Plan Collected" value={`GH₵ ${(overview.offPlan.totalGhsCollected / 1000).toFixed(0)}k`} trend={`${overview.offPlan.unitsSold} sold`} text="GHS installments paid to date" />
+          <KpiCard label="Off-Plan Collected" value={formatGHS(overview.offPlan.totalGhsCollected, { compact: true })} trend={`${overview.offPlan.unitsSold} sold`} text="GHS installments paid to date" />
           <KpiCard label="Rent Collection" value={`${overview.residency.rentCollectionPct}%`} trend={overview.residency.rentCollectionPct >= 90 ? "On plan" : "Below target"} text={`${overview.residency.activeLeases} active leases`} />
           <KpiCard label="Open Maintenance" value={String(overview.residency.openTickets)} trend={overview.residency.urgentTickets > 0 ? `${overview.residency.urgentTickets} urgent` : "None urgent"} text="Unresolved tickets" />
         </div>
@@ -810,7 +804,7 @@ function LeasesView() {
     l.id.slice(0, 8),
     l.status,
     l.endDate ?? "Open",
-    `GH₵ ${l.rentMonthly.toLocaleString()}`,
+    formatGHS(l.rentMonthly),
   ]);
 
   return (
@@ -849,7 +843,7 @@ function PaymentsView() {
     p.ref ?? "—",
     p.leaseId.slice(0, 8),
     p.status,
-    `GH₵ ${p.amount.toLocaleString()}`,
+    formatGHS(p.amount),
     p.dueDate ?? "—",
   ]);
 

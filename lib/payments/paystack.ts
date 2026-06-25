@@ -73,6 +73,48 @@ export const paystackProvider: PaymentProvider = {
     }
   },
 
+  async verifyTransaction(reference: string): Promise<WebhookEvent | null> {
+    let secretKey: string
+    try {
+      secretKey = getSecretKey()
+    } catch {
+      return null
+    }
+
+    let res: Response
+    try {
+      res = await fetch(
+        `${BASE_URL}/transaction/verify/${encodeURIComponent(reference)}`,
+        { headers: { Authorization: `Bearer ${secretKey}` } },
+      )
+    } catch {
+      return null
+    }
+
+    if (!res.ok) return null
+
+    const json = await res.json().catch(() => null) as {
+      status: boolean
+      data?: Record<string, unknown>
+    } | null
+    if (!json?.status || !json.data) return null
+
+    const data = json.data
+    if (data.status !== "success") return null
+
+    const amountPesewas = data.amount
+    if (typeof amountPesewas !== "number") return null
+
+    return {
+      event: "charge.success",
+      reference: data.reference as string,
+      amountCedis: amountPesewas / 100,
+      channel: (data.channel as string | undefined) ?? "unknown",
+      metadata: (data.metadata as Record<string, unknown> | undefined) ?? {},
+      rawPayload: data,
+    }
+  },
+
   parseWebhook(payload: Record<string, unknown>): WebhookEvent | null {
     const event = payload.event as string | undefined;
     if (event !== "charge.success") return null;

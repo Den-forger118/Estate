@@ -15,6 +15,12 @@ export function formatGHS(
 ): string {
   const { compact = false, decimals = 0 } = options;
 
+  if (compact && amount >= 1_000_000) {
+    const millions = amount / 1_000_000;
+    const rounded = millions.toFixed(decimals > 0 ? decimals : 1);
+    return `GH₵ ${rounded}M`;
+  }
+
   if (compact && amount >= 1000) {
     const thousands = amount / 1000;
     const rounded = decimals > 0 ? thousands.toFixed(decimals) : Math.round(thousands);

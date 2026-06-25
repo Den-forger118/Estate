@@ -6,10 +6,46 @@ import { findProjectById } from "@/lib/repos/projects"
 import { findPaymentPlanByUnit, findInstallmentsByPlan } from "@/lib/repos/paymentPlans"
 import { findMilestonesByProject } from "@/lib/repos/milestones"
 import { findDocumentsByUnit } from "@/lib/repos/documents"
+import { findPaymentByProviderRef, receiveAndReconcile } from "@/lib/repos/payments"
+import { getPaymentProvider } from "@/lib/payments"
 import { formatGHS } from "@/lib/formatters"
 import { statusClassForLabel } from "@/app/components/statusBadge"
 import { SignOutButton } from "./SignOutButton"
 import { PayNowButton } from "./PayNowButton"
+
+/**
+ * Verify-on-return: called when the buyer lands back on /portal?payment=done&reference=...
+ *
+ * Calls Paystack's Transaction Verify API server-side (never trusts the client's word),
+ * then runs the same receiveAndReconcile path used by the webhook.
+ * Idempotent: if the webhook already processed this reference, findPaymentByProviderRef
+ * returns early so no duplicate Payment row is created.
+ */
+async function runVerifyOnReturn(reference: string, developerId: string): Promise<void> {
+  // Fast idempotency check — skip the Paystack API call entirely if already reconciled
+  const existing = await findPaymentByProviderRef(reference, developerId)
+  if (existing) return
+
+  const provider = getPaymentProvider()
+  const event = await provider.verifyTransaction(reference)
+  if (!event) return  // not a successful charge
+
+  // Mirror the same installmentId extraction used by the webhook handler
+  const fromMeta = event.metadata.installmentId
+  const installmentId =
+    typeof fromMeta === "string" && fromMeta.length > 0
+      ? fromMeta
+      : (event.reference.match(/^PAY-([0-9a-f-]{36})-[0-9a-f]+$/i)?.[1] ?? null)
+
+  await receiveAndReconcile({
+    developerId,
+    providerRef:   event.reference,
+    amount:        event.amountCedis,
+    channel:       event.channel,
+    rawPayload:    event.rawPayload,
+    installmentId,
+  })
+}
 
 function fmt(date?: string | null) {
   if (!date) return "—"
@@ -23,6 +59,7 @@ export default async function BuyerPortalPage(
   const { buyerId, email } = session.user
   const sp = await searchParams
   const paymentDone = sp.payment === "done"
+  const returnReference = typeof sp.reference === "string" ? sp.reference : null
 
   if (!buyerId) redirect("/login?error=no-buyer-record")
 
@@ -47,6 +84,15 @@ export default async function BuyerPortalPage(
     findProjectById(unit.projectId, developerId),
     findPaymentPlanByUnit(unit.id, developerId),
   ])
+
+  // Verify-on-return: if the buyer just completed a payment, confirm it server-side
+  // with Paystack's verify API and reconcile before loading installments so the
+  // page renders the updated status immediately. Errors are non-fatal.
+  if (paymentDone && returnReference) {
+    await runVerifyOnReturn(returnReference, developerId).catch((err) =>
+      console.error("[verify-on-return]", err),
+    )
+  }
 
   const [installments, milestones, documents] = await Promise.all([
     paymentPlan ? findInstallmentsByPlan(paymentPlan.id) : Promise.resolve([]),

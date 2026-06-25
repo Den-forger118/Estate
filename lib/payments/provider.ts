@@ -38,4 +38,10 @@ export interface PaymentProvider {
   verifyWebhook(rawBody: string, signatureHeader: string | null): boolean;
   /** Parse the already-verified JSON payload into a normalized WebhookEvent. */
   parseWebhook(payload: Record<string, unknown>): WebhookEvent | null;
+  /**
+   * Server-side transaction verify — calls the provider's verify API.
+   * Returns a WebhookEvent if the charge succeeded, null otherwise.
+   * Used by verify-on-return so the portal can reconcile without a webhook tunnel.
+   */
+  verifyTransaction(reference: string): Promise<WebhookEvent | null>;
 }

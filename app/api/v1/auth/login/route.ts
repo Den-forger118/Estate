@@ -18,7 +18,16 @@ export async function POST(req: NextRequest) {
   }
 
   const { email, password } = parsed.data
-  const user = await findUserByEmail(email)
+
+  let user
+  try {
+    user = await findUserByEmail(email)
+  } catch {
+    return NextResponse.json(
+      { error: "Service waking up, please try again in a moment." },
+      { status: 503 },
+    )
+  }
 
   if (!user || !user.passwordHash) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })

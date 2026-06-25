@@ -28,6 +28,7 @@ function LoginForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
+        signal: AbortSignal.timeout(15000),
       });
 
       if (!res.ok) {
@@ -53,8 +54,13 @@ function LoginForm() {
       // httpOnly cookie to the server component on the next request,
       // avoiding any soft-nav race with Set-Cookie timing.
       window.location.href = destination;
-    } catch {
-      setError("Network error. Please try again.");
+    } catch (err) {
+      const isTimeout = err instanceof DOMException && err.name === "TimeoutError";
+      setError(
+        isTimeout
+          ? "Request timed out — the service may be warming up. Please try again."
+          : "Network error. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
