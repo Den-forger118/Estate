@@ -6,7 +6,9 @@ const BASE_URL = "https://api.paystack.co";
 function getSecretKey(): string {
   const key = process.env.PAYSTACK_SECRET_KEY;
   if (!key) throw new Error("PAYSTACK_SECRET_KEY is not set");
-  if (!key.startsWith("sk_test_")) throw new Error("PAYSTACK_SECRET_KEY must be a test key (sk_test_…)");
+  if (process.env.NODE_ENV === "production" && key.startsWith("sk_test_")) {
+    console.warn("[paystack] WARNING: using a test key (sk_test_…) in production — payments will not settle");
+  }
   return key;
 }
 

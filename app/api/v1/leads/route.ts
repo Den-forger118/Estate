@@ -33,11 +33,11 @@ export async function POST(req: NextRequest) {
     req.headers.get("x-real-ip") ??
     "unknown"
 
-  const rl = checkRateLimit(ip)
+  const rl = await checkRateLimit(ip)
   if (!rl.allowed) {
     return NextResponse.json(
       { error: "Too many requests — please try again in a minute." },
-      { status: 429, headers: { "Retry-After": "60" } },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } },
     )
   }
 

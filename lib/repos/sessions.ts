@@ -1,12 +1,19 @@
+import { createHash } from "crypto"
 import { query, queryOne } from "../db"
 import type { Role } from "@/app/data/types"
+
+// Session tokens: the raw token lives only in the httpOnly cookie and is never
+// stored. The DB column holds SHA-256(raw_token) so a DB read yields nothing
+// usable without the original cookie value.
+function hashToken(raw: string): string {
+  return createHash("sha256").update(raw).digest("hex")
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type SessionWithUser = {
   id: string
   userId: string
-  token: string
   expiresAt: Date
   user: {
     id: string
@@ -23,7 +30,6 @@ export async function findSessionByToken(token: string): Promise<SessionWithUser
   type Row = {
     session_id: string
     user_id: string
-    token: string
     expires_at: Date
     u_id: string
     u_developer_id: string | null
@@ -36,7 +42,6 @@ export async function findSessionByToken(token: string): Promise<SessionWithUser
     `SELECT
        s.id         AS session_id,
        s.user_id,
-       s.token,
        s.expires_at,
        u.id         AS u_id,
        u.developer_id AS u_developer_id,
@@ -45,15 +50,15 @@ export async function findSessionByToken(token: string): Promise<SessionWithUser
        u.buyer_id   AS u_buyer_id
      FROM sessions s
      JOIN users u ON u.id = s.user_id
-     WHERE s.token = $1`,
-    [token],
+     WHERE s.token = $1
+       AND u.status = 'ACTIVE'`,
+    [hashToken(token)],
   )
   if (!row) return null
 
   return {
     id: row.session_id,
     userId: row.user_id,
-    token: row.token,
     expiresAt: row.expires_at,
     user: {
       id: row.u_id,
@@ -72,14 +77,18 @@ export async function createSession(
 ): Promise<void> {
   await query(
     "INSERT INTO sessions (user_id, token, expires_at) VALUES ($1, $2, $3)",
-    [userId, token, expiresAt],
+    [userId, hashToken(token), expiresAt],
   )
 }
 
 export async function deleteSessionByToken(token: string): Promise<void> {
-  await query("DELETE FROM sessions WHERE token = $1", [token])
+  await query("DELETE FROM sessions WHERE token = $1", [hashToken(token)])
 }
 
 export async function deleteSessionById(id: string): Promise<void> {
   await query("DELETE FROM sessions WHERE id = $1", [id])
+}
+
+export async function deleteSessionsByUserId(userId: string): Promise<void> {
+  await query("DELETE FROM sessions WHERE user_id = $1", [userId])
 }

@@ -92,7 +92,18 @@
       "Bash(curl -s http://localhost:3000/dashboard -H 'RSC: 1' -H 'Next-Router-State-Tree: %5B%22%22%2C%7B%22children%22%3A%5B%22dashboard%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%5D%7D%5D%7D%2Cnull%2Cnull%2Ctrue%5D')",
       "Bash(git *)",
       "Bash(node *)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(mkdir -p /home/danquah-jephthah-kojo/Downloads/Estate-main/app/api/v1/accounts/\\\\[userId\\\\]/resend-link)",
+      "Bash(mkdir -p /home/danquah-jephthah-kojo/Downloads/Estate-main/app/api/v1/accounts/\\\\[userId\\\\]/reset-password)",
+      "Bash(mkdir -p /home/danquah-jephthah-kojo/Downloads/Estate-main/app/api/v1/accounts/\\\\[userId\\\\]/suspend)",
+      "Bash(mkdir -p /home/danquah-jephthah-kojo/Downloads/Estate-main/app/api/v1/accounts/\\\\[userId\\\\]/reactivate)",
+      "Bash(pnpm db:migrate *)",
+      "Bash(pnpm build *)",
+      "Bash(gh pr *)",
+      "Bash(grep -rn \"SQL\\\\|sql\\\\|\\\\$\\\\{\" /home/danquah-jephthah-kojo/Downloads/Estate-main/lib/repos --include=\"*.ts\")",
+      "Bash(grep '`')",
+      "Bash(pnpm audit *)",
+      "Bash(grep -rn 'developer_id.*$[0-9]\\\\|$[0-9].*developer_id' /home/danquah-jephthah-kojo/Downloads/Estate-main/lib/repos/)"
     ]
   }
 }

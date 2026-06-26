@@ -8,8 +8,9 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function submit(event: FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault();
     if (!email.trim()) {
       setError("Please enter your email address.");
@@ -17,7 +18,19 @@ export default function ForgotPasswordPage() {
       return;
     }
     setError("");
-    setMessage("If this email is registered, a reset link has been sent.");
+    setLoading(true);
+    try {
+      await fetch("/api/v1/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+    } catch {
+      // Network error — still show generic message to avoid account enumeration.
+    } finally {
+      setLoading(false);
+    }
+    setMessage("If that email is registered, a reset link has been sent.");
   }
 
   return (
@@ -39,8 +52,8 @@ export default function ForgotPasswordPage() {
               required
             />
           </label>
-          <button className="btn btn-primary" type="submit">
-            Send Reset Link
+          <button className="btn btn-primary" type="submit" disabled={loading}>
+            {loading ? "Sending…" : "Send Reset Link"}
           </button>
           <div className="auth-links">
             <Link href="/login">Return to login</Link>

@@ -135,9 +135,12 @@ function buildSetPasswordHtml(p: SetPasswordParams): string {
 export async function sendSetPasswordEmail(params: SetPasswordParams): Promise<void> {
   const key = process.env.RESEND_API_KEY
   if (!key) {
-    console.log(
-      `[notify] RESEND_API_KEY not set — set-password link for ${params.buyerEmail}: ${params.setPasswordUrl}`,
-    )
+    if (process.env.NODE_ENV !== "production") {
+      // Development only — never log token URLs in production.
+      console.log(`[notify][dev] set-password link for ${params.buyerEmail}: ${params.setPasswordUrl}`)
+    } else {
+      console.warn(`[notify] RESEND_API_KEY not set — set-password email suppressed for ${params.buyerEmail}`)
+    }
     return
   }
 

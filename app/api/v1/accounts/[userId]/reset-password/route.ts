@@ -9,7 +9,7 @@ import { sendSetPasswordEmail } from "@/lib/notify"
 type Params = { params: Promise<{ userId: string }> }
 type UserRow = { id: string; email: string; full_name: string | null; developer_id: string | null }
 
-// POST /api/v1/accounts/[userId]/reset-password — ADMIN | SALES only
+// POST /api/v1/accounts/[userId]/reset-password — ADMIN only
 // Clears the existing password hash and issues a fresh set-password link.
 // Admin never sees a password — buyer sets a new one via the link.
 export async function POST(_req: NextRequest, { params }: Params) {
@@ -17,7 +17,7 @@ export async function POST(_req: NextRequest, { params }: Params) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { role, developerId, id: actorUserId } = session.user
-  if (role !== "ADMIN" && role !== "SALES") {
+  if (role !== "ADMIN") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
   if (!developerId) return NextResponse.json({ error: "No developer context" }, { status: 403 })

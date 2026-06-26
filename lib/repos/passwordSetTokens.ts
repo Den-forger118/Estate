@@ -54,6 +54,26 @@ export async function markTokenUsed(id: string): Promise<void> {
   )
 }
 
+/**
+ * Atomically validate and consume a set-password token in one SQL statement.
+ * Returns the user_id if the token was valid and not yet used; null otherwise.
+ * Concurrent calls with the same token: only one UPDATE wins the used_at = NULL
+ * condition — the other gets no rows back and is rejected.
+ */
+export async function consumeSetPasswordToken(raw: string): Promise<string | null> {
+  const tokenHash = hashToken(raw)
+  const row = await queryOne<{ user_id: string }>(
+    `UPDATE password_set_tokens
+        SET used_at = now()
+      WHERE token_hash = $1
+        AND used_at IS NULL
+        AND expires_at > now()
+      RETURNING user_id`,
+    [tokenHash],
+  )
+  return row?.user_id ?? null
+}
+
 /** Invalidate all unused tokens for a user (call before issuing a new one). */
 export async function invalidatePriorTokens(userId: string): Promise<void> {
   await query(

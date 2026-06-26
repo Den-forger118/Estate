@@ -4,13 +4,37 @@ import { compare } from "bcryptjs"
 import { createSession, COOKIE_NAME, SESSION_TTL_MS } from "@/lib/auth"
 import { findUserByEmail, touchLastLogin } from "@/lib/repos/users"
 import { createAuditLog } from "@/lib/repos/auditLog"
+import { checkRateLimit } from "@/lib/rateLimit"
 
 const schema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
 })
 
+// 20 attempts per 5 minutes per IP — blocks spray attacks and credential stuffing.
+const IP_MAX = 20
+const IP_WINDOW_MS = 5 * 60_000
+
+// 10 attempts per 10 minutes per email — blocks targeted attacks on a single account
+// from many IPs (distributed credential stuffing).
+const EMAIL_MAX = 10
+const EMAIL_WINDOW_MS = 10 * 60_000
+
 export async function POST(req: NextRequest) {
+  // ── IP rate limit — checked before body parse to prevent amplification ────
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    req.headers.get("x-real-ip") ??
+    "unknown"
+
+  const ipRl = await checkRateLimit(`login:ip:${ip}`, { max: IP_MAX, windowMs: IP_WINDOW_MS })
+  if (!ipRl.allowed) {
+    return NextResponse.json(
+      { error: "Too many login attempts. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(ipRl.retryAfterSec) } },
+    )
+  }
+
   const body = await req.json().catch(() => null)
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
@@ -18,6 +42,15 @@ export async function POST(req: NextRequest) {
   }
 
   const { email, password } = parsed.data
+
+  // ── Per-email rate limit — catches distributed attacks targeting one account ─
+  const emailRl = await checkRateLimit(`login:email:${email.toLowerCase()}`, { max: EMAIL_MAX, windowMs: EMAIL_WINDOW_MS })
+  if (!emailRl.allowed) {
+    return NextResponse.json(
+      { error: "Too many login attempts. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(emailRl.retryAfterSec) } },
+    )
+  }
 
   let user
   try {

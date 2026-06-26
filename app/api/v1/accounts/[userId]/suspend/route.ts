@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getSession } from "@/lib/auth"
 import { queryOne } from "@/lib/db"
 import { setUserStatus } from "@/lib/repos/users"
+import { deleteSessionsByUserId } from "@/lib/repos/sessions"
 import { createAuditLog } from "@/lib/repos/auditLog"
 
 type Params = { params: Promise<{ userId: string }> }
@@ -30,6 +31,7 @@ export async function POST(_req: NextRequest, { params }: Params) {
   }
 
   await setUserStatus(userId, "SUSPENDED")
+  await deleteSessionsByUserId(userId)
 
   await createAuditLog({
     developerId,
