@@ -5,6 +5,7 @@ import { invalidatePriorTokens, issueSetPasswordToken } from "@/lib/repos/passwo
 import { sendSetPasswordEmail } from "@/lib/notify"
 import { createAuditLog } from "@/lib/repos/auditLog"
 import { checkRateLimit } from "@/lib/rateLimit"
+import { getAppBaseUrl } from "@/lib/appUrl"
 
 const schema = z.object({
   email: z.string().email(),
@@ -54,9 +55,7 @@ export async function POST(req: NextRequest) {
     if (user && user.status === "ACTIVE") {
       await invalidatePriorTokens(user.id)
       const rawToken = await issueSetPasswordToken(user.id)
-      const appUrl =
-        process.env.APP_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-      const setPasswordUrl = `${appUrl}/set-password?token=${rawToken}`
+      const setPasswordUrl = `${getAppBaseUrl()}/set-password?token=${rawToken}`
 
       await sendSetPasswordEmail({
         buyerEmail: user.email,

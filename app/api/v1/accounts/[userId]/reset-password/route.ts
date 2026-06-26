@@ -5,6 +5,7 @@ import { clearPasswordHash } from "@/lib/repos/users"
 import { invalidatePriorTokens, issueSetPasswordToken } from "@/lib/repos/passwordSetTokens"
 import { createAuditLog } from "@/lib/repos/auditLog"
 import { sendSetPasswordEmail } from "@/lib/notify"
+import { getAppBaseUrl } from "@/lib/appUrl"
 
 type Params = { params: Promise<{ userId: string }> }
 type UserRow = { id: string; email: string; full_name: string | null; developer_id: string | null }
@@ -36,8 +37,7 @@ export async function POST(_req: NextRequest, { params }: Params) {
   await clearPasswordHash(userId)
   await invalidatePriorTokens(userId)
   const rawToken = await issueSetPasswordToken(userId)
-  const appUrl = process.env.APP_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-  const setPasswordUrl = `${appUrl}/set-password?token=${rawToken}`
+  const setPasswordUrl = `${getAppBaseUrl()}/set-password?token=${rawToken}`
 
   await sendSetPasswordEmail({
     buyerEmail: user.email,

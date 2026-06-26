@@ -6,6 +6,7 @@ import { findLeadById, updateLeadStatus } from "@/lib/repos/leads"
 import { createAuditLog } from "@/lib/repos/auditLog"
 import { issueSetPasswordToken, invalidatePriorTokens } from "@/lib/repos/passwordSetTokens"
 import { sendSetPasswordEmail } from "@/lib/notify"
+import { getAppBaseUrl } from "@/lib/appUrl"
 import type { PoolClient } from "pg"
 
 const patchSchema = z.discriminatedUnion("action", [
@@ -154,8 +155,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   try {
     await invalidatePriorTokens(result.userId)
     const rawToken = await issueSetPasswordToken(result.userId)
-    const appUrl = process.env.APP_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-    const setPasswordUrl = `${appUrl}/set-password?token=${rawToken}`
+    const setPasswordUrl = `${getAppBaseUrl()}/set-password?token=${rawToken}`
 
     await sendSetPasswordEmail({
       buyerEmail: result.email,
