@@ -64,6 +64,28 @@ export async function completeMilestone(
   )
 }
 
+/**
+ * Activate the next milestone in sequence within the same project.
+ * Only transitions NOT_STARTED → IN_PROGRESS; no-ops if already active/completed or if
+ * this was the last milestone. Must be called inside the same transaction as completeMilestone.
+ * Returns the activated milestone's id, or null if there was no next milestone.
+ */
+export async function activateNextMilestone(
+  currentMilestoneId: string,
+  client: PoolClient,
+): Promise<string | null> {
+  const result = await client.query<{ id: string }>(
+    `UPDATE milestones
+     SET status = 'IN_PROGRESS'
+     WHERE project_id = (SELECT project_id FROM milestones WHERE id = $1)
+       AND sequence   = (SELECT sequence   FROM milestones WHERE id = $1) + 1
+       AND status = 'NOT_STARTED'
+     RETURNING id`,
+    [currentMilestoneId],
+  )
+  return result.rows[0]?.id ?? null
+}
+
 // ─── Stalled-ops query ────────────────────────────────────────────────────────
 
 export type StalledMilestone = {

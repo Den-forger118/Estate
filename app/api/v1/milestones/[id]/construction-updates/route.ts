@@ -2,13 +2,36 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { getSession } from "@/lib/auth"
 import { findMilestoneById } from "@/lib/repos/milestones"
-import { createUpdate } from "@/lib/repos/constructionUpdates"
+import { createUpdate, findUpdatesByMilestone } from "@/lib/repos/constructionUpdates"
 
 const schema = z.object({
   photoUrl: z.string().url(),
   caption: z.string().max(500).optional(),
 })
 
+// GET — list all photos for a milestone (staff only)
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const session = await getSession()
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+
+  const { role, developerId } = session.user
+  if (role !== "ADMIN" && role !== "OPS" && role !== "SALES") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
+  if (!developerId) return NextResponse.json({ error: "No developer context" }, { status: 403 })
+
+  const { id } = await params
+  const milestone = await findMilestoneById(id, developerId)
+  if (!milestone) return NextResponse.json({ error: "Milestone not found" }, { status: 404 })
+
+  const updates = await findUpdatesByMilestone(id)
+  return NextResponse.json(updates)
+}
+
+// POST — add a photo to a milestone (ADMIN|OPS; allowed on COMPLETED milestones too)
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -31,9 +54,7 @@ export async function POST(
 
   const milestone = await findMilestoneById(id, developerId)
   if (!milestone) return NextResponse.json({ error: "Milestone not found" }, { status: 404 })
-  if (milestone.status === "COMPLETED") {
-    return NextResponse.json({ error: "Cannot add updates to a completed milestone" }, { status: 409 })
-  }
+  // Removed: COMPLETED guard — staff may add photos to any milestone, including finished phases.
 
   const update = await createUpdate({
     developerId,

@@ -51,6 +51,7 @@ const schema = z.object({
   downPayment: z.number().nonnegative(),
   currency: z.enum(["GHS", "USD"]).default("GHS"),
   zeroInterest: z.boolean().default(true),
+  saleType: z.enum(["OFF_PLAN", "COMPLETED"]).default("OFF_PLAN"),
   installments: z.array(installmentSchema).min(1),
 })
 
@@ -111,6 +112,7 @@ export async function POST(
         downPayment: parsed.data.downPayment,
         currency: parsed.data.currency,
         zeroInterest: parsed.data.zeroInterest,
+        saleType: parsed.data.saleType,
         installments: parsed.data.installments.map((i) => ({
           sequence: i.sequence,
           amount: i.amount,

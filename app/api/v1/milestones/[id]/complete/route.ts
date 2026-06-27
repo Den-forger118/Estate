@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getSession } from "@/lib/auth"
 import { withTransaction } from "@/lib/db"
-import { findMilestoneById, completeMilestone } from "@/lib/repos/milestones"
+import { findMilestoneById, completeMilestone, activateNextMilestone } from "@/lib/repos/milestones"
 import { countUpdatesByMilestone } from "@/lib/repos/constructionUpdates"
 import { setInstallmentsDueByMilestone } from "@/lib/repos/paymentPlans"
 import { createAuditLog } from "@/lib/repos/auditLog"
@@ -37,9 +37,12 @@ export async function PATCH(
 
   const now = new Date()
 
+  let activatedNextId: string | null = null
+
   await withTransaction(async (client) => {
     await completeMilestone(id, now, client)
     await setInstallmentsDueByMilestone(id, developerId, now, client)
+    activatedNextId = await activateNextMilestone(id, client)
   })
 
   await createAuditLog({
@@ -47,12 +50,14 @@ export async function PATCH(
     actorUserId: session.user.id,
     action: "MILESTONE_COMPLETE",
     target: id,
-    meta: { milestoneName: milestone.name },
+    meta: { milestoneName: milestone.name, activatedNextMilestoneId: activatedNextId },
   }).catch(() => {})
 
   return NextResponse.json({
     id,
     status: "COMPLETED",
     completedAt: now.toISOString(),
+    nextMilestoneActivated: activatedNextId !== null,
+    nextMilestoneId: activatedNextId,
   })
 }

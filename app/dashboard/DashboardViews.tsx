@@ -25,6 +25,7 @@ import { LeadsView } from "./LeadsView";
 import { OffPlanPaymentsView } from "./OffPlanPaymentsView";
 import { PaymentPlansView } from "./PaymentPlansView";
 import { MilestonesView } from "./MilestonesView";
+import { BuyerChatView } from "./BuyerChatView";
 import {
   getDashboardOverview,
   getMaintenance,
@@ -931,7 +932,7 @@ export function ModuleView({ module }: { module: DashboardModule }) {
   if (module === "payment-plans") return <PaymentPlansView />;
   if (module === "milestones") return <MilestonesView />;
   if (module === "maintenance") return <MaintenanceView />;
-  if (module === "messages") return <MessagesView />;
+  if (module === "messages") return <BuyerChatView />;
   if (module === "documents") return <DocumentsView />;
   if (module === "reports") return <ReportsView />;
   if (module === "settings") return <SettingsView />;

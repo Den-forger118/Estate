@@ -1,5 +1,5 @@
 import { query, queryOne } from "../db"
-import type { PaymentPlan, Installment, InstallmentStatus } from "@/app/data/types"
+import type { PaymentPlan, Installment, InstallmentStatus, SaleType } from "@/app/data/types"
 import type { PoolClient } from "pg"
 
 // ─── Payment Plan ─────────────────────────────────────────────────────────────
@@ -13,6 +13,7 @@ type PlanRow = {
   down_payment: string
   currency: string
   zero_interest: boolean
+  sale_type: string
   created_at: Date
 }
 
@@ -25,6 +26,7 @@ function mapPlan(row: PlanRow): PaymentPlan {
     downPayment: parseFloat(row.down_payment),
     currency: row.currency,
     zeroInterest: row.zero_interest,
+    saleType: (row.sale_type ?? "OFF_PLAN") as SaleType,
   }
 }
 
@@ -120,14 +122,15 @@ export async function createPaymentPlanWithInstallments(
     downPayment: number
     currency: string
     zeroInterest: boolean
+    saleType?: SaleType
     installments: NewInstallment[]
   },
   client: PoolClient,
 ): Promise<{ plan: PaymentPlan; installments: Installment[] }> {
   const planResult = await client.query<PlanRow>(
     `INSERT INTO payment_plans
-       (developer_id, unit_id, buyer_id, total_amount, down_payment, currency, zero_interest)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
+       (developer_id, unit_id, buyer_id, total_amount, down_payment, currency, zero_interest, sale_type)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
      RETURNING *`,
     [
       data.developerId,
@@ -137,6 +140,7 @@ export async function createPaymentPlanWithInstallments(
       data.downPayment,
       data.currency,
       data.zeroInterest,
+      data.saleType ?? "OFF_PLAN",
     ],
   )
   const plan = mapPlan(planResult.rows[0])
@@ -242,6 +246,18 @@ export async function findInstallmentNotifyData(
     installmentSeq: row.sequence,
     currency:      row.currency,
   }
+}
+
+/**
+ * Returns true if any installment in the plan has received any payment (paidAmount > 0).
+ * Used by the unassign-unit flow to block removal when real money has changed hands.
+ */
+export async function hasPaidInstallments(planId: string): Promise<boolean> {
+  const row = await queryOne<{ cnt: string }>(
+    "SELECT COUNT(*) AS cnt FROM installments WHERE payment_plan_id = $1 AND paid_amount > 0",
+    [planId],
+  )
+  return parseInt(row?.cnt ?? "0", 10) > 0
 }
 
 /** Set all PENDING installments linked to a milestone to DUE. Called inside a transaction. */

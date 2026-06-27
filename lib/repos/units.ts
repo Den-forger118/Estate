@@ -56,16 +56,25 @@ export async function findUnitById(
   return row ? mapUnit(row) : null
 }
 
-/** Returns the first unit linked to this buyer (a buyer typically owns one unit). */
+/** Returns ALL units linked to this buyer, ordered by code. */
+export async function findUnitsByBuyer(
+  buyerId: string,
+  developerId: string,
+): Promise<Unit[]> {
+  const rows = await query<UnitRow>(
+    "SELECT * FROM units WHERE buyer_id = $1 AND developer_id = $2 ORDER BY code",
+    [buyerId, developerId],
+  )
+  return rows.map(mapUnit)
+}
+
+/** @deprecated Use findUnitsByBuyer — returns the first unit only. */
 export async function findUnitByBuyer(
   buyerId: string,
   developerId: string,
 ): Promise<Unit | null> {
-  const row = await queryOne<UnitRow>(
-    "SELECT * FROM units WHERE buyer_id = $1 AND developer_id = $2 LIMIT 1",
-    [buyerId, developerId],
-  )
-  return row ? mapUnit(row) : null
+  const units = await findUnitsByBuyer(buyerId, developerId)
+  return units[0] ?? null
 }
 
 export async function updateUnitStatus(

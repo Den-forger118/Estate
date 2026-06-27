@@ -121,6 +121,7 @@ const mockPaymentPlans: PaymentPlan[] = [
     downPayment: 85500,
     currency: "GHS",
     zeroInterest: true,
+    saleType: "OFF_PLAN" as const,
   },
   {
     id: "plan-2",
@@ -130,6 +131,7 @@ const mockPaymentPlans: PaymentPlan[] = [
     downPayment: 57000,
     currency: "USD",
     zeroInterest: false,
+    saleType: "OFF_PLAN" as const,
   },
   {
     id: "plan-3",
@@ -139,6 +141,7 @@ const mockPaymentPlans: PaymentPlan[] = [
     downPayment: 204000,
     currency: "GHS",
     zeroInterest: true,
+    saleType: "OFF_PLAN" as const,
   },
 ];
 
@@ -570,7 +573,7 @@ async function mockGetStalledOps(): Promise<StalledOpsData> {
   };
 }
 
-async function mockCompleteMilestone(milestoneId: string): Promise<Milestone> {
+async function mockCompleteMilestone(milestoneId: string): Promise<Milestone & { nextMilestoneActivated: boolean; nextMilestoneId: string | null }> {
   await delay(300);
   const milestone = mockMilestones.find((m) => m.id === milestoneId);
   if (!milestone) throw new Error("Milestone not found");
@@ -578,7 +581,10 @@ async function mockCompleteMilestone(milestoneId: string): Promise<Milestone> {
   if (updates.length === 0) throw new Error("Cannot complete milestone without a progress photo.");
   milestone.status = "COMPLETED";
   milestone.completedAt = new Date().toISOString().slice(0, 10);
-  return { ...milestone };
+  // Activate the next milestone in mock data
+  const next = mockMilestones.find((m) => m.sequence === milestone.sequence + 1 && m.status === "NOT_STARTED");
+  if (next) next.status = "IN_PROGRESS";
+  return { ...milestone, nextMilestoneActivated: !!next, nextMilestoneId: next?.id ?? null };
 }
 
 async function mockPostConstructionUpdate(
@@ -692,7 +698,7 @@ async function liveGetStalledOps(): Promise<StalledOpsData> {
   return res.json();
 }
 
-async function liveCompleteMilestone(milestoneId: string): Promise<Milestone> {
+async function liveCompleteMilestone(milestoneId: string): Promise<Milestone & { nextMilestoneActivated: boolean; nextMilestoneId: string | null }> {
   const res = await fetch(`/api/v1/milestones/${milestoneId}/complete`, { method: "PATCH" });
   if (!res.ok) {
     const body = await res.json().catch(() => ({ error: "Failed to complete milestone" }));
@@ -801,7 +807,7 @@ export async function getStalledOps(): Promise<StalledOpsData> {
   return DATA_MODE === "mock" ? mockGetStalledOps() : liveGetStalledOps();
 }
 
-export async function completeMilestone(milestoneId: string): Promise<Milestone> {
+export async function completeMilestone(milestoneId: string): Promise<Milestone & { nextMilestoneActivated: boolean; nextMilestoneId: string | null }> {
   return DATA_MODE === "mock"
     ? mockCompleteMilestone(milestoneId)
     : liveCompleteMilestone(milestoneId);

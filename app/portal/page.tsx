@@ -1,17 +1,21 @@
 import { redirect } from "next/navigation"
 import { requireUser } from "@/lib/auth"
 import { findBuyerByIdRaw } from "@/lib/repos/buyers"
-import { findUnitByBuyer } from "@/lib/repos/units"
+import { findUnitsByBuyer } from "@/lib/repos/units"
 import { findProjectById } from "@/lib/repos/projects"
 import { findPaymentPlanByUnit, findInstallmentsByPlan } from "@/lib/repos/paymentPlans"
 import { findMilestonesByProject } from "@/lib/repos/milestones"
 import { findDocumentsByUnit } from "@/lib/repos/documents"
+import { findUpdatesByProject } from "@/lib/repos/constructionUpdates"
 import { findPaymentByProviderRef, receiveAndReconcile } from "@/lib/repos/payments"
 import { getPaymentProvider } from "@/lib/payments"
 import { formatGHS } from "@/lib/formatters"
 import { statusClassForLabel } from "@/app/components/statusBadge"
 import { SignOutButton } from "./SignOutButton"
 import { PayNowButton } from "./PayNowButton"
+import { PhotoGallery } from "./PhotoGallery"
+import { ChatPanel } from "./ChatPanel"
+import type { Unit } from "@/app/data/types"
 
 /**
  * Verify-on-return: called when the buyer lands back on /portal?payment=done&reference=...
@@ -68,8 +72,9 @@ export default async function BuyerPortalPage(
 
   const developerId = rawBuyer.developerId
 
-  const unit = await findUnitByBuyer(buyerId, developerId)
-  if (!unit) {
+  const units = await findUnitsByBuyer(buyerId, developerId)
+
+  if (units.length === 0) {
     return (
       <PortalShell email={email}>
         <div className="dashboard-card" style={{ padding: "2rem", textAlign: "center" }}>
@@ -87,6 +92,10 @@ export default async function BuyerPortalPage(
     )
   }
 
+  // Unit selection: ?unit=<id> param, or default to the first unit
+  const selectedUnitId = typeof sp.unit === "string" ? sp.unit : null
+  const unit = (selectedUnitId ? units.find((u) => u.id === selectedUnitId) : null) ?? units[0]
+
   const [project, paymentPlan] = await Promise.all([
     findProjectById(unit.projectId, developerId),
     findPaymentPlanByUnit(unit.id, developerId),
@@ -96,6 +105,7 @@ export default async function BuyerPortalPage(
   if (!paymentPlan) {
     return (
       <PortalShell email={email}>
+        {units.length > 1 && <UnitSwitcher units={units} selectedUnitId={unit.id} />}
         <div className="dashboard-card" style={{ padding: "2rem", textAlign: "center" }}>
           <h2>Your payment plan is being set up</h2>
           <p className="meta" style={{ maxWidth: "440px", margin: "0.75rem auto 0" }}>
@@ -120,19 +130,29 @@ export default async function BuyerPortalPage(
     )
   }
 
-  const [installments, milestones, documents] = await Promise.all([
+  const [installments, milestones, documents, allUpdates] = await Promise.all([
     paymentPlan ? findInstallmentsByPlan(paymentPlan.id) : Promise.resolve([]),
     findMilestonesByProject(unit.projectId),
     findDocumentsByUnit(unit.id),
+    findUpdatesByProject(unit.projectId),
   ])
+
+  // Group construction updates by milestone id for gallery rendering
+  const updatesByMilestone = new Map<string, typeof allUpdates>()
+  for (const u of allUpdates) {
+    const existing = updatesByMilestone.get(u.milestoneId) ?? []
+    updatesByMilestone.set(u.milestoneId, [...existing, u])
+  }
 
   const totalPaid = installments.reduce((s, i) => s + i.paidAmount, 0)
   const totalDue = paymentPlan?.totalAmount ?? 0
   const pctPaid = totalDue > 0 ? Math.round((totalPaid / totalDue) * 100) : 0
-  const firstName = rawBuyer.fullName.split(" ")[0]
 
   return (
     <PortalShell email={email}>
+      {/* ── Unit switcher (only shown when buyer holds 2+ units) ── */}
+      {units.length > 1 && <UnitSwitcher units={units} selectedUnitId={unit.id} />}
+
       {/* ── Payment return banner ── */}
       {paymentDone && (
         <div
@@ -271,8 +291,8 @@ export default async function BuyerPortalPage(
         </section>
       )}
 
-      {/* ── Construction milestones ── */}
-      {milestones.length > 0 && (
+      {/* ── Construction milestones (OFF_PLAN only) ── */}
+      {paymentPlan.saleType === "OFF_PLAN" && milestones.length > 0 && (
         <section style={{ marginBottom: "1.5rem" }}>
           <h2 style={{ marginBottom: "0.75rem" }}>Construction Progress</h2>
           <div className="dashboard-kpi-grid">
@@ -291,8 +311,25 @@ export default async function BuyerPortalPage(
                       ? `Target: ${fmt(m.targetDate)}`
                       : "Not yet scheduled"}
                 </small>
+                <PhotoGallery updates={updatesByMilestone.get(m.id) ?? []} />
               </article>
             ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── Completed unit: ready-for-handover banner (replaces milestone section) ── */}
+      {paymentPlan.saleType === "COMPLETED" && (
+        <section className="dashboard-card" style={{ marginBottom: "1.5rem", padding: "1.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <span style={{ fontSize: "2rem" }}>🏠</span>
+            <div>
+              <strong style={{ fontSize: "1.05rem" }}>Unit complete &amp; ready</strong>
+              <p className="meta" style={{ margin: "0.25rem 0 0" }}>
+                This is a completed unit — construction is finished.
+                Once your payment is settled your handover will be arranged.
+              </p>
+            </div>
           </div>
         </section>
       )}
@@ -332,10 +369,50 @@ export default async function BuyerPortalPage(
         </section>
       )}
 
-      {documents.length === 0 && milestones.length === 0 && (
+      {documents.length === 0 && paymentPlan.saleType === "OFF_PLAN" && milestones.length === 0 && (
         <p className="meta">No additional information available yet. Check back as construction progresses.</p>
       )}
+
+      {/* ── Chat ── */}
+      <ChatPanel buyerId={buyerId!} unitId={unit.id} />
     </PortalShell>
+  )
+}
+
+function UnitSwitcher({ units, selectedUnitId }: { units: Unit[]; selectedUnitId: string }) {
+  return (
+    <nav
+      aria-label="Your units"
+      style={{
+        display: "flex",
+        gap: "0.5rem",
+        marginBottom: "1.5rem",
+        flexWrap: "wrap",
+      }}
+    >
+      {units.map((u) => {
+        const isActive = u.id === selectedUnitId
+        return (
+          <a
+            key={u.id}
+            href={`/portal?unit=${u.id}`}
+            style={{
+              padding: "0.4rem 1rem",
+              borderRadius: "6px",
+              border: "1px solid var(--border)",
+              background: isActive ? "var(--brand)" : "var(--surface)",
+              color: isActive ? "#fff" : "var(--text)",
+              fontWeight: isActive ? 600 : 400,
+              textDecoration: "none",
+              fontSize: "0.875rem",
+            }}
+          >
+            {u.code}
+            {u.type ? ` · ${u.type}` : ""}
+          </a>
+        )
+      })}
+    </nav>
   )
 }
 

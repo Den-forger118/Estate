@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getSession } from "@/lib/auth"
 import { findBuyerById, findBuyerByIdRaw } from "@/lib/repos/buyers"
-import { findUnitByBuyer } from "@/lib/repos/units"
+import { findUnitsByBuyer } from "@/lib/repos/units"
 import { findProjectById } from "@/lib/repos/projects"
 import { findPaymentPlanByUnit, findInstallmentsByPlan } from "@/lib/repos/paymentPlans"
 import { findMilestonesByProject } from "@/lib/repos/milestones"
@@ -39,8 +39,12 @@ export async function GET(
   const buyer = await findBuyerById(buyerId, scopedDeveloperId)
   if (!buyer) return NextResponse.json({ error: "Buyer not found" }, { status: 404 })
 
-  const unit = await findUnitByBuyer(buyerId, scopedDeveloperId)
-  if (!unit) return NextResponse.json({ error: "No unit linked to this buyer" }, { status: 404 })
+  const units = await findUnitsByBuyer(buyerId, scopedDeveloperId)
+  if (units.length === 0) return NextResponse.json({ error: "No unit linked to this buyer" }, { status: 404 })
+
+  // Support ?unitId= to select a specific unit; default to the first
+  const requestedUnitId = _req.nextUrl.searchParams.get("unitId")
+  const unit = (requestedUnitId ? units.find((u) => u.id === requestedUnitId) : null) ?? units[0]
 
   const [project, paymentPlan] = await Promise.all([
     findProjectById(unit.projectId, scopedDeveloperId),
@@ -59,6 +63,7 @@ export async function GET(
 
   return NextResponse.json({
     buyer,
+    units,
     unit,
     project,
     paymentPlan,

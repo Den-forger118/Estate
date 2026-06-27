@@ -7,6 +7,8 @@ export type UnitStatus = "AVAILABLE" | "RESERVED" | "SOLD" | "HANDED_OVER";
 
 export type InstallmentStatus = "PENDING" | "DUE" | "PAID" | "OVERDUE" | "PARTIAL";
 
+export type SaleType = "OFF_PLAN" | "COMPLETED";
+
 export type MilestoneStatus = "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
 
 export interface Project {
@@ -43,6 +45,7 @@ export interface PaymentPlan {
   downPayment: number;
   currency: string;
   zeroInterest: boolean;
+  saleType: SaleType;
 }
 
 export interface Installment {
@@ -205,6 +208,29 @@ export interface Payment {
   receivedAt: string;
   reconciledInstallmentId: string | null;
   reconStatus: ReconStatus;
+}
+
+// ─── Chat ────────────────────────────────────────────────────────────────────
+
+export interface ChatMessage {
+  id: string;
+  buyerId: string;
+  unitId: string;
+  senderRole: "BUYER" | "STAFF";
+  senderUserId: string;
+  body: string;
+  milestoneId: string | null;
+  milestoneName: string | null;
+  createdAt: string;
+}
+
+export interface ChatThread {
+  buyerId: string;
+  buyerName: string;
+  unitId: string;
+  unitCode: string;
+  lastMessage: string | null;
+  lastMessageAt: string | null;
 }
 
 // Response types for API endpoints

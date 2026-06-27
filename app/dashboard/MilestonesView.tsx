@@ -34,6 +34,7 @@ export function MilestonesView() {
   const [photoUrl, setPhotoUrl] = useState("");
   const [caption, setCaption] = useState("");
   const [submittingPhoto, setSubmittingPhoto] = useState(false);
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -75,13 +76,21 @@ export function MilestonesView() {
       setMilestones((prev) => {
         const next = new Map(prev);
         const list = next.get(milestone.projectId) ?? [];
+        // Update the completed milestone and activate the next one if the API says so
         next.set(
           milestone.projectId,
-          list.map((m) => (m.id === milestone.id ? { ...m, ...updated } : m)),
+          list.map((m) => {
+            if (m.id === milestone.id) return { ...m, ...updated };
+            if (updated.nextMilestoneId && m.id === updated.nextMilestoneId) {
+              return { ...m, status: "IN_PROGRESS" as const };
+            }
+            return m;
+          }),
         );
         return next;
       });
-      showToast(`"${milestone.name}" marked complete. Linked installments set to DUE.`);
+      const nextMsg = updated.nextMilestoneActivated ? " Next milestone is now active." : "";
+      showToast(`"${milestone.name}" marked complete. Linked installments set to DUE.${nextMsg}`);
     } catch (err) {
       showToast(err instanceof Error ? err.message : "Failed to complete milestone", "error");
     } finally {
@@ -104,7 +113,7 @@ export function MilestonesView() {
         next.set(addPhotoFor.milestoneId, [...existing, update]);
         return next;
       });
-      showToast("Progress photo added. You can now complete this milestone.");
+      showToast("Progress photo added.");
       setPhotoUrl("");
       setCaption("");
       setAddPhotoFor(null);
@@ -186,73 +195,107 @@ export function MilestonesView() {
                   <article
                     key={milestone.id}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.75rem",
                       padding: "0.75rem 1rem",
                       background: "var(--surface-alt)",
                       borderRadius: "var(--radius)",
                       border: needsPhoto ? "1px solid var(--accent)" : "1px solid transparent",
                     }}
                   >
-                    <span
-                      className="font-data-md"
-                      style={{
-                        minWidth: "1.5rem",
-                        color: "var(--muted)",
-                        textAlign: "center",
-                      }}
-                    >
-                      {milestone.sequence}
-                    </span>
-
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <strong style={{ display: "block", marginBottom: "0.125rem" }}>
-                        {milestone.name}
-                      </strong>
-                      <span className="meta">
-                        {milestone.completedAt
-                          ? `Completed ${formatDate(milestone.completedAt)}`
-                          : milestone.targetDate
-                          ? `Target ${formatDate(milestone.targetDate)}`
-                          : null}
-                        {milestoneUpdates.length > 0 && (
-                          <> · {milestoneUpdates.length} photo{milestoneUpdates.length !== 1 ? "s" : ""}</>
-                        )}
+                    {/* ── Header row ── */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <span
+                        className="font-data-md"
+                        style={{ minWidth: "1.5rem", color: "var(--muted)", textAlign: "center" }}
+                      >
+                        {milestone.sequence}
                       </span>
+
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <strong style={{ display: "block", marginBottom: "0.125rem" }}>
+                          {milestone.name}
+                        </strong>
+                        <span className="meta">
+                          {milestone.completedAt
+                            ? `Completed ${formatDate(milestone.completedAt)}`
+                            : milestone.targetDate
+                            ? `Target ${formatDate(milestone.targetDate)}`
+                            : null}
+                          {milestoneUpdates.length > 0 && (
+                            <> · {milestoneUpdates.length} photo{milestoneUpdates.length !== 1 ? "s" : ""}</>
+                          )}
+                        </span>
+                      </div>
+
+                      <span className={`status-chip ${statusClassForLabel(milestoneStatusLabel(milestone.status))}`}>
+                        {milestoneStatusLabel(milestone.status)}
+                      </span>
+
+                      {/* Actions: Add Photo available for IN_PROGRESS and COMPLETED; Complete only for IN_PROGRESS */}
+                      <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
+                        {(milestone.status === "IN_PROGRESS" || milestone.status === "COMPLETED") && (
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            style={{ fontSize: "0.8125rem", padding: "0.25rem 0.625rem" }}
+                            onClick={() =>
+                              setAddPhotoFor({ milestoneId: milestone.id, milestoneName: milestone.name })
+                            }
+                          >
+                            Add photo
+                          </button>
+                        )}
+                        {milestone.status === "IN_PROGRESS" && (
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            style={{ fontSize: "0.8125rem", padding: "0.25rem 0.625rem" }}
+                            disabled={!canComplete}
+                            title={needsPhoto ? "Add a progress photo before completing this milestone" : undefined}
+                            onClick={() => handleComplete(milestone)}
+                          >
+                            {isCompleting ? "Completing…" : "Complete"}
+                          </button>
+                        )}
+                      </div>
                     </div>
 
-                    <span
-                      className={`status-chip ${statusClassForLabel(milestoneStatusLabel(milestone.status))}`}
-                    >
-                      {milestoneStatusLabel(milestone.status)}
-                    </span>
-
-                    {milestone.status === "IN_PROGRESS" && (
-                      <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          style={{ fontSize: "0.8125rem", padding: "0.25rem 0.625rem" }}
-                          onClick={() =>
-                            setAddPhotoFor({
-                              milestoneId: milestone.id,
-                              milestoneName: milestone.name,
-                            })
-                          }
-                        >
-                          Add photo
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          style={{ fontSize: "0.8125rem", padding: "0.25rem 0.625rem" }}
-                          disabled={!canComplete}
-                          title={needsPhoto ? "Add a progress photo before completing this milestone" : undefined}
-                          onClick={() => handleComplete(milestone)}
-                        >
-                          {isCompleting ? "Completing…" : "Complete"}
-                        </button>
+                    {/* ── Photo gallery ── */}
+                    {milestoneUpdates.length > 0 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: "0.5rem",
+                          marginTop: "0.75rem",
+                          paddingTop: "0.75rem",
+                          borderTop: "1px solid var(--border)",
+                        }}
+                      >
+                        {milestoneUpdates.map((u) => (
+                          <button
+                            key={u.id}
+                            type="button"
+                            onClick={() => setLightboxUrl(u.photoUrl)}
+                            title={u.caption ?? u.photoUrl}
+                            style={{
+                              padding: 0,
+                              border: "2px solid var(--border)",
+                              borderRadius: "4px",
+                              cursor: "zoom-in",
+                              background: "var(--surface)",
+                              overflow: "hidden",
+                              width: "72px",
+                              height: "72px",
+                            }}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={u.photoUrl}
+                              alt={u.caption ?? "Construction photo"}
+                              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                            />
+                          </button>
+                        ))}
                       </div>
                     )}
                   </article>
@@ -263,6 +306,7 @@ export function MilestonesView() {
         );
       })}
 
+      {/* ── Add photo modal ── */}
       <Modal
         open={!!addPhotoFor}
         onClose={() => {
@@ -302,6 +346,59 @@ export function MilestonesView() {
           </button>
         </form>
       </Modal>
+
+      {/* ── Lightbox ── */}
+      {lightboxUrl && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Photo enlarged"
+          onClick={() => setLightboxUrl(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.82)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            cursor: "zoom-out",
+            padding: "1.5rem",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={lightboxUrl}
+            alt="Enlarged construction photo"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "90vh",
+              borderRadius: "6px",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.5)",
+              objectFit: "contain",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            type="button"
+            onClick={() => setLightboxUrl(null)}
+            aria-label="Close"
+            style={{
+              position: "absolute",
+              top: "1rem",
+              right: "1.25rem",
+              background: "transparent",
+              border: "none",
+              color: "#fff",
+              fontSize: "1.75rem",
+              cursor: "pointer",
+              lineHeight: 1,
+            }}
+          >
+            ×
+          </button>
+        </div>
+      )}
     </>
   );
 }
