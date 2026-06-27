@@ -103,7 +103,12 @@
       "Bash(grep -rn \"SQL\\\\|sql\\\\|\\\\$\\\\{\" /home/danquah-jephthah-kojo/Downloads/Estate-main/lib/repos --include=\"*.ts\")",
       "Bash(grep '`')",
       "Bash(pnpm audit *)",
-      "Bash(grep -rn 'developer_id.*$[0-9]\\\\|$[0-9].*developer_id' /home/danquah-jephthah-kojo/Downloads/Estate-main/lib/repos/)"
+      "Bash(grep -rn 'developer_id.*$[0-9]\\\\|$[0-9].*developer_id' /home/danquah-jephthah-kojo/Downloads/Estate-main/lib/repos/)",
+      "Bash(pnpm db:add-units *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git commit *)",
+      "Bash(psql *)"
     ]
   }
 }
