@@ -46,14 +46,25 @@ const installmentSchema = z.object({
   linkedMilestoneId: z.string().optional(),
 })
 
-const schema = z.object({
+// OFF_PLAN: caller supplies installments (existing behaviour — unchanged)
+const offPlanSchema = z.object({
+  saleType: z.literal("OFF_PLAN").default("OFF_PLAN"),
   buyerId: z.string().min(1),
   downPayment: z.number().nonnegative(),
   currency: z.enum(["GHS", "USD"]).default("GHS"),
   zeroInterest: z.boolean().default(true),
-  saleType: z.enum(["OFF_PLAN", "COMPLETED"]).default("OFF_PLAN"),
   installments: z.array(installmentSchema).min(1),
 })
+
+// COMPLETED: caller supplies only totalAmount; server builds the single DUE installment
+const completedSchema = z.object({
+  saleType: z.literal("COMPLETED"),
+  buyerId: z.string().min(1),
+  totalAmount: z.number().positive(),
+  currency: z.enum(["GHS", "USD"]).default("GHS"),
+})
+
+const schema = z.discriminatedUnion("saleType", [offPlanSchema, completedSchema])
 
 export async function POST(
   req: NextRequest,
@@ -90,39 +101,62 @@ export async function POST(
     return NextResponse.json({ error: "Unit is already sold" }, { status: 409 })
   }
 
-  const totalAmount =
-    parsed.data.downPayment +
-    parsed.data.installments.reduce((sum, i) => sum + i.amount, 0)
-
   let result: Awaited<ReturnType<typeof createPaymentPlanWithInstallments>>
 
-  await withTransaction(async (client) => {
-    // Link buyer to unit and mark as SOLD
-    await client.query(
-      "UPDATE units SET buyer_id = $1, status = 'SOLD' WHERE id = $2 AND developer_id = $3",
-      [parsed.data.buyerId, unitId, developerId],
-    )
+  if (parsed.data.saleType === "COMPLETED") {
+    // Single full-amount installment, immediately DUE — no milestone linkage
+    const { totalAmount, currency } = parsed.data
+    await withTransaction(async (client) => {
+      await client.query(
+        "UPDATE units SET buyer_id = $1, status = 'SOLD' WHERE id = $2 AND developer_id = $3",
+        [parsed.data.buyerId, unitId, developerId],
+      )
+      result = await createPaymentPlanWithInstallments(
+        {
+          developerId,
+          unitId,
+          buyerId: parsed.data.buyerId,
+          totalAmount,
+          downPayment: 0,
+          currency,
+          zeroInterest: true,
+          saleType: "COMPLETED",
+          installments: [{ sequence: 1, amount: totalAmount, status: "DUE" }],
+        },
+        client,
+      )
+    })
+  } else {
+    // OFF_PLAN — existing behaviour unchanged
+    const { downPayment, currency, zeroInterest, installments } = parsed.data
+    const totalAmount = downPayment + installments.reduce((sum, i) => sum + i.amount, 0)
 
-    result = await createPaymentPlanWithInstallments(
-      {
-        developerId,
-        unitId,
-        buyerId: parsed.data.buyerId,
-        totalAmount,
-        downPayment: parsed.data.downPayment,
-        currency: parsed.data.currency,
-        zeroInterest: parsed.data.zeroInterest,
-        saleType: parsed.data.saleType,
-        installments: parsed.data.installments.map((i) => ({
-          sequence: i.sequence,
-          amount: i.amount,
-          dueDate: i.dueDate ? new Date(i.dueDate) : undefined,
-          linkedMilestoneId: i.linkedMilestoneId,
-        })),
-      },
-      client,
-    )
-  })
+    await withTransaction(async (client) => {
+      await client.query(
+        "UPDATE units SET buyer_id = $1, status = 'SOLD' WHERE id = $2 AND developer_id = $3",
+        [parsed.data.buyerId, unitId, developerId],
+      )
+      result = await createPaymentPlanWithInstallments(
+        {
+          developerId,
+          unitId,
+          buyerId: parsed.data.buyerId,
+          totalAmount,
+          downPayment,
+          currency,
+          zeroInterest,
+          saleType: "OFF_PLAN",
+          installments: installments.map((i) => ({
+            sequence: i.sequence,
+            amount: i.amount,
+            dueDate: i.dueDate ? new Date(i.dueDate) : undefined,
+            linkedMilestoneId: i.linkedMilestoneId,
+          })),
+        },
+        client,
+      )
+    })
+  }
 
   return NextResponse.json(result!, { status: 201 })
 }

@@ -31,12 +31,16 @@ function CreatePlanForm({
   availableUnits: Unit[]
   onDone: () => void
 }) {
+  const [saleType, setSaleType] = useState<"OFF_PLAN" | "COMPLETED">("OFF_PLAN")
   const [selectedBuyerId, setSelectedBuyerId] = useState("")
   const [selectedUnitId, setSelectedUnitId] = useState("")
+  const [currency, setCurrency] = useState<"GHS" | "USD">("GHS")
+  // OFF_PLAN fields
   const [downPayment, setDownPayment] = useState("")
   const [numInstallments, setNumInstallments] = useState("3")
   const [installmentAmount, setInstallmentAmount] = useState("")
-  const [currency, setCurrency] = useState<"GHS" | "USD">("GHS")
+  // COMPLETED field
+  const [totalAmount, setTotalAmount] = useState("")
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(e: FormEvent) {
@@ -45,25 +49,37 @@ function CreatePlanForm({
       showToast("Select a buyer and unit", "error")
       return
     }
-    const dp = parseFloat(downPayment)
-    const ia = parseFloat(installmentAmount)
-    const n = parseInt(numInstallments)
-    if (isNaN(dp) || dp < 0) { showToast("Invalid down payment", "error"); return }
-    if (isNaN(ia) || ia <= 0 || isNaN(n) || n < 1) { showToast("Invalid installment terms", "error"); return }
 
     setSubmitting(true)
     try {
-      const installments = Array.from({ length: n }, (_, i) => ({
-        sequence: i + 1,
-        amount: ia,
-      }))
-      await createPaymentPlan(selectedUnitId, {
-        buyerId: selectedBuyerId,
-        downPayment: dp,
-        currency,
-        zeroInterest: true,
-        installments,
-      })
+      if (saleType === "COMPLETED") {
+        const ta = parseFloat(totalAmount)
+        if (isNaN(ta) || ta <= 0) { showToast("Invalid total amount", "error"); setSubmitting(false); return }
+        await createPaymentPlan(selectedUnitId, {
+          saleType: "COMPLETED",
+          buyerId: selectedBuyerId,
+          totalAmount: ta,
+          currency,
+        })
+      } else {
+        const dp = parseFloat(downPayment)
+        const ia = parseFloat(installmentAmount)
+        const n = parseInt(numInstallments)
+        if (isNaN(dp) || dp < 0) { showToast("Invalid down payment", "error"); setSubmitting(false); return }
+        if (isNaN(ia) || ia <= 0 || isNaN(n) || n < 1) { showToast("Invalid installment terms", "error"); setSubmitting(false); return }
+        const installments = Array.from({ length: n }, (_, i) => ({
+          sequence: i + 1,
+          amount: ia,
+        }))
+        await createPaymentPlan(selectedUnitId, {
+          saleType: "OFF_PLAN",
+          buyerId: selectedBuyerId,
+          downPayment: dp,
+          currency,
+          zeroInterest: true,
+          installments,
+        })
+      }
       showToast("Payment plan created", "success")
       onDone()
     } catch (err) {
@@ -76,6 +92,39 @@ function CreatePlanForm({
   return (
     <form className="dashboard-card" style={{ padding: "1.5rem", marginBottom: "1.5rem" }} onSubmit={handleSubmit}>
       <h2 style={{ marginBottom: "1rem" }}>Assign Unit + Create Payment Plan</h2>
+
+      {/* Sale type selector */}
+      <fieldset style={{ border: "1px solid var(--border)", borderRadius: "6px", padding: "0.75rem 1rem", marginBottom: "1rem" }}>
+        <legend style={{ fontSize: "0.8rem", fontWeight: 600, padding: "0 0.25rem" }}>Sale type</legend>
+        <div style={{ display: "flex", gap: "1.5rem" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "0.4rem", cursor: "pointer" }}>
+            <input
+              type="radio"
+              name="saleType"
+              value="OFF_PLAN"
+              checked={saleType === "OFF_PLAN"}
+              onChange={() => setSaleType("OFF_PLAN")}
+            />
+            Off-plan (installments)
+          </label>
+          <label style={{ display: "flex", alignItems: "center", gap: "0.4rem", cursor: "pointer" }}>
+            <input
+              type="radio"
+              name="saleType"
+              value="COMPLETED"
+              checked={saleType === "COMPLETED"}
+              onChange={() => setSaleType("COMPLETED")}
+            />
+            Completed unit (pay in full)
+          </label>
+        </div>
+        <p className="meta" style={{ margin: "0.5rem 0 0", fontSize: "0.75rem" }}>
+          {saleType === "OFF_PLAN"
+            ? "Unit is under construction. Buyer pays a down payment then scheduled installments."
+            : "Unit is ready. Buyer makes a single full payment before handover."}
+        </p>
+      </fieldset>
+
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
         <label>
           Buyer
@@ -96,28 +145,50 @@ function CreatePlanForm({
           </select>
         </label>
         <label>
-          Down payment ({currency})
-          <input type="number" min="0" step="0.01" value={downPayment} onChange={(e) => setDownPayment(e.target.value)} placeholder="e.g. 85500" required />
-        </label>
-        <label>
           Currency
           <select value={currency} onChange={(e) => setCurrency(e.target.value as "GHS" | "USD")}>
             <option value="GHS">GHS</option>
             <option value="USD">USD</option>
           </select>
         </label>
-        <label>
-          Number of installments
-          <input type="number" min="1" max="60" value={numInstallments} onChange={(e) => setNumInstallments(e.target.value)} required />
-        </label>
-        <label>
-          Amount per installment ({currency})
-          <input type="number" min="0.01" step="0.01" value={installmentAmount} onChange={(e) => setInstallmentAmount(e.target.value)} placeholder="e.g. 33166" required />
-        </label>
+
+        {saleType === "COMPLETED" ? (
+          <label>
+            Full price ({currency})
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              value={totalAmount}
+              onChange={(e) => setTotalAmount(e.target.value)}
+              placeholder="e.g. 250000"
+              required
+            />
+          </label>
+        ) : (
+          <>
+            <label>
+              Down payment ({currency})
+              <input type="number" min="0" step="0.01" value={downPayment} onChange={(e) => setDownPayment(e.target.value)} placeholder="e.g. 85500" required />
+            </label>
+            <label>
+              Number of installments
+              <input type="number" min="1" max="60" value={numInstallments} onChange={(e) => setNumInstallments(e.target.value)} required />
+            </label>
+            <label>
+              Amount per installment ({currency})
+              <input type="number" min="0.01" step="0.01" value={installmentAmount} onChange={(e) => setInstallmentAmount(e.target.value)} placeholder="e.g. 33166" required />
+            </label>
+          </>
+        )}
       </div>
-      <p className="meta" style={{ marginTop: "0.5rem", fontSize: "0.8rem" }}>
-        Total = down payment + (installments × amount). Due dates can be set per-installment after creation.
-      </p>
+
+      {saleType === "OFF_PLAN" && (
+        <p className="meta" style={{ marginTop: "0.5rem", fontSize: "0.8rem" }}>
+          Total = down payment + (installments × amount). Due dates can be set per-installment after creation.
+        </p>
+      )}
+
       <div style={{ display: "flex", gap: "0.75rem", marginTop: "1rem" }}>
         <button className="btn btn-primary" type="submit" disabled={submitting}>
           {submitting ? "Creating…" : "Create plan"}
@@ -362,7 +433,12 @@ export function PaymentPlansView() {
         <div className="dashboard-card">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "1.5rem" }}>
             <div>
-              <h2>Payment Plan: {selectedUnitData.code}</h2>
+              <h2 style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                Payment Plan: {selectedUnitData.code}
+                <span className={`status-chip ${planData.plan.saleType === "COMPLETED" ? "status-success" : "status-info"}`} style={{ fontSize: "0.7rem" }}>
+                  {planData.plan.saleType === "COMPLETED" ? "Completed unit" : "Off-plan"}
+                </span>
+              </h2>
               <p className="meta">
                 Buyer: {selectedBuyer?.fullName} • {selectedBuyer?.phone}
               </p>
@@ -415,7 +491,9 @@ export function PaymentPlansView() {
             </article>
           </div>
 
-          <h3 style={{ marginTop: "1.5rem", marginBottom: "0.75rem" }}>Installment Schedule</h3>
+          <h3 style={{ marginTop: "1.5rem", marginBottom: "0.75rem" }}>
+            {planData.plan.saleType === "COMPLETED" ? "Full Payment" : "Installment Schedule"}
+          </h3>
           <div className="dashboard-card table-card">
             <table className="zebra-rows">
               <thead>
@@ -423,7 +501,7 @@ export function PaymentPlansView() {
                   <th>#</th>
                   <th>Amount</th>
                   <th>Due Date</th>
-                  <th>Linked Milestone</th>
+                  {planData.plan.saleType !== "COMPLETED" && <th>Linked Milestone</th>}
                   <th>Status</th>
                   <th>Paid Amount</th>
                   <th>Paid Date</th>
@@ -441,19 +519,21 @@ export function PaymentPlansView() {
                         {formatCurrency(inst.amount, planData.plan.currency as "GHS" | "USD")}
                       </td>
                       <td>{inst.dueDate ? formatDate(inst.dueDate) : "—"}</td>
-                      <td>
-                        {linkedMilestone ? (
-                          <>
-                            {linkedMilestone.name}
-                            <br />
-                            <span className={`status-chip status-${linkedMilestone.status.toLowerCase().replace("_", "-")}`}>
-                              {linkedMilestone.status.replace("_", " ")}
-                            </span>
-                          </>
-                        ) : (
-                          "—"
-                        )}
-                      </td>
+                      {planData.plan.saleType !== "COMPLETED" && (
+                        <td>
+                          {linkedMilestone ? (
+                            <>
+                              {linkedMilestone.name}
+                              <br />
+                              <span className={`status-chip status-${linkedMilestone.status.toLowerCase().replace("_", "-")}`}>
+                                {linkedMilestone.status.replace("_", " ")}
+                              </span>
+                            </>
+                          ) : (
+                            "—"
+                          )}
+                        </td>
+                      )}
                       <td>
                         <span className={`status-chip status-${getInstallmentStatusClass(inst.status)}`}>
                           {inst.status}

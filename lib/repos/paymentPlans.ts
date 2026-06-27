@@ -111,6 +111,7 @@ export type NewInstallment = {
   amount: number
   dueDate?: Date
   linkedMilestoneId?: string
+  status?: "PENDING" | "DUE"   // defaults to PENDING; pass DUE for immediately-payable installments
 }
 
 export async function createPaymentPlanWithInstallments(
@@ -150,7 +151,7 @@ export async function createPaymentPlanWithInstallments(
     const instResult = await client.query<InstallmentRow>(
       `INSERT INTO installments
          (developer_id, payment_plan_id, sequence, amount, due_date, linked_milestone_id, status)
-       VALUES ($1, $2, $3, $4, $5, $6, 'PENDING')
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING *`,
       [
         data.developerId,
@@ -159,6 +160,7 @@ export async function createPaymentPlanWithInstallments(
         inst.amount,
         inst.dueDate ?? null,
         inst.linkedMilestoneId ?? null,
+        inst.status ?? "PENDING",
       ],
     )
     installments.push(mapInstallment(instResult.rows[0]))

@@ -847,13 +847,21 @@ export async function updateMaintenanceTicket(
     : liveUpdateMaintenanceTicket(id, status);
 }
 
-export type CreatePlanPayload = {
-  buyerId: string
-  downPayment: number
-  currency: "GHS" | "USD"
-  zeroInterest: boolean
-  installments: { sequence: number; amount: number; dueDate?: string }[]
-}
+export type CreatePlanPayload =
+  | {
+      saleType: "OFF_PLAN"
+      buyerId: string
+      downPayment: number
+      currency: "GHS" | "USD"
+      zeroInterest: boolean
+      installments: { sequence: number; amount: number; dueDate?: string }[]
+    }
+  | {
+      saleType: "COMPLETED"
+      buyerId: string
+      totalAmount: number
+      currency: "GHS" | "USD"
+    }
 
 export async function createPaymentPlan(
   unitId: string,

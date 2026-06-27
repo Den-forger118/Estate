@@ -17,7 +17,8 @@ const isProd = process.env.NODE_ENV === "production";
 // tags with full Unsplash URLs (Cards, Heroes, etc.) rather than Next/Image proxy.
 const cspDirectives = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  // React dev mode uses eval() to reconstruct call stacks; never needed in production.
+  `script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval'"}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https://images.unsplash.com",
   "font-src 'self'",

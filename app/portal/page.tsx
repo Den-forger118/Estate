@@ -202,17 +202,18 @@ export default async function BuyerPortalPage(
           </div>
           <small>{paymentPlan?.currency ?? "GHS"} · {paymentPlan?.zeroInterest ? "Zero interest" : "With interest"}</small>
         </article>
-        <article className="dashboard-card kpi-card">
-          <div>
-            <span>Down Payment</span>
-            <strong className="font-data-lg">{paymentPlan ? formatGHS(paymentPlan.downPayment) : "—"}</strong>
-          </div>
-          <small>
-            {paymentPlan && totalDue > 0
-              ? `${Math.round((paymentPlan.downPayment / totalDue) * 100)}% of total`
-              : ""}
-          </small>
-        </article>
+        {/* Down Payment card only shown for installment plans — meaningless (always 0) for completed units */}
+        {paymentPlan.saleType === "OFF_PLAN" && (
+          <article className="dashboard-card kpi-card">
+            <div>
+              <span>Down Payment</span>
+              <strong className="font-data-lg">{formatGHS(paymentPlan.downPayment)}</strong>
+            </div>
+            <small>
+              {totalDue > 0 ? `${Math.round((paymentPlan.downPayment / totalDue) * 100)}% of total` : ""}
+            </small>
+          </article>
+        )}
         <article className="dashboard-card kpi-card">
           <div>
             <span>Paid to Date</span>
@@ -226,7 +227,9 @@ export default async function BuyerPortalPage(
             <strong className="font-data-lg">{formatGHS(Math.max(0, totalDue - totalPaid))}</strong>
           </div>
           <small>
-            {installments.filter((i) => i.status === "PENDING" || i.status === "DUE").length} installments pending
+            {paymentPlan.saleType === "COMPLETED"
+              ? totalPaid >= totalDue ? "Paid in full" : "Full payment pending"
+              : `${installments.filter((i) => i.status === "PENDING" || i.status === "DUE").length} installments pending`}
           </small>
         </article>
       </div>
@@ -250,10 +253,12 @@ export default async function BuyerPortalPage(
         </div>
       </div>
 
-      {/* ── Installment schedule ── */}
+      {/* ── Installment schedule / full payment ── */}
       {installments.length > 0 && (
         <section className="dashboard-card table-card" style={{ marginBottom: "1.5rem" }}>
-          <h2 style={{ padding: "1rem 1rem 0" }}>Installment Schedule</h2>
+          <h2 style={{ padding: "1rem 1rem 0" }}>
+            {paymentPlan.saleType === "COMPLETED" ? "Full Payment" : "Installment Schedule"}
+          </h2>
           <table className="zebra-rows">
             <thead>
               <tr>
