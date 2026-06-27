@@ -251,6 +251,21 @@ export async function findInstallmentNotifyData(
 }
 
 /**
+ * Returns true when ALL installments in the plan are fully paid (no PENDING/DUE/OVERDUE/PARTIAL).
+ * Used to gate homeowner access: only fully-settled plans qualify.
+ */
+export async function isFullyPaid(planId: string): Promise<boolean> {
+  const row = await queryOne<{ cnt: string }>(
+    `SELECT COUNT(*) AS cnt
+     FROM installments
+     WHERE payment_plan_id = $1
+       AND status NOT IN ('PAID')`,
+    [planId],
+  )
+  return parseInt(row?.cnt ?? "1", 10) === 0
+}
+
+/**
  * Returns true if any installment in the plan has received any payment (paidAmount > 0).
  * Used by the unassign-unit flow to block removal when real money has changed hands.
  */

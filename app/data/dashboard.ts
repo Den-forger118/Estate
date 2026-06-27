@@ -17,6 +17,7 @@ export type DashboardModule =
   | "accounts"
   | "payment-plans"
   | "milestones"
+  | "homeowners"
   | "tenants"
   | "leases"
   | "payments"
@@ -43,6 +44,7 @@ export const moduleMeta: Record<
   accounts: { label: "Accounts", href: "/dashboard/accounts", icon: "A", summary: "Buyer portal accounts — activation state, login history, and access controls." },
   "payment-plans": { label: "Payment Plans", href: "/dashboard/payment-plans", icon: "₵", summary: "Installment schedules and milestone-linked payments." },
   milestones: { label: "Milestones", href: "/dashboard/milestones", icon: "M", summary: "Construction progress tracking with photo updates." },
+  homeowners: { label: "Homeowners", href: "/dashboard/homeowners", icon: "H", summary: "Grant portal access to buyers who have completed purchase and been handed over." },
   tenants: { label: "Tenants", href: "/dashboard/tenants", icon: "T", summary: "Resident directory, balances, and lease links." },
   leases: { label: "Leases", href: "/dashboard/leases", icon: "L", summary: "Renewals, terms, approvals, and signed contracts." },
   payments: { label: "Payments", href: "/dashboard/payments", icon: "$", summary: "Collections, revenue, payouts, and arrears." },
@@ -57,8 +59,8 @@ export const moduleMeta: Record<
 };
 
 export const roleModules: Record<DashboardRole, DashboardModule[]> = {
-  admin: ["dashboard", "properties", "units", "buyers", "leads", "accounts", "payment-plans", "milestones", "tenants", "leases", "payments", "maintenance", "invoices", "reports", "messages", "documents", "landlord-applications", "settings"],
-  manager: ["dashboard", "properties", "units", "buyers", "leads", "accounts", "payment-plans", "milestones", "tenants", "leases", "payments", "maintenance", "reports", "messages", "documents", "landlord-applications", "settings"],
+  admin: ["dashboard", "properties", "units", "buyers", "leads", "accounts", "payment-plans", "milestones", "homeowners", "tenants", "leases", "payments", "maintenance", "invoices", "reports", "messages", "documents", "landlord-applications", "settings"],
+  manager: ["dashboard", "properties", "units", "buyers", "leads", "accounts", "payment-plans", "milestones", "homeowners", "tenants", "leases", "payments", "maintenance", "reports", "messages", "documents", "landlord-applications", "settings"],
   owner: ["dashboard", "properties", "payments", "messages", "documents", "landlord-application", "settings"],
   landlord: ["dashboard", "properties", "units", "tenants", "leases", "payments", "reports", "messages", "documents", "settings"],
   tenant: ["dashboard", "leases", "payments", "maintenance", "messages", "documents", "settings"],

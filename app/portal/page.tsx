@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { requireUser } from "@/lib/auth"
 import { findBuyerByIdRaw } from "@/lib/repos/buyers"
-import { findUnitsByBuyer } from "@/lib/repos/units"
+import { findUnitsByBuyer, findHomeownerUnitsByBuyer } from "@/lib/repos/units"
 import { findProjectById } from "@/lib/repos/projects"
 import { findPaymentPlanByUnit, findInstallmentsByPlan } from "@/lib/repos/paymentPlans"
 import { findMilestonesByProject } from "@/lib/repos/milestones"
@@ -15,26 +15,17 @@ import { SignOutButton } from "./SignOutButton"
 import { PayNowButton } from "./PayNowButton"
 import { PhotoGallery } from "./PhotoGallery"
 import { ChatPanel } from "./ChatPanel"
+import { MaintenancePanel } from "./MaintenancePanel"
 import type { Unit } from "@/app/data/types"
 
-/**
- * Verify-on-return: called when the buyer lands back on /portal?payment=done&reference=...
- *
- * Calls Paystack's Transaction Verify API server-side (never trusts the client's word),
- * then runs the same receiveAndReconcile path used by the webhook.
- * Idempotent: if the webhook already processed this reference, findPaymentByProviderRef
- * returns early so no duplicate Payment row is created.
- */
 async function runVerifyOnReturn(reference: string, developerId: string): Promise<void> {
-  // Fast idempotency check — skip the Paystack API call entirely if already reconciled
   const existing = await findPaymentByProviderRef(reference, developerId)
   if (existing) return
 
   const provider = getPaymentProvider()
   const event = await provider.verifyTransaction(reference)
-  if (!event) return  // not a successful charge
+  if (!event) return
 
-  // Mirror the same installmentId extraction used by the webhook handler
   const fromMeta = event.metadata.installmentId
   const installmentId =
     typeof fromMeta === "string" && fromMeta.length > 0
@@ -72,9 +63,19 @@ export default async function BuyerPortalPage(
 
   const developerId = rawBuyer.developerId
 
-  const units = await findUnitsByBuyer(buyerId, developerId)
+  // Gather all units: buyer-phase (SOLD/RESERVED via units.buyer_id) +
+  // homeowner units (HANDED_OVER via residents.buyer_id bridge, catches historical data
+  // where units.buyer_id may be NULL). Deduplicate by id.
+  const [buyerUnits, homeownerUnits] = await Promise.all([
+    findUnitsByBuyer(buyerId, developerId),
+    findHomeownerUnitsByBuyer(buyerId, developerId),
+  ])
 
-  if (units.length === 0) {
+  const unitMap = new Map<string, Unit>()
+  for (const u of [...buyerUnits, ...homeownerUnits]) unitMap.set(u.id, u)
+  const allUnits = Array.from(unitMap.values()).sort((a, b) => a.code.localeCompare(b.code))
+
+  if (allUnits.length === 0) {
     return (
       <PortalShell email={email}>
         <div className="dashboard-card" style={{ padding: "2rem", textAlign: "center" }}>
@@ -92,20 +93,24 @@ export default async function BuyerPortalPage(
     )
   }
 
-  // Unit selection: ?unit=<id> param, or default to the first unit
+  // Unit selection via ?unit=<id>, default to first
   const selectedUnitId = typeof sp.unit === "string" ? sp.unit : null
-  const unit = (selectedUnitId ? units.find((u) => u.id === selectedUnitId) : null) ?? units[0]
+  const unit = (selectedUnitId ? allUnits.find((u) => u.id === selectedUnitId) : null) ?? allUnits[0]
+
+  // A unit is in homeowner mode when it has been fully handed over and the
+  // buyer has an owner-occupier residents row (which is how it appears in homeownerUnits).
+  const isHomeowner = unit.status === "HANDED_OVER"
 
   const [project, paymentPlan] = await Promise.all([
     findProjectById(unit.projectId, developerId),
     findPaymentPlanByUnit(unit.id, developerId),
   ])
 
-  // No payment plan yet — unit exists but plan hasn't been created
-  if (!paymentPlan) {
+  // ── No payment plan yet (buyer view only) ────────────────────────────────
+  if (!isHomeowner && !paymentPlan) {
     return (
       <PortalShell email={email}>
-        {units.length > 1 && <UnitSwitcher units={units} selectedUnitId={unit.id} />}
+        {allUnits.length > 1 && <UnitSwitcher units={allUnits} selectedUnitId={unit.id} />}
         <div className="dashboard-card" style={{ padding: "2rem", textAlign: "center" }}>
           <h2>Your payment plan is being set up</h2>
           <p className="meta" style={{ maxWidth: "440px", margin: "0.75rem auto 0" }}>
@@ -121,10 +126,8 @@ export default async function BuyerPortalPage(
     )
   }
 
-  // Verify-on-return: if the buyer just completed a payment, confirm it server-side
-  // with Paystack's verify API and reconcile before loading installments so the
-  // page renders the updated status immediately. Errors are non-fatal.
-  if (paymentDone && returnReference) {
+  // Verify-on-return for active payment flow (buyer view only)
+  if (!isHomeowner && paymentDone && returnReference) {
     await runVerifyOnReturn(returnReference, developerId).catch((err) =>
       console.error("[verify-on-return]", err),
     )
@@ -137,7 +140,6 @@ export default async function BuyerPortalPage(
     findUpdatesByProject(unit.projectId),
   ])
 
-  // Group construction updates by milestone id for gallery rendering
   const updatesByMilestone = new Map<string, typeof allUpdates>()
   for (const u of allUpdates) {
     const existing = updatesByMilestone.get(u.milestoneId) ?? []
@@ -148,12 +150,130 @@ export default async function BuyerPortalPage(
   const totalDue = paymentPlan?.totalAmount ?? 0
   const pctPaid = totalDue > 0 ? Math.round((totalPaid / totalDue) * 100) : 0
 
+  // ── HOMEOWNER VIEW ────────────────────────────────────────────────────────
+  if (isHomeowner) {
+    return (
+      <PortalShell email={email} isHomeowner>
+        {allUnits.length > 1 && <UnitSwitcher units={allUnits} selectedUnitId={unit.id} />}
+
+        {/* Unit hero */}
+        <div className="dashboard-card" style={{ marginBottom: "1.5rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
+            <div>
+              <span className="eyebrow">Your Home</span>
+              <h1 style={{ margin: "0.25rem 0 0.5rem" }}>
+                {unit.code}
+                {unit.type ? ` — ${unit.type}` : ""}
+              </h1>
+              <p className="meta">{project?.name ?? "—"} · {project?.location ?? ""}</p>
+              {unit.sizeSqm && (
+                <p className="meta" style={{ marginTop: "0.25rem" }}>{unit.sizeSqm} sqm</p>
+              )}
+            </div>
+            <span className="status-chip status-success">Owner-Occupier</span>
+          </div>
+        </div>
+
+        {/* Settled payment banner */}
+        <div
+          className="dashboard-card"
+          style={{
+            marginBottom: "1.5rem",
+            padding: "1.25rem 1.5rem",
+            borderLeft: "4px solid var(--brand)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <div>
+              <strong>Purchase settled</strong>
+              <p className="meta" style={{ margin: "0.2rem 0 0" }}>
+                {formatGHS(totalDue)} paid in full · Unit handed over
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Payment history (read-only — no Pay Now buttons) */}
+        {installments.length > 0 && (
+          <section className="dashboard-card table-card" style={{ marginBottom: "1.5rem" }}>
+            <h2 style={{ padding: "1rem 1rem 0" }}>Payment History</h2>
+            <table className="zebra-rows">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Amount</th>
+                  <th>Paid On</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {installments.map((inst) => (
+                  <tr key={inst.id}>
+                    <td>{inst.sequence}</td>
+                    <td className="font-data-md">{formatGHS(inst.amount)}</td>
+                    <td>{fmt(inst.paidAt)}</td>
+                    <td>
+                      <span className={`status-chip status-${inst.status.toLowerCase()}`}>
+                        {inst.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        )}
+
+        {/* Documents */}
+        {documents.length > 0 && (
+          <section className="dashboard-card" style={{ marginBottom: "1.5rem" }}>
+            <h2 style={{ padding: "1rem 1rem 0.5rem" }}>Your Documents</h2>
+            <ul style={{ listStyle: "none", margin: 0, padding: "0 1rem 1rem" }}>
+              {documents.map((doc) => (
+                <li
+                  key={doc.id}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "0.75rem 0",
+                    borderBottom: "1px solid var(--border)",
+                  }}
+                >
+                  <div>
+                    <strong>{doc.type.replace(/_/g, " ")}</strong>
+                    <p className="meta" style={{ margin: 0 }}>Uploaded {fmt(doc.uploadedAt)} · v{doc.version}</p>
+                  </div>
+                  <a
+                    href={doc.fileUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-secondary"
+                    style={{ fontSize: "0.8rem" }}
+                  >
+                    View
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* Maintenance requests — homeowners can submit tickets for their unit */}
+        <MaintenancePanel unitId={unit.id} />
+
+        {/* Chat — keep available for homeowners too */}
+        {buyerId && <ChatPanel buyerId={buyerId} unitId={unit.id} />}
+      </PortalShell>
+    )
+  }
+
+  // ── BUYER VIEW (existing, unchanged) ─────────────────────────────────────
   return (
     <PortalShell email={email}>
-      {/* ── Unit switcher (only shown when buyer holds 2+ units) ── */}
-      {units.length > 1 && <UnitSwitcher units={units} selectedUnitId={unit.id} />}
+      {allUnits.length > 1 && <UnitSwitcher units={allUnits} selectedUnitId={unit.id} />}
 
-      {/* ── Payment return banner ── */}
+      {/* Payment return banner */}
       {paymentDone && (
         <div
           role="status"
@@ -178,7 +298,7 @@ export default async function BuyerPortalPage(
         </div>
       )}
 
-      {/* ── Unit hero ── */}
+      {/* Unit hero */}
       <div className="dashboard-card" style={{ marginBottom: "1.5rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
           <div>
@@ -193,7 +313,7 @@ export default async function BuyerPortalPage(
         </div>
       </div>
 
-      {/* ── Payment KPIs ── */}
+      {/* Payment KPIs */}
       <div className="dashboard-kpi-grid" style={{ marginBottom: "1.5rem" }}>
         <article className="dashboard-card kpi-card">
           <div>
@@ -202,8 +322,7 @@ export default async function BuyerPortalPage(
           </div>
           <small>{paymentPlan?.currency ?? "GHS"} · {paymentPlan?.zeroInterest ? "Zero interest" : "With interest"}</small>
         </article>
-        {/* Down Payment card only shown for installment plans — meaningless (always 0) for completed units */}
-        {paymentPlan.saleType === "OFF_PLAN" && (
+        {paymentPlan?.saleType === "OFF_PLAN" && (
           <article className="dashboard-card kpi-card">
             <div>
               <span>Down Payment</span>
@@ -227,14 +346,14 @@ export default async function BuyerPortalPage(
             <strong className="font-data-lg">{formatGHS(Math.max(0, totalDue - totalPaid))}</strong>
           </div>
           <small>
-            {paymentPlan.saleType === "COMPLETED"
+            {paymentPlan?.saleType === "COMPLETED"
               ? totalPaid >= totalDue ? "Paid in full" : "Full payment pending"
               : `${installments.filter((i) => i.status === "PENDING" || i.status === "DUE").length} installments pending`}
           </small>
         </article>
       </div>
 
-      {/* ── Progress bar ── */}
+      {/* Progress bar */}
       <div className="dashboard-card" style={{ marginBottom: "1.5rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
           <span>Payment progress</span>
@@ -253,11 +372,11 @@ export default async function BuyerPortalPage(
         </div>
       </div>
 
-      {/* ── Installment schedule / full payment ── */}
+      {/* Installment schedule / full payment */}
       {installments.length > 0 && (
         <section className="dashboard-card table-card" style={{ marginBottom: "1.5rem" }}>
           <h2 style={{ padding: "1rem 1rem 0" }}>
-            {paymentPlan.saleType === "COMPLETED" ? "Full Payment" : "Installment Schedule"}
+            {paymentPlan?.saleType === "COMPLETED" ? "Full Payment" : "Installment Schedule"}
           </h2>
           <table className="zebra-rows">
             <thead>
@@ -296,8 +415,8 @@ export default async function BuyerPortalPage(
         </section>
       )}
 
-      {/* ── Construction milestones (OFF_PLAN only) ── */}
-      {paymentPlan.saleType === "OFF_PLAN" && milestones.length > 0 && (
+      {/* Construction milestones (OFF_PLAN only) */}
+      {paymentPlan?.saleType === "OFF_PLAN" && milestones.length > 0 && (
         <section style={{ marginBottom: "1.5rem" }}>
           <h2 style={{ marginBottom: "0.75rem" }}>Construction Progress</h2>
           <div className="dashboard-kpi-grid">
@@ -323,11 +442,10 @@ export default async function BuyerPortalPage(
         </section>
       )}
 
-      {/* ── Completed unit: ready-for-handover banner (replaces milestone section) ── */}
-      {paymentPlan.saleType === "COMPLETED" && (
+      {/* Completed unit: ready-for-handover banner */}
+      {paymentPlan?.saleType === "COMPLETED" && (
         <section className="dashboard-card" style={{ marginBottom: "1.5rem", padding: "1.5rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <span style={{ fontSize: "2rem" }}>🏠</span>
             <div>
               <strong style={{ fontSize: "1.05rem" }}>Unit complete &amp; ready</strong>
               <p className="meta" style={{ margin: "0.25rem 0 0" }}>
@@ -339,7 +457,7 @@ export default async function BuyerPortalPage(
         </section>
       )}
 
-      {/* ── Documents ── */}
+      {/* Documents */}
       {documents.length > 0 && (
         <section className="dashboard-card" style={{ marginBottom: "1.5rem" }}>
           <h2 style={{ padding: "1rem 1rem 0.5rem" }}>Your Documents</h2>
@@ -374,12 +492,12 @@ export default async function BuyerPortalPage(
         </section>
       )}
 
-      {documents.length === 0 && paymentPlan.saleType === "OFF_PLAN" && milestones.length === 0 && (
+      {documents.length === 0 && paymentPlan?.saleType === "OFF_PLAN" && milestones.length === 0 && (
         <p className="meta">No additional information available yet. Check back as construction progresses.</p>
       )}
 
-      {/* ── Chat ── */}
-      <ChatPanel buyerId={buyerId!} unitId={unit.id} />
+      {/* Chat */}
+      {buyerId && <ChatPanel buyerId={buyerId} unitId={unit.id} />}
     </PortalShell>
   )
 }
@@ -397,6 +515,7 @@ function UnitSwitcher({ units, selectedUnitId }: { units: Unit[]; selectedUnitId
     >
       {units.map((u) => {
         const isActive = u.id === selectedUnitId
+        const isHome = u.status === "HANDED_OVER"
         return (
           <a
             key={u.id}
@@ -413,7 +532,7 @@ function UnitSwitcher({ units, selectedUnitId }: { units: Unit[]; selectedUnitId
             }}
           >
             {u.code}
-            {u.type ? ` · ${u.type}` : ""}
+            {isHome ? " · Home" : u.type ? ` · ${u.type}` : ""}
           </a>
         )
       })}
@@ -421,7 +540,15 @@ function UnitSwitcher({ units, selectedUnitId }: { units: Unit[]; selectedUnitId
   )
 }
 
-function PortalShell({ email, children }: { email: string; children: React.ReactNode }) {
+function PortalShell({
+  email,
+  children,
+  isHomeowner,
+}: {
+  email: string
+  children: React.ReactNode
+  isHomeowner?: boolean
+}) {
   const firstName = email.split("@")[0]
 
   return (
@@ -438,7 +565,9 @@ function PortalShell({ email, children }: { email: string; children: React.React
       >
         <div>
           <strong style={{ fontSize: "1.1rem" }}>Special Gardens</strong>
-          <span className="meta" style={{ marginLeft: "0.75rem" }}>Buyer Portal</span>
+          <span className="meta" style={{ marginLeft: "0.75rem" }}>
+            {isHomeowner ? "Homeowner Portal" : "Buyer Portal"}
+          </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <span className="meta">Welcome, {firstName}</span>

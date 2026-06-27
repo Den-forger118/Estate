@@ -416,6 +416,7 @@ const mockResidentsList: Resident[] = [
     email: "a.sterling@example.com",
     moveInDate: "2024-04-01",
     status: "ACTIVE",
+    occupancyType: "TENANT",
     createdAt: "2024-04-01T00:00:00Z",
   },
   {
@@ -428,6 +429,7 @@ const mockResidentsList: Resident[] = [
     email: "n.boateng@email.com",
     moveInDate: "2025-10-01",
     status: "ACTIVE",
+    occupancyType: "OWNER_OCCUPIER",
     createdAt: "2025-10-01T00:00:00Z",
   },
   {
@@ -439,6 +441,7 @@ const mockResidentsList: Resident[] = [
     email: "elena.martinez@email.com",
     moveInDate: "2024-01-01",
     status: "NOTICE_GIVEN",
+    occupancyType: "TENANT",
     createdAt: "2024-01-01T00:00:00Z",
   },
 ];

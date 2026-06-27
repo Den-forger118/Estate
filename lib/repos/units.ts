@@ -78,6 +78,28 @@ export async function findUnitsByBuyer(
   return rows.map(mapUnit)
 }
 
+/**
+ * Returns HANDED_OVER units where this buyer has an owner-occupier residents row.
+ * Catches units where units.buyer_id may be NULL (seeded/historical data) but
+ * the residents bridge is intact.
+ */
+export async function findHomeownerUnitsByBuyer(
+  buyerId: string,
+  developerId: string,
+): Promise<Unit[]> {
+  const rows = await query<UnitRow>(
+    `SELECT u.*
+     FROM units u
+     JOIN residents r ON r.unit_id = u.id
+     WHERE r.buyer_id = $1
+       AND u.developer_id = $2
+       AND r.occupancy_type = 'OWNER_OCCUPIER'
+     ORDER BY u.code`,
+    [buyerId, developerId],
+  )
+  return rows.map(mapUnit)
+}
+
 /** @deprecated Use findUnitsByBuyer — returns the first unit only. */
 export async function findUnitByBuyer(
   buyerId: string,

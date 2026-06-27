@@ -45,6 +45,23 @@ export async function findTicketsByDeveloper(developerId: string): Promise<Maint
   return rows.map(mapTicket)
 }
 
+export async function findTicketsByUnit(
+  unitId: string,
+  developerId: string,
+): Promise<MaintenanceTicket[]> {
+  const rows = await query<TicketRow>(
+    `SELECT t.*, u.code AS unit_code
+     FROM maintenance_tickets t
+     LEFT JOIN units u ON u.id = t.unit_id
+     WHERE t.unit_id = $1 AND t.developer_id = $2
+     ORDER BY
+       CASE t.priority WHEN 'URGENT' THEN 1 WHEN 'HIGH' THEN 2 WHEN 'MEDIUM' THEN 3 ELSE 4 END,
+       t.created_at DESC`,
+    [unitId, developerId],
+  )
+  return rows.map(mapTicket)
+}
+
 export async function findTicketById(
   id: string,
   developerId: string,

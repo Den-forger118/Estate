@@ -105,6 +105,7 @@ export interface UnitDocument {
 // ─── Residency (REMS) types ──────────────────────────────────────────────────
 
 export type ResidentStatus = "ACTIVE" | "NOTICE_GIVEN" | "VACATED";
+export type OccupancyType = "TENANT" | "OWNER_OCCUPIER";
 export type LeaseStatus = "ACTIVE" | "NOTICE_GIVEN" | "EXPIRED" | "TERMINATED";
 export type RentPaymentStatus = "PENDING" | "PAID" | "OVERDUE" | "PARTIAL";
 export type TicketPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
@@ -120,6 +121,7 @@ export interface Resident {
   email?: string;
   moveInDate?: string;
   status: ResidentStatus;
+  occupancyType: OccupancyType;
   createdAt: string;
 }
 
