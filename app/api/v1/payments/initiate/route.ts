@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth"
 import { findInstallmentById } from "@/lib/repos/paymentPlans"
 import { findBuyerById } from "@/lib/repos/buyers"
 import { getPaymentProvider } from "@/lib/payments"
+import { getAppBaseUrl } from "@/lib/appUrl"
 import { randomUUID } from "crypto"
 
 const PAYABLE_STATUSES = new Set(["DUE", "PARTIAL", "PENDING", "OVERDUE"])
@@ -79,8 +80,7 @@ export async function POST(req: NextRequest) {
 
   // Paystack redirects here after checkout — buyer lands back on the portal with fresh data.
   // Set server-side only; never accepted from the client.
-  const appUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3000"
-  const callbackUrl = `${appUrl}/portal?payment=done`
+  const callbackUrl = `${getAppBaseUrl()}/portal?payment=done`
 
   const provider = getPaymentProvider()
   let result: Awaited<ReturnType<typeof provider.initiatePayment>>
