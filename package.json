@@ -10,6 +10,7 @@
     "db:migrate": "tsx db/migrate.ts",
     "db:seed": "tsx db/seed.ts",
     "db:reseed": "tsx db/reseed.ts",
+    "db:add-units": "tsx db/add-units.ts",
     "dev:tunnel": "ngrok http 3000"
   },
   "dependencies": {

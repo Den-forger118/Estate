@@ -1,6 +1,13 @@
 import { query, queryOne } from "../db"
 import type { Project } from "@/app/data/types"
 
+export type NewProject = {
+  developerId: string
+  name: string
+  location?: string
+  status?: string
+}
+
 type ProjectRow = {
   id: string
   developer_id: string
@@ -35,4 +42,14 @@ export async function findProjectById(
     [id, developerId],
   )
   return row ? mapProject(row) : null
+}
+
+export async function createProject(data: NewProject): Promise<Project> {
+  const row = await queryOne<ProjectRow>(
+    `INSERT INTO projects (developer_id, name, location, status)
+     VALUES ($1, $2, $3, $4)
+     RETURNING *`,
+    [data.developerId, data.name, data.location ?? null, data.status ?? "ACTIVE"],
+  )
+  return mapProject(row!)
 }

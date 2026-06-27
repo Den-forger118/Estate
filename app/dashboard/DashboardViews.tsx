@@ -26,6 +26,7 @@ import { OffPlanPaymentsView } from "./OffPlanPaymentsView";
 import { PaymentPlansView } from "./PaymentPlansView";
 import { MilestonesView } from "./MilestonesView";
 import { BuyerChatView } from "./BuyerChatView";
+import { UnitsInventoryView } from "./UnitsInventoryView";
 import {
   getDashboardOverview,
   getMaintenance,
@@ -874,53 +875,6 @@ function PaymentsView() {
   );
 }
 
-function RemsUnitsView() {
-  const [units, setUnits] = useState<Unit[] | null>(null);
-  const [projects, setProjects] = useState<Project[] | null>(null);
-
-  useEffect(() => {
-    Promise.all([getUnits(), getProjects()])
-      .then(([u, p]) => {
-        setUnits(u);
-        setProjects(p);
-      })
-      .catch(() => {
-        setUnits([]);
-        setProjects([]);
-      });
-  }, []);
-
-  const projectById = useMemo(() => {
-    const map = new Map<string, string>();
-    (projects ?? []).forEach((p) => map.set(p.id, p.name));
-    return map;
-  }, [projects]);
-
-  const rows: string[][] = (units ?? []).map((u): string[] => [
-    u.code,
-    projectById.get(u.projectId) ?? "—",
-    u.status as string,
-    u.type ?? "—",
-    u.sizeSqm != null ? String(u.sizeSqm) : "—",
-  ]);
-
-  return (
-    <>
-      <PageHeader
-        module="units"
-        action="Add Unit"
-        onAction={() =>
-          showToast("Unit creation requires project context — use Projects module.", "info")
-        }
-      />
-      {units === null ? (
-        <p className="meta" style={{ padding: "1rem" }}>Loading…</p>
-      ) : (
-        <DataTable headers={["Code", "Project", "Status", "Type", "Size (sqm)"]} rows={rows} />
-      )}
-    </>
-  );
-}
 
 export function ModuleView({ module }: { module: DashboardModule }) {
   if (module === "landlord-application") return <LandlordApplicationSubmitPanel />;
@@ -936,7 +890,7 @@ export function ModuleView({ module }: { module: DashboardModule }) {
   if (module === "documents") return <DocumentsView />;
   if (module === "reports") return <ReportsView />;
   if (module === "settings") return <SettingsView />;
-  if (module === "units") return <RemsUnitsView />;
+  if (module === "units") return <UnitsInventoryView />;
   if (module === "tenants") return <TenantsView />;
   if (module === "leases") return <LeasesView />;
   if (module === "payments") return <OffPlanPaymentsView />;

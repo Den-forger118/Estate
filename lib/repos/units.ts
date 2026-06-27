@@ -1,6 +1,16 @@
 import { query, queryOne } from "../db"
 import type { Unit, UnitStatus } from "@/app/data/types"
 
+export type NewUnit = {
+  developerId: string
+  projectId: string
+  code: string
+  type?: string
+  sizeSqm?: number
+  priceTotal: number
+  status?: UnitStatus
+}
+
 type UnitRow = {
   id: string
   developer_id: string
@@ -75,6 +85,31 @@ export async function findUnitByBuyer(
 ): Promise<Unit | null> {
   const units = await findUnitsByBuyer(buyerId, developerId)
   return units[0] ?? null
+}
+
+/** Returns null if a unit with the same code already exists in the project. */
+export async function createUnit(data: NewUnit): Promise<Unit | null> {
+  const existing = await queryOne<{ id: string }>(
+    "SELECT id FROM units WHERE developer_id = $1 AND project_id = $2 AND code = $3",
+    [data.developerId, data.projectId, data.code],
+  )
+  if (existing) return null
+
+  const row = await queryOne<UnitRow>(
+    `INSERT INTO units (developer_id, project_id, code, type, size_sqm, price_total, status)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
+     RETURNING *`,
+    [
+      data.developerId,
+      data.projectId,
+      data.code,
+      data.type ?? null,
+      data.sizeSqm ?? null,
+      data.priceTotal,
+      data.status ?? "AVAILABLE",
+    ],
+  )
+  return mapUnit(row!)
 }
 
 export async function updateUnitStatus(

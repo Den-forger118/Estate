@@ -774,6 +774,43 @@ export async function getUnits(projectId?: string): Promise<Unit[]> {
   return DATA_MODE === "mock" ? mockGetUnits(projectId) : liveGetUnits(projectId);
 }
 
+export async function createProject(data: {
+  name: string
+  location?: string
+  status?: string
+}): Promise<Project> {
+  const res = await fetch("/api/v1/projects", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ error: "Failed to create project" }))
+    throw new Error((body as { error?: string }).error ?? "Failed to create project")
+  }
+  return res.json()
+}
+
+export async function createUnit(data: {
+  projectId: string
+  code: string
+  type?: string
+  sizeSqm?: number
+  priceTotal: number
+  status?: string
+}): Promise<Unit> {
+  const res = await fetch("/api/v1/units", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ error: "Failed to create unit" }))
+    throw new Error((body as { error?: string }).error ?? "Failed to create unit")
+  }
+  return res.json()
+}
+
 export async function getBuyers(): Promise<Buyer[]> {
   return DATA_MODE === "mock" ? mockGetBuyers() : liveGetBuyers();
 }
