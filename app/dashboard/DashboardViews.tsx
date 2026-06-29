@@ -28,6 +28,7 @@ import { MilestonesView } from "./MilestonesView";
 import { BuyerChatView } from "./BuyerChatView";
 import { UnitsInventoryView } from "./UnitsInventoryView";
 import { HomeownersView } from "./HomeownersView";
+import { CommunityAdminView } from "./CommunityAdminView";
 import {
   getDashboardOverview,
   getMaintenance,
@@ -893,6 +894,7 @@ export function ModuleView({ module }: { module: DashboardModule }) {
   if (module === "settings") return <SettingsView />;
   if (module === "units") return <UnitsInventoryView />;
   if (module === "homeowners") return <HomeownersView />;
+  if (module === "community") return <CommunityAdminView />;
   if (module === "tenants") return <TenantsView />;
   if (module === "leases") return <LeasesView />;
   if (module === "payments") return <OffPlanPaymentsView />;
