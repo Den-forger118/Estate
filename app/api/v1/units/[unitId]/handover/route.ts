@@ -95,11 +95,20 @@ export async function PATCH(
       [unitId, developerId],
     )
 
-    // 2. Create resident row — buyer_id carries the lifecycle bridge
+    // 2. Upsert resident row as OWNER_OCCUPIER — buyer_id is the lifecycle bridge.
+    // ON CONFLICT handles re-handover or a pre-existing TENANT row for the same pair.
     const res = await client.query<ResidentRow>(
       `INSERT INTO residents
-         (developer_id, unit_id, buyer_id, full_name, phone, email, move_in_date, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, 'ACTIVE')
+         (developer_id, unit_id, buyer_id, full_name, phone, email, move_in_date, status, occupancy_type)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'ACTIVE', 'OWNER_OCCUPIER')
+       ON CONFLICT (unit_id, buyer_id)
+         DO UPDATE SET
+           occupancy_type = 'OWNER_OCCUPIER',
+           status         = 'ACTIVE',
+           full_name      = EXCLUDED.full_name,
+           phone          = EXCLUDED.phone,
+           email          = EXCLUDED.email,
+           move_in_date   = EXCLUDED.move_in_date
        RETURNING *`,
       [
         developerId,

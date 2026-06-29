@@ -110,3 +110,50 @@ export async function createResident(
   )
   return mapResident(rows[0])
 }
+
+/**
+ * Upsert an OWNER_OCCUPIER resident row for a buyer+unit pair.
+ * Uses ON CONFLICT (unit_id, buyer_id) so it is safe whether the handover
+ * already created a TENANT row or no row exists yet.
+ * Returns the resident and whether it pre-existed as OWNER_OCCUPIER.
+ */
+export async function upsertOwnerOccupier(
+  developerId: string,
+  data: {
+    unitId: string
+    buyerId: string
+    fullName: string
+    phone: string
+    email?: string
+    moveInDate?: Date
+  },
+): Promise<{ resident: Resident; wasAlreadyGranted: boolean }> {
+  type UpsertRow = ResidentRow & { xmax: string }
+  const rows = await query<UpsertRow>(
+    `INSERT INTO residents
+       (developer_id, unit_id, buyer_id, full_name, phone, email, move_in_date, status, occupancy_type)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, 'ACTIVE', 'OWNER_OCCUPIER')
+     ON CONFLICT (unit_id, buyer_id)
+       DO UPDATE SET
+         occupancy_type = 'OWNER_OCCUPIER',
+         status         = 'ACTIVE',
+         full_name      = EXCLUDED.full_name,
+         phone          = EXCLUDED.phone,
+         email          = EXCLUDED.email,
+         move_in_date   = COALESCE(residents.move_in_date, EXCLUDED.move_in_date)
+     RETURNING *, NULL AS unit_code, xmax::text`,
+    [
+      developerId,
+      data.unitId,
+      data.buyerId,
+      data.fullName,
+      data.phone,
+      data.email ?? null,
+      data.moveInDate ?? null,
+    ],
+  )
+  const row = rows[0]
+  // xmax = 0 means the row was freshly inserted; non-zero means it was updated
+  const wasAlreadyGranted = row.xmax !== "0"
+  return { resident: mapResident(row), wasAlreadyGranted }
+}

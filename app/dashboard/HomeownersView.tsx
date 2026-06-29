@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getUnits, getPaymentPlan, getBuyers } from "../../lib/api-client";
-import type { Unit, Buyer, PaymentPlan, Installment } from "../data/types";
-import { formatGHS, formatDate } from "../../lib/formatters";
+import { getUnits, getPaymentPlan, getBuyers, getResidents } from "../../lib/api-client";
+import type { Unit, Buyer, PaymentPlan, Installment, Resident } from "../data/types";
+import { formatGHS } from "../../lib/formatters";
 import { showToast } from "../components/Toast";
 
 type HomeownerEntry = {
   unit: Unit
   buyer: Buyer | undefined
   plan: { plan: PaymentPlan; installments: Installment[] } | null
-  alreadyGranted: boolean | null  // null = unknown (grant endpoint returns idempotent 200)
+  alreadyGranted: boolean
 }
 
 export function HomeownersView() {
@@ -22,8 +22,14 @@ export function HomeownersView() {
     async function load() {
       setLoading(true)
       try {
-        const [units, buyers] = await Promise.all([getUnits(), getBuyers()])
+        const [units, buyers, residents] = await Promise.all([getUnits(), getBuyers(), getResidents()])
         const buyerMap = new Map(buyers.map((b) => [b.id, b]))
+        // Build a set of unit IDs that already have an OWNER_OCCUPIER resident row
+        const grantedUnitIds = new Set(
+          residents
+            .filter((r: Resident) => r.occupancyType === "OWNER_OCCUPIER" && r.buyerId)
+            .map((r: Resident) => r.unitId),
+        )
         const handedOver = units.filter((u) => u.status === "HANDED_OVER" && u.buyerId)
 
         const plans = await Promise.all(handedOver.map((u) => getPaymentPlan(u.id)))
@@ -31,7 +37,7 @@ export function HomeownersView() {
           unit: u,
           buyer: u.buyerId ? buyerMap.get(u.buyerId) : undefined,
           plan: plans[i],
-          alreadyGranted: null,
+          alreadyGranted: grantedUnitIds.has(u.id),
         }))
         setEntries(result)
       } catch {
@@ -48,13 +54,8 @@ export function HomeownersView() {
     try {
       const res = await fetch(`/api/v1/units/${unitId}/grant-homeowner`, { method: "POST" })
       const body = await res.json() as { message?: string; error?: string; detail?: string }
-      if (res.status === 200) {
-        showToast(body.message ?? "Already granted", "info")
-        setEntries((prev) =>
-          prev.map((e) => e.unit.id === unitId ? { ...e, alreadyGranted: true } : e),
-        )
-      } else if (res.status === 201) {
-        showToast(body.message ?? "Homeowner access granted", "success")
+      if (res.ok) {
+        showToast(body.message ?? "Homeowner access granted", res.status === 201 ? "success" : "info")
         setEntries((prev) =>
           prev.map((e) => e.unit.id === unitId ? { ...e, alreadyGranted: true } : e),
         )

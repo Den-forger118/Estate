@@ -3,7 +3,7 @@ import { getSession } from "@/lib/auth"
 import { findUnitById } from "@/lib/repos/units"
 import { findBuyerById } from "@/lib/repos/buyers"
 import { findPaymentPlanByUnit, findInstallmentsByPlan, isFullyPaid } from "@/lib/repos/paymentPlans"
-import { findResidentByBuyerUnit, createResident } from "@/lib/repos/residents"
+import { upsertOwnerOccupier } from "@/lib/repos/residents"
 import { createAuditLog } from "@/lib/repos/auditLog"
 
 export async function POST(
@@ -59,27 +59,18 @@ export async function POST(
     )
   }
 
-  // ── Idempotency — already granted ────────────────────────────────────────
+  // ── Grant (idempotent upsert) ─────────────────────────────────────────────
+  // upsertOwnerOccupier uses ON CONFLICT (unit_id, buyer_id) DO UPDATE, so
+  // re-calling this endpoint is safe whether or not the handover already
+  // created a TENANT row for the same pair.
 
-  const existing = await findResidentByBuyerUnit(unit.buyerId, unitId, developerId)
-  if (existing) {
-    return NextResponse.json(
-      { message: "Homeowner access already granted", residentId: existing.id },
-      { status: 200 },
-    )
-  }
-
-  // ── Grant: create owner-occupier residents row ────────────────────────────
-
-  const resident = await createResident(developerId, {
+  const { resident, wasAlreadyGranted } = await upsertOwnerOccupier(developerId, {
     unitId,
     buyerId: unit.buyerId,
     fullName: buyer.fullName,
     phone: buyer.phone,
     email: buyer.email,
     moveInDate: new Date(),
-    status: "ACTIVE",
-    occupancyType: "OWNER_OCCUPIER",
   })
 
   await createAuditLog({
@@ -93,11 +84,17 @@ export async function POST(
       buyerId: unit.buyerId,
       buyerName: buyer.fullName,
       residentId: resident.id,
+      wasAlreadyGranted,
     },
   })
 
   return NextResponse.json(
-    { message: `Homeowner access granted to ${buyer.fullName}`, residentId: resident.id },
-    { status: 201 },
+    {
+      message: wasAlreadyGranted
+        ? "Homeowner access already granted"
+        : `Homeowner access granted to ${buyer.fullName}`,
+      residentId: resident.id,
+    },
+    { status: wasAlreadyGranted ? 200 : 201 },
   )
 }

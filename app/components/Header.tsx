@@ -11,8 +11,6 @@ const navItems: { label: string; href: string; mobile?: boolean }[] = [
   { label: "About", href: "/about", mobile: true },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact", mobile: true },
-  { label: "Resident Services", href: "/community" },
-  { label: "Dashboard", href: "/dashboard" },
 ];
 
 export function Header() {
