@@ -11,10 +11,12 @@ import { brand } from "../data/site";
 
 type Props = {
   children: ReactNode;
-  displayName: string;
+  residentName: string;
+  unitCode: string;
 };
 
-export function CommunityShell({ children, displayName }: Props) {
+export function CommunityShell({ children, residentName, unitCode }: Props) {
+  const displayName = residentName;
   const pathname = usePathname();
   const router = useRouter();
   const year = new Date().getFullYear();
@@ -61,7 +63,7 @@ export function CommunityShell({ children, displayName }: Props) {
             <div className="dashboard-avatar" aria-hidden="true">{initials}</div>
             <div>
               <strong>{displayName}</strong>
-              <span>Resident</span>
+              <span>{unitCode}</span>
             </div>
           </>
         }

@@ -59,6 +59,39 @@ export async function findResidentById(
   return row ? mapResident(row) : null
 }
 
+/**
+ * Find any OWNER_OCCUPIER resident row for this buyer across all units.
+ * Does NOT require developerId — safe to call with only the buyer's session ID.
+ * Used by community layout to gate /community access and resolve developer context.
+ */
+export async function findOwnerOccupierByBuyer(buyerId: string): Promise<{
+  id: string
+  developerId: string
+  unitId: string
+  unitCode: string | null
+  fullName: string
+} | null> {
+  type Row = { id: string; developer_id: string; unit_id: string; unit_code: string | null; full_name: string }
+  const row = await queryOne<Row>(
+    `SELECT r.id, r.developer_id, r.unit_id, u.code AS unit_code, r.full_name
+     FROM residents r
+     LEFT JOIN units u ON u.id = r.unit_id
+     WHERE r.buyer_id = $1
+       AND r.occupancy_type = 'OWNER_OCCUPIER'
+     ORDER BY r.created_at DESC
+     LIMIT 1`,
+    [buyerId],
+  )
+  if (!row) return null
+  return {
+    id: row.id,
+    developerId: row.developer_id,
+    unitId: row.unit_id,
+    unitCode: row.unit_code,
+    fullName: row.full_name,
+  }
+}
+
 /** Find the owner-occupier residents row for a specific buyer+unit, if it exists. */
 export async function findResidentByBuyerUnit(
   buyerId: string,

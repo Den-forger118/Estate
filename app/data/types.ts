@@ -160,6 +160,41 @@ export interface MaintenanceTicket {
   createdAt: string;
 }
 
+// ─── Community / Resident OS types ───────────────────────────────────────────
+
+export interface CommunityEvent {
+  id: string;
+  title: string;
+  description?: string;
+  eventDate: string;
+  location?: string;
+  category: string;
+  imageUrl?: string;
+  rsvpCount: number;
+  createdAt: string;
+}
+
+export interface SecurityNotice {
+  id: string;
+  title: string;
+  body: string;
+  severity: "INFO" | "WARNING" | "URGENT";
+  active: boolean;
+  postedAt: string;
+}
+
+export interface FacilityBooking {
+  id: string;
+  unitId?: string;
+  unitCode?: string;
+  residentId?: string;
+  facility: string;
+  bookingDate: string;
+  timeSlot: string;
+  status: "CONFIRMED" | "CANCELLED";
+  createdAt: string;
+}
+
 // ─── Aggregates for dashboard overview ───────────────────────────────────────
 
 export interface DashboardOverview {

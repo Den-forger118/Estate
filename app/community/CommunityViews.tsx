@@ -2,26 +2,21 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { estateImages } from "../data/images";
 import {
   bookingFacilities,
   bookingWeekDays,
-  communityEvents,
   communityModuleMeta,
-  directoryEntries,
   emergencyContacts,
   hubQuickActions,
   incidentTypes,
   marketplaceCategories,
   marketplaceProviderDetails,
-  reservedAmenities,
-  securityAnnouncements,
-  securityNotices,
-  upcomingEvents,
   type CommunityModule,
 } from "../data/community";
 import { showToast } from "../components/Toast";
+import type { CommunityEvent, SecurityNotice, FacilityBooking } from "../data/types";
 
 function PageHeader({
   module,
@@ -63,8 +58,30 @@ function PageHeader({
   );
 }
 
-export function CommunityHubView() {
-  const featured = upcomingEvents[0];
+function fmtDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
+function severityClass(s: SecurityNotice["severity"]) {
+  return s === "URGENT" ? "status-error" : s === "WARNING" ? "status-warning" : "status-info";
+}
+
+// ─── Hub ──────────────────────────────────────────────────────────────────────
+
+export function CommunityHubView({ residentName, unitCode }: { residentName?: string; unitCode?: string }) {
+  const [events, setEvents] = useState<CommunityEvent[]>([]);
+  const [notices, setNotices] = useState<SecurityNotice[]>([]);
+  const [bookings, setBookings] = useState<FacilityBooking[]>([]);
+
+  useEffect(() => {
+    fetch("/api/v1/community/events").then((r) => r.json()).then(setEvents).catch(() => {});
+    fetch("/api/v1/community/security-notices").then((r) => r.json()).then(setNotices).catch(() => {});
+    fetch("/api/v1/community/bookings").then((r) => r.json()).then(setBookings).catch(() => {});
+  }, []);
+
+  const featured = events[0];
+  const displayUnit = unitCode ?? "Your unit";
+  const displayName = residentName ?? "";
 
   return (
     <>
@@ -79,8 +96,8 @@ export function CommunityHubView() {
         />
         <div className="community-hero-copy">
           <span className="eyebrow">Resident services</span>
-          <h1 className="community-welcome-title">Welcome home.</h1>
-          <p>Penthouse 4B is ready for your arrival. Book amenities, RSVP to events, and reach security in one place.</p>
+          <h1 className="community-welcome-title">Welcome home{displayName ? `, ${displayName.split(" ")[0]}` : ""}.</h1>
+          <p>{displayUnit} · Book amenities, RSVP to events, and reach security in one place.</p>
         </div>
       </section>
 
@@ -97,54 +114,73 @@ export function CommunityHubView() {
         <article className="dashboard-card community-bento-wide">
           <div className="community-bento-head">
             <h2>Upcoming events</h2>
-            <span className="status-chip status-featured">3 new</span>
+            {events.length > 0 && (
+              <span className="status-chip status-featured">{events.length} event{events.length !== 1 ? "s" : ""}</span>
+            )}
           </div>
-          <div className="community-featured-event">
-            <Image
-              src={featured.image}
-              alt={featured.title}
-              fill
-              sizes="(max-width: 980px) 100vw, 66vw"
-              className="community-media-image"
-            />
-            <div>
-              <span className="eyebrow">{featured.tag}</span>
-              <h3>{featured.title}</h3>
-              <p>{featured.when} · {featured.where}</p>
-            </div>
-          </div>
-          <Link href="/community/events" className="community-inline-link">
-            View all community events →
-          </Link>
+          {featured ? (
+            <>
+              <div className="community-featured-event" style={{ position: "relative", overflow: "hidden" }}>
+                {featured.imageUrl ? (
+                  <img
+                    src={featured.imageUrl}
+                    alt={featured.title}
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                ) : null}
+                <div>
+                  <span className="eyebrow">{featured.category}</span>
+                  <h3>{featured.title}</h3>
+                  <p>{fmtDate(featured.eventDate)}{featured.location ? ` · ${featured.location}` : ""}</p>
+                </div>
+              </div>
+              <Link href="/community/events" className="community-inline-link">
+                View all community events →
+              </Link>
+            </>
+          ) : (
+            <p className="meta" style={{ padding: "1rem 0" }}>No upcoming events. Check back soon.</p>
+          )}
         </article>
 
         <article className="dashboard-card">
           <h2>Security notices</h2>
-          <div className="community-notice-list">
-            {securityNotices.map((notice) => (
-              <div key={notice.title} className="community-notice">
-                <strong>{notice.title}</strong>
-                <p>{notice.text}</p>
-                <span className="meta">{notice.posted}</span>
-              </div>
-            ))}
-          </div>
+          {notices.length > 0 ? (
+            <div className="community-notice-list">
+              {notices.slice(0, 3).map((notice) => (
+                <div key={notice.id} className="community-notice">
+                  <strong>{notice.title}</strong>
+                  <p>{notice.body}</p>
+                  <span className={`status-chip ${severityClass(notice.severity)}`} style={{ fontSize: "0.7rem" }}>
+                    {notice.severity}
+                  </span>
+                  <span className="meta" style={{ marginLeft: "0.5rem" }}>{fmtDate(notice.postedAt)}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="meta" style={{ padding: "0.5rem 0" }}>No active security notices.</p>
+          )}
           <Link href="/community/security" className="community-inline-link">
             Access security portal →
           </Link>
         </article>
 
         <article className="dashboard-card">
-          <h2>Reserved amenities</h2>
-          {reservedAmenities.map((item, index) => (
-            <div key={item.name} className={index === 0 ? "community-booking-highlight" : "community-booking-row"}>
-              <div>
-                <strong>{item.name}</strong>
-                <p>{item.detail}</p>
+          <h2>Your bookings</h2>
+          {bookings.length > 0 ? (
+            bookings.slice(0, 3).map((bk, i) => (
+              <div key={bk.id} className={i === 0 ? "community-booking-highlight" : "community-booking-row"}>
+                <div>
+                  <strong>{bk.facility}</strong>
+                  <p>{bk.timeSlot}</p>
+                </div>
+                <span className="meta">{fmtDate(bk.bookingDate)}</span>
               </div>
-              <span className="meta">{item.when}</span>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="meta" style={{ padding: "0.5rem 0" }}>No upcoming bookings.</p>
+          )}
           <Link href="/community/bookings" className="btn btn-secondary">
             Manage bookings
           </Link>
@@ -190,136 +226,143 @@ export function ModuleView({ module }: { module: Exclude<CommunityModule, "commu
   }
 }
 
+// ─── Events ───────────────────────────────────────────────────────────────────
+
 function EventsView() {
+  const [events, setEvents] = useState<CommunityEvent[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
-  const [rsvp, setRsvp] = useState<Record<string, boolean>>({});
 
-  const filteredEvents = useMemo(() => {
-    if (filter === "All") return communityEvents;
-    if (filter === "This week") return communityEvents.slice(0, 2);
-    if (filter === "Family") return communityEvents.filter((e) => e.category === "Wellness" || e.category === "Social");
-    return communityEvents.filter((e) => e.category === "Official");
-  }, [filter]);
+  useEffect(() => {
+    fetch("/api/v1/community/events")
+      .then((r) => r.json())
+      .then(setEvents)
+      .catch(() => showToast("Failed to load events", "error"))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const pills = ["All", "This week", "Family", "Committee"];
+  const pills = ["All", ...Array.from(new Set(events.map((e) => e.category)))];
+
+  const filtered = useMemo(() => {
+    if (filter === "All") return events;
+    return events.filter((e) => e.category === filter);
+  }, [events, filter]);
 
   return (
     <>
       <PageHeader
         module="events"
         action="Create reminder"
-        onAction={() => showToast("Reminder created for upcoming events.", "info")}
+        onAction={() => showToast("Reminder set for upcoming events.", "info")}
       />
-      <div className="community-filter-pills">
-        {pills.map((pill) => (
-          <button
-            key={pill}
-            type="button"
-            className={filter === pill ? "active" : ""}
-            onClick={() => setFilter(pill)}
-          >
-            {pill}
-          </button>
-        ))}
-      </div>
-      <div className="dashboard-card table-wrap">
-        <table className="zebra-rows">
-          <thead>
-            <tr>
-              <th>Event</th>
-              <th>When</th>
-              <th>Location</th>
-              <th>Category</th>
-              <th>RSVP</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredEvents.map((event) => (
-              <tr key={event.id}>
-                <td>{event.title}</td>
-                <td>{event.when}</td>
-                <td>{event.location}</td>
-                <td><span className="status-chip">{event.category}</span></td>
-                <td className="font-data-md">{event.rsvp} attending</td>
-              </tr>
+      {loading ? (
+        <p className="meta" style={{ padding: "1rem" }}>Loading…</p>
+      ) : events.length === 0 ? (
+        <div className="dashboard-card" style={{ padding: "2rem", textAlign: "center" }}>
+          <p className="meta">No events scheduled yet.</p>
+        </div>
+      ) : (
+        <>
+          <div className="community-filter-pills">
+            {pills.map((pill) => (
+              <button
+                key={pill}
+                type="button"
+                className={filter === pill ? "active" : ""}
+                onClick={() => setFilter(pill)}
+              >
+                {pill}
+              </button>
             ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="community-event-grid">
-        {upcomingEvents.map((event) => {
-          const isRsvp = rsvp[event.id];
-          return (
-            <article key={event.id} className="dashboard-card community-event-card">
-              <div className="community-event-image">
-                <Image
-                  src={event.image}
-                  alt={event.title}
-                  fill
-                  sizes="(max-width: 640px) 100vw, 33vw"
-                  className="community-media-image"
-                />
-              </div>
-              <div>
-                <span className="eyebrow">{event.tag}</span>
-                <h3>{event.title}</h3>
-                <p>{event.when} · {event.where}</p>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={() => {
-                    setRsvp((prev) => ({ ...prev, [event.id]: !prev[event.id] }));
-                    showToast(
-                      isRsvp ? `RSVP cancelled for ${event.title}.` : `You're on the list for ${event.title}.`,
-                    );
-                  }}
-                >
-                  {isRsvp ? "Cancel RSVP" : "RSVP"}
-                </button>
-              </div>
-            </article>
-          );
-        })}
-      </div>
+          </div>
+          <div className="dashboard-card table-wrap">
+            <table className="zebra-rows">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Date</th>
+                  <th>Location</th>
+                  <th>Category</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((event) => (
+                  <tr key={event.id}>
+                    <td><strong>{event.title}</strong>
+                      {event.description && (
+                        <p className="meta" style={{ margin: 0, fontSize: "0.8rem" }}>{event.description}</p>
+                      )}
+                    </td>
+                    <td>{fmtDate(event.eventDate)}</td>
+                    <td>{event.location ?? "—"}</td>
+                    <td><span className="status-chip">{event.category}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
     </>
   );
 }
 
+// ─── Directory ────────────────────────────────────────────────────────────────
+
+type DirectoryEntry = { id: string; fullName: string; unitCode?: string; moveInDate?: string };
+
 function DirectoryView() {
+  const [entries, setEntries] = useState<DirectoryEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/v1/community/directory")
+      .then((r) => r.json())
+      .then(setEntries)
+      .catch(() => showToast("Failed to load directory", "error"))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
       <PageHeader
         module="directory"
         title="Resident directory"
-        text="Verified residents only. Control how neighbours see your profile."
+        text="Verified homeowner-residents only."
         action="Privacy settings"
         onAction={() => showToast("Privacy settings saved. Your profile visibility is Residents Only.", "info")}
       />
-      <div className="dashboard-card table-wrap">
-        <table className="zebra-rows">
-          <thead>
-            <tr>
-              <th>Resident</th>
-              <th>Unit</th>
-              <th>Visibility</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {directoryEntries.map((row) => (
-              <tr key={row.id}>
-                <td>{row.name}</td>
-                <td>{row.unit}</td>
-                <td>{row.visibility}</td>
-                <td>{row.committee ?? "—"}</td>
+      {loading ? (
+        <p className="meta" style={{ padding: "1rem" }}>Loading…</p>
+      ) : (
+        <div className="dashboard-card table-wrap">
+          <table className="zebra-rows">
+            <thead>
+              <tr>
+                <th>Resident</th>
+                <th>Unit</th>
+                <th>Move-in</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {entries.length === 0 ? (
+                <tr><td colSpan={3} style={{ textAlign: "center" }} className="meta">No residents listed yet.</td></tr>
+              ) : entries.map((row) => (
+                <tr key={row.id}>
+                  <td>{row.fullName}</td>
+                  <td>{row.unitCode ?? "—"}</td>
+                  <td>{row.moveInDate ? fmtDate(row.moveInDate) : "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 }
+
+// ─── Marketplace (static — no DB backing) ─────────────────────────────────────
 
 function MarketplaceView() {
   const [category, setCategory] = useState("All Services");
@@ -380,10 +423,23 @@ function MarketplaceView() {
   );
 }
 
+// ─── Security ─────────────────────────────────────────────────────────────────
+
 function SecurityView() {
+  const [notices, setNotices] = useState<SecurityNotice[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/v1/community/security-notices")
+      .then((r) => r.json())
+      .then(setNotices)
+      .catch(() => showToast("Failed to load security notices", "error"))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
-      <PageHeader module="security" action="Signal emergency" actionHref="/community/report" />
+      <PageHeader module="security" action="Report incident" actionHref="/community/report" />
       <div className="community-security-split">
         <div className="community-hero community-hero-compact">
           <Image
@@ -408,35 +464,64 @@ function SecurityView() {
       </div>
       <div className="dashboard-card">
         <h2>Security announcements</h2>
-        {securityAnnouncements.map((row) => (
-          <div key={row[0]} className="community-announcement">
-            <div>
-              <span className="eyebrow">{row[3]}</span>
-              <strong>{row[0]}</strong>
+        {loading ? (
+          <p className="meta" style={{ padding: "1rem 0" }}>Loading…</p>
+        ) : notices.length === 0 ? (
+          <p className="meta" style={{ padding: "1rem 0" }}>No active security notices.</p>
+        ) : (
+          notices.map((notice) => (
+            <div key={notice.id} className="community-announcement">
+              <div>
+                <span className={`eyebrow ${severityClass(notice.severity)}`}>{notice.severity}</span>
+                <strong>{notice.title}</strong>
+              </div>
+              <p>{notice.body}</p>
+              <span className="meta">{fmtDate(notice.postedAt)}</span>
             </div>
-            <p>{row[1]}</p>
-            <span className="meta">{row[2]}</span>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </>
   );
 }
 
-function ReportView() {
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
+// ─── Report ───────────────────────────────────────────────────────────────────
 
-  function submit(event: FormEvent) {
+function ReportView() {
+  const [incidentType, setIncidentType] = useState(incidentTypes[0]);
+  const [location, setLocation] = useState("");
+  const [priority, setPriority] = useState("MEDIUM");
+  const [description, setDescription] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState<string | null>(null);
+
+  async function submit(event: FormEvent) {
     event.preventDefault();
     if (!location.trim() || !description.trim()) {
       showToast("Please complete all required fields.", "error");
       return;
     }
-    const ref = `TKT-${String(Math.floor(Math.random() * 900) + 100)}`;
-    showToast(`Request submitted. Reference: ${ref}`);
-    setLocation("");
-    setDescription("");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/v1/community/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ incidentType, location: location.trim(), priority, description: description.trim() }),
+      });
+      const body = await res.json() as { ref?: string; error?: string };
+      if (res.ok && body.ref) {
+        setSubmitted(body.ref);
+        setLocation("");
+        setDescription("");
+        showToast(`Report submitted. Reference: ${body.ref}`);
+      } else {
+        showToast(body.error ?? "Failed to submit report", "error");
+      }
+    } catch {
+      showToast("Request failed", "error");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -446,10 +531,19 @@ function ReportView() {
         title="Report an incident"
         text="Notify estate security of suspicious activity, emergencies, or access issues."
       />
+      {submitted && (
+        <div className="dashboard-card" style={{ padding: "1rem", marginBottom: "1rem", borderLeft: "3px solid var(--primary)" }}>
+          <strong>Report submitted</strong>
+          <p className="meta">Reference: <code>{submitted}</code> — our team will respond shortly.</p>
+          <button className="btn btn-secondary" style={{ marginTop: "0.5rem" }} type="button" onClick={() => setSubmitted(null)}>
+            Submit another
+          </button>
+        </div>
+      )}
       <form className="dashboard-card form-grid community-report-form" onSubmit={submit}>
         <label>
           Incident type
-          <select defaultValue={incidentTypes[0]}>
+          <select value={incidentType} onChange={(e) => setIncidentType(e.target.value)}>
             {incidentTypes.map((type) => (
               <option key={type}>{type}</option>
             ))}
@@ -457,63 +551,170 @@ function ReportView() {
         </label>
         <label>
           Location
-          <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="e.g. North gate, Block C walkway" required />
+          <input
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="e.g. North gate, Block C walkway"
+            required
+          />
         </label>
         <label>
           Priority
-          <select defaultValue="Standard">
-            <option>Standard</option>
-            <option>Urgent</option>
-            <option>Emergency</option>
+          <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+            <option value="LOW">Standard</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">Urgent</option>
+            <option value="URGENT">Emergency</option>
           </select>
         </label>
         <label className="community-report-wide">
           Description
-          <textarea rows={5} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe what you observed…" required />
+          <textarea
+            rows={5}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Describe what you observed…"
+            required
+          />
         </label>
-        <label className="community-report-wide">
-          Photo (optional)
-          <input type="file" accept="image/*" onChange={() => showToast("Photo attached to report.", "info")} />
-        </label>
-        <button className="btn btn-primary community-report-wide" type="submit">
-          Submit to security
+        <button
+          className="btn btn-primary community-report-wide"
+          type="submit"
+          disabled={submitting}
+        >
+          {submitting ? "Submitting…" : "Submit to security"}
         </button>
       </form>
     </>
   );
 }
 
+// ─── Bookings ─────────────────────────────────────────────────────────────────
+
+const AVAILABLE_FACILITIES = bookingFacilities.map((f) => f[0]);
+const TIME_SLOTS = ["06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
+
 function BookingsView() {
+  const [bookings, setBookings] = useState<FacilityBooking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [facility, setFacility] = useState(AVAILABLE_FACILITIES[0] ?? "");
+  const [bookingDate, setBookingDate] = useState("");
+  const [timeSlot, setTimeSlot] = useState(TIME_SLOTS[0]);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/v1/community/bookings")
+      .then((r) => r.json())
+      .then(setBookings)
+      .catch(() => showToast("Failed to load bookings", "error"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleBook(e: FormEvent) {
+    e.preventDefault();
+    if (!bookingDate) { showToast("Please select a date", "error"); return; }
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/v1/community/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ facility, bookingDate, timeSlot }),
+      });
+      const body = await res.json() as FacilityBooking & { error?: string };
+      if (res.ok) {
+        setBookings((prev) => [...prev, body]);
+        setShowForm(false);
+        setBookingDate("");
+        showToast(`${facility} booked for ${fmtDate(body.bookingDate)} at ${body.timeSlot}.`);
+      } else {
+        showToast((body as { error?: string }).error ?? "Booking failed", "error");
+      }
+    } catch {
+      showToast("Request failed", "error");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <>
       <PageHeader
         module="bookings"
         action="New booking"
-        onAction={() => showToast("Booking request submitted. Facility team will confirm within 2 hours.", "info")}
+        onAction={() => setShowForm((v) => !v)}
       />
+
+      {showForm && (
+        <form className="dashboard-card form-grid" onSubmit={handleBook} style={{ marginBottom: "1.5rem" }}>
+          <label>
+            Facility
+            <select value={facility} onChange={(e) => setFacility(e.target.value)}>
+              {AVAILABLE_FACILITIES.map((f) => <option key={f}>{f}</option>)}
+            </select>
+          </label>
+          <label>
+            Date
+            <input
+              type="date"
+              value={bookingDate}
+              min={new Date().toISOString().slice(0, 10)}
+              onChange={(e) => setBookingDate(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Time slot
+            <select value={timeSlot} onChange={(e) => setTimeSlot(e.target.value)}>
+              {TIME_SLOTS.map((t) => <option key={t}>{t}</option>)}
+            </select>
+          </label>
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            <button className="btn btn-primary" type="submit" disabled={submitting}>
+              {submitting ? "Booking…" : "Confirm booking"}
+            </button>
+            <button className="btn btn-secondary" type="button" onClick={() => setShowForm(false)}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+
       <div className="community-bento community-bento-bookings">
         <article className="dashboard-card community-bento-wide">
           <div className="community-bento-head">
-            <h2>Weekly schedule</h2>
-            <span className="meta">Conflict-aware calendar</span>
+            <h2>Your bookings</h2>
+            <span className="meta">Upcoming only</span>
           </div>
-          <div className="community-calendar-head">
-            <span>Time</span>
-            {bookingWeekDays.map((day) => (
-              <span key={day}>{day}</span>
-            ))}
-          </div>
-          <div className="community-calendar-slot">
-            <span>08:00</span>
-            <span className="booked">Gym</span>
-            <span />
-            <span className="booked">Pool L2</span>
-            <span />
-            <span />
-            <span className="booked">Lounge</span>
-            <span />
-          </div>
+          {loading ? (
+            <p className="meta" style={{ padding: "1rem 0" }}>Loading…</p>
+          ) : bookings.length === 0 ? (
+            <p className="meta" style={{ padding: "1rem 0" }}>No upcoming bookings. Use "New booking" to reserve a facility.</p>
+          ) : (
+            <table className="zebra-rows" style={{ marginTop: "0.5rem" }}>
+              <thead>
+                <tr>
+                  <th>Facility</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookings.map((bk) => (
+                  <tr key={bk.id}>
+                    <td><strong>{bk.facility}</strong></td>
+                    <td>{fmtDate(bk.bookingDate)}</td>
+                    <td>{bk.timeSlot}</td>
+                    <td><span className="status-chip status-success">{bk.status}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </article>
+
         <article className="dashboard-card">
           <h2>Facilities</h2>
           {bookingFacilities.map((row) => (
@@ -523,6 +724,28 @@ function BookingsView() {
                 <p className="meta">{row[1]}</p>
               </div>
               <span className="status-chip">{row[2]}</span>
+            </div>
+          ))}
+        </article>
+      </div>
+
+      <div className="community-bento" style={{ marginTop: "1.5rem" }}>
+        <article className="dashboard-card community-bento-wide">
+          <div className="community-bento-head">
+            <h2>Weekly overview</h2>
+            <span className="meta">All residents</span>
+          </div>
+          <div className="community-calendar-head">
+            <span>Time</span>
+            {bookingWeekDays.map((day) => (
+              <span key={day}>{day}</span>
+            ))}
+          </div>
+          {bookings.slice(0, 3).map((bk) => (
+            <div key={bk.id} className="community-calendar-slot">
+              <span>{bk.timeSlot}</span>
+              <span className="booked" style={{ gridColumn: "span 2" }}>{bk.facility}</span>
+              <span /><span /><span /><span /><span />
             </div>
           ))}
         </article>
