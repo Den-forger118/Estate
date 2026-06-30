@@ -20,6 +20,7 @@ import type {
   RentPayment,
   MaintenanceTicket,
   TicketStatus,
+  TicketPriority,
   DashboardOverview,
 } from "../app/data/types";
 
@@ -885,6 +886,32 @@ export async function updateMaintenanceTicket(
   return DATA_MODE === "mock"
     ? mockUpdateMaintenanceTicket(id, status)
     : liveUpdateMaintenanceTicket(id, status);
+}
+
+export async function createMaintenanceTicket(data: {
+  title: string
+  priority?: TicketPriority
+}): Promise<MaintenanceTicket> {
+  if (DATA_MODE === "mock") {
+    const ticket: MaintenanceTicket = {
+      id: `TKT-${String(Math.floor(Math.random() * 900) + 100)}`,
+      title: data.title,
+      priority: data.priority ?? "MEDIUM",
+      status: "NEW",
+      createdAt: new Date().toISOString(),
+    }
+    return ticket
+  }
+  const res = await fetch("/api/v1/maintenance", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ error: "Failed to create ticket" }))
+    throw new Error((body as { error?: string }).error ?? "Failed to create ticket")
+  }
+  return res.json()
 }
 
 export type CreatePlanPayload =

@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState, type DragEvent, type FormEvent } from "react";
 import {
   DashboardModule,
-  dashboardProperties,
   documentFolders,
   documentFiles,
   invoices,
@@ -30,6 +29,7 @@ import { UnitsInventoryView } from "./UnitsInventoryView";
 import { HomeownersView } from "./HomeownersView";
 import { CommunityAdminView } from "./CommunityAdminView";
 import {
+  createMaintenanceTicket,
   getDashboardOverview,
   getMaintenance,
   getLeases,
@@ -384,40 +384,39 @@ export function DashboardOverview() {
 }
 
 export function PropertiesView() {
+  const [projects, setProjects] = useState<Project[] | null>(null);
   const [tab, setTab] = useState("All");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [period, setPeriod] = useState("This Month");
+
+  useEffect(() => {
+    getProjects().then(setProjects).catch(() => setProjects([]));
+  }, []);
 
   const filtered = useMemo(() => {
-    if (tab === "All") return dashboardProperties;
-    if (tab === "Active") return dashboardProperties.filter((p) => p.tab === "Active");
-    if (tab === "Development") return dashboardProperties.filter((p) => p.tab === "Development");
-    return dashboardProperties.filter((p) => p.tab === "Maintenance");
-  }, [tab]);
+    if (!projects) return [];
+    if (tab === "All") return projects;
+    return projects.filter((p) => p.status === tab);
+  }, [projects, tab]);
+
+  const counts = useMemo(() => {
+    if (!projects) return { All: 0, ACTIVE: 0, COMPLETED: 0, ON_HOLD: 0 };
+    return {
+      All: projects.length,
+      ACTIVE: projects.filter((p) => p.status === "ACTIVE").length,
+      COMPLETED: projects.filter((p) => p.status === "COMPLETED").length,
+      ON_HOLD: projects.filter((p) => p.status === "ON_HOLD").length,
+    };
+  }, [projects]);
 
   const tabs = [
-    { label: "All Properties", key: "All", count: dashboardProperties.length },
-    { label: "Active", key: "Active", count: dashboardProperties.filter((p) => p.tab === "Active").length },
-    { label: "Development", key: "Development", count: dashboardProperties.filter((p) => p.tab === "Development").length },
-    { label: "Maintenance", key: "Maintenance", count: dashboardProperties.filter((p) => p.tab === "Maintenance").length },
+    { label: "All", key: "All" },
+    { label: "Active", key: "ACTIVE" },
+    { label: "Completed", key: "COMPLETED" },
+    { label: "On Hold", key: "ON_HOLD" },
   ];
 
   return (
     <>
-      <PageHeader
-        module="properties"
-        action="Add Property"
-        period={period}
-        onPeriodChange={setPeriod}
-        onAction={() => setModalOpen(true)}
-      />
-      <QuickCreateModal
-        open={modalOpen}
-        title="Add Property"
-        fieldLabel="Property name"
-        onClose={() => setModalOpen(false)}
-        onSubmit={(name) => showToast(`Property "${name}" submitted for review.`)}
-      />
+      <PageHeader module="properties" />
       <div className="dashboard-tabs">
         {tabs.map((t) => (
           <button
@@ -426,35 +425,29 @@ export function PropertiesView() {
             className={tab === t.key ? "dashboard-tab-active" : ""}
             onClick={() => setTab(t.key)}
           >
-            {t.label} ({t.count})
+            {t.label} ({counts[t.key as keyof typeof counts] ?? 0})
           </button>
         ))}
       </div>
-      <div className="dashboard-property-grid">
-        {filtered.map((property) => (
-          <article className="dashboard-property-card card-interactive" key={property.name}>
-            <div className="dashboard-property-image">
-              <img src={property.image} alt={`${property.name} exterior`} />
-              <span className={`status-chip ${statusClassForLabel(property.status)}`}>{property.status}</span>
-            </div>
-            <div className="dashboard-property-body">
-              <h2>{property.name}</h2>
-              <p>{property.address}</p>
-              <div>
-                <span>
-                  Units <strong className="font-data-md">{property.units}</strong>
-                </span>
-                <span>
-                  Occupancy <strong className="font-data-md">{property.occupancy}</strong>
-                </span>
-                <span>
-                  Revenue <strong className="font-data-md">{property.revenue}</strong>
-                </span>
+      {projects === null ? (
+        <p className="meta" style={{ padding: "1rem" }}>Loading…</p>
+      ) : filtered.length === 0 ? (
+        <p className="meta" style={{ padding: "1rem" }}>No projects found. Create one via the Units module.</p>
+      ) : (
+        <div className="dashboard-property-grid">
+          {filtered.map((project) => (
+            <article className="dashboard-property-card" key={project.id}>
+              <div className="dashboard-property-body">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem" }}>
+                  <h2 style={{ margin: 0 }}>{project.name}</h2>
+                  <span className={`status-chip ${statusClassForLabel(project.status)}`}>{project.status}</span>
+                </div>
+                <p style={{ margin: "0.25rem 0 0", color: "var(--text-muted)" }}>{project.location ?? "—"}</p>
               </div>
-            </div>
-          </article>
-        ))}
-      </div>
+            </article>
+          ))}
+        </div>
+      )}
     </>
   );
 }
@@ -505,18 +498,15 @@ export function MaintenanceView() {
         title="New Maintenance Ticket"
         fieldLabel="Issue title"
         onClose={() => setModalOpen(false)}
-        onSubmit={(title) => {
-          const id = `TKT-${String(Math.floor(Math.random() * 900) + 100)}`;
-          const newTicket: MaintenanceTicket = {
-            id,
-            title,
-            description: "Submitted via dashboard.",
-            priority: "MEDIUM",
-            status: "NEW",
-            createdAt: new Date().toISOString(),
-          };
-          setTickets((prev) => (prev ? [newTicket, ...prev] : [newTicket]));
-          showToast(`Request submitted. Reference: ${id}`);
+        onSubmit={async (title) => {
+          try {
+            const ticket = await createMaintenanceTicket({ title });
+            setTickets((prev) => (prev ? [ticket, ...prev] : [ticket]));
+            showToast(`Ticket created. Reference: ${ticket.id.slice(0, 8).toUpperCase()}`);
+            setModalOpen(false);
+          } catch {
+            showToast("Failed to create ticket.", "error");
+          }
         }}
       />
       {tickets === null ? (
@@ -675,30 +665,39 @@ export function ReportsView() {
 }
 
 export function SettingsView() {
-  const [name, setName] = useState("Eleanor Vance");
-  const [email, setEmail] = useState("eleanor@specialgardens.com");
+  const [email, setEmail] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/v1/auth/me")
+      .then((r) => r.json())
+      .then((d: { user: { email: string; role: string } }) => {
+        setEmail(d.user.email);
+        setRole(d.user.role);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <>
-      <PageHeader
-        module="settings"
-        action="Save Changes"
-        onAction={() => showToast("Profile updated successfully.")}
-      />
+      <PageHeader module="settings" />
       <div className="settings-grid">
         <section className="dashboard-card">
-          <h2>Profile</h2>
+          <h2>Account</h2>
           <label>
-            Display name
-            <input value={name} onChange={(e) => setName(e.target.value)} />
+            Email
+            <input value={email ?? "Loading…"} readOnly disabled style={{ opacity: 0.7 }} />
           </label>
           <label>
-            Notification email
-            <input value={email} onChange={(e) => setEmail(e.target.value)} />
+            Role
+            <input value={role ?? "Loading…"} readOnly disabled style={{ opacity: 0.7 }} />
           </label>
+          <p className="meta" style={{ marginTop: "0.5rem" }}>
+            To update your email or password, contact your system administrator.
+          </p>
         </section>
         <section className="dashboard-card">
-          <h2>Access Controls</h2>
+          <h2>Session</h2>
           <label>
             Session timeout
             <select defaultValue="30">
@@ -706,10 +705,6 @@ export function SettingsView() {
               <option value="30">30 minutes</option>
               <option value="60">1 hour</option>
             </select>
-          </label>
-          <label>
-            Approval threshold
-            <input defaultValue="GH₵ 5,000" />
           </label>
         </section>
       </div>
